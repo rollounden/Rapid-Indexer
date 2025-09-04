@@ -9,10 +9,11 @@ const SPEEDYINDEX_BASE_URL = 'https://api.speedyindex.com';
 const SPEEDYINDEX_API_KEY = 'REPLACE_WITH_YOUR_SPEEDYINDEX_API_KEY';
 
 // Database configuration (update with your Hostinger MySQL credentials)
+// Find these in your Hostinger control panel > Databases > MySQL Databases
 const DB_HOST = 'localhost';
-const DB_NAME = 'REPLACE_DB_NAME';
-const DB_USER = 'REPLACE_DB_USER';
-const DB_PASS = 'REPLACE_DB_PASS';
+const DB_NAME = 'your_database_name';  // Replace with your actual database name
+const DB_USER = 'your_database_user';  // Replace with your actual database username
+const DB_PASS = 'your_database_password';  // Replace with your actual database password
 
 // Logging
 const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
