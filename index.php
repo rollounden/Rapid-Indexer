@@ -4,6 +4,8 @@ session_start();
 require_once __DIR__ . '/src/Db.php';
 require_once __DIR__ . '/src/SpeedyIndexClient.php';
 require_once __DIR__ . '/src/ApiLogger.php';
+require_once __DIR__ . '/src/CreditsService.php';
+require_once __DIR__ . '/src/TaskService.php';
 
 function log_message(string $msg): void {
 	$dir = dirname(LOG_FILE);
@@ -12,25 +14,26 @@ function log_message(string $msg): void {
 }
 
 $userId = $_SESSION['uid'] ?? null;
-$client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);
 $action = $_POST['action'] ?? $_GET['action'] ?? null;
 $result = null;
+$credits = $userId ? CreditsService::getBalance(intval($userId)) : null;
+
 
 try {
-	if ($action === 'balance') {
-		$result = $client->getAccount();
-		log_message('Balance requested');
-	} elseif ($action === 'create_task') {
+	if ($action === 'create_task') {
 		$engine = $_POST['engine'] ?? 'google';
 		$type = $_POST['type'] ?? 'indexer';
 		$title = $_POST['title'] ?? null;
 		$urlsRaw = $_POST['urls'] ?? '';
 		$urls = array_values(array_filter(array_map('trim', preg_split('/\r?\n/', $urlsRaw))));
-		$result = $client->createTask($engine, $type, $urls, $title);
+		$vip = isset($_POST['vip']) && $_POST['vip'] === '1';
+		$created = TaskService::createTask(intval($userId), $engine, $type, $urls, $title, $vip);
+		$result = ['httpCode' => 200, 'body' => json_encode(['ok' => true, 'task' => $created])];
 		log_message('Task created: ' . ($title ?? 'no-title') . ' with ' . count($urls) . ' urls');
 	} elseif ($action === 'list_tasks') {
 		$engine = $_POST['engine'] ?? 'google';
 		$page = intval($_POST['page'] ?? 0);
+		$client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);
 		$result = $client->listTasks($engine, $page);
 		log_message("List tasks page=$page");
 	}

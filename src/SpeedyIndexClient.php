@@ -29,17 +29,19 @@ class SpeedyIndexClient
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 		}
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		$start = microtime(true);
 		$response = curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$error = curl_error($ch);
 		curl_close($ch);
+		$durationMs = (int) round((microtime(true) - $start) * 1000);
 
 		// Log
 		if (!class_exists('ApiLogger')) {
 			require_once __DIR__ . '/ApiLogger.php';
 			require_once __DIR__ . '/Db.php';
 		}
-		ApiLogger::log($this->userId, $path, $body, $response, $httpCode, $error ?: null);
+		ApiLogger::log($this->userId, $path, $body, $response, $httpCode, $error ?: null, $durationMs);
 
 		return [
 			'httpCode' => $httpCode,

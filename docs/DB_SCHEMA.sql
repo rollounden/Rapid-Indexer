@@ -26,7 +26,8 @@ CREATE TABLE tasks (
 	completed_at DATETIME NULL,
 	CONSTRAINT fk_tasks_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
 	INDEX idx_tasks_user_created (user_id, created_at),
-	INDEX idx_tasks_provider (speedyindex_task_id)
+	INDEX idx_tasks_provider (speedyindex_task_id),
+	INDEX idx_tasks_status_created (status, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE task_links (
@@ -38,21 +39,36 @@ CREATE TABLE task_links (
 	checked_at DATETIME NULL,
 	error_code INT NULL,
 	CONSTRAINT fk_tasklinks_task FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
-	INDEX idx_tasklinks_task (task_id)
+	INDEX idx_tasklinks_task (task_id),
+	INDEX idx_tasklinks_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE payments (
 	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 	user_id BIGINT UNSIGNED NOT NULL,
-	amount BIGINT NOT NULL,
-	method ENUM('paypal','crypto','yookassa') NOT NULL,
-	speedyindex_invoice_id VARCHAR(128) NULL,
-	paypal_txn_id VARCHAR(128) NULL,
+	amount DECIMAL(10,2) NOT NULL,
+	currency VARCHAR(16) NOT NULL DEFAULT 'USD',
+	method ENUM('paypal') NOT NULL,
+	paypal_order_id VARCHAR(128) NULL,
+	paypal_capture_id VARCHAR(128) NULL,
+	credits_awarded BIGINT NOT NULL DEFAULT 0,
 	status ENUM('pending','paid','failed','refunded') NOT NULL DEFAULT 'pending',
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT fk_payments_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-	UNIQUE KEY uniq_paypal_txn (paypal_txn_id)
+	UNIQUE KEY uniq_paypal_capture (paypal_capture_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE credit_ledger (
+	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	user_id BIGINT UNSIGNED NOT NULL,
+	delta BIGINT NOT NULL,
+	reason ENUM('payment','task_deduction','task_refund','admin_adjustment','resubmission') NOT NULL,
+	reference_table VARCHAR(64) NULL,
+	reference_id BIGINT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT fk_credit_ledger_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	INDEX idx_credit_ledger_user_time (user_id, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE api_logs (
@@ -62,9 +78,26 @@ CREATE TABLE api_logs (
 	request_payload JSON NULL,
 	response_payload JSON NULL,
 	status_code INT NULL,
+	duration_ms INT UNSIGNED NULL,
 	error_message TEXT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	INDEX idx_api_logs_user_time (user_id, created_at)
+	INDEX idx_api_logs_user_time (user_id, created_at),
+	INDEX idx_api_logs_endpoint_time (endpoint, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE webhook_events (
+	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	provider ENUM('paypal') NOT NULL,
+	external_event_id VARCHAR(191) NOT NULL,
+	event_type VARCHAR(191) NULL,
+	signature VARCHAR(255) NULL,
+	payload JSON NULL,
+	status ENUM('received','processed','ignored','error') NOT NULL DEFAULT 'received',
+	delivery_attempts INT NOT NULL DEFAULT 0,
+	last_error TEXT NULL,
+	processed_at DATETIME NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	UNIQUE KEY uniq_webhook_external_event (external_event_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE admin_actions (
