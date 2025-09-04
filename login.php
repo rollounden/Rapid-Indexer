@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($user && password_verify($password, $user['password_hash'])) {
                 $_SESSION['uid'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
                 $_SESSION['role'] = $user['role'];
-                $pdo->prepare('UPDATE users SET last_login_at = NOW() WHERE id = ?')->execute([$user['id']]);
                 header('Location: /');
                 exit;
             } else {
