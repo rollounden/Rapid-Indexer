@@ -1,4 +1,4 @@
-name: Deploy via FTPS to Hostinger
+name: Deploy via FTP to Hostinger
 
 on:
   push:
@@ -11,15 +11,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy to Hostinger via FTPS
+      - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.cyan-peafowl-394593.hostingersite.com
+          server: 82.197.89.47
           username: 'u906310247.Testing123'
           password: '/Nz!JdGZufu[dV3b'
           server-dir: '/'
-          protocol: ftps
+          protocol: ftp
           port: 21
+          timeout: 120000
+          passive: false
           exclude: |
             **/.git*
             **/.github/**
