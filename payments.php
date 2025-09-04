@@ -24,10 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     } else {
         try {
             require_once __DIR__ . '/src/PaymentService.php';
-            $paymentService = new PaymentService();
-            $payment = $paymentService->createPayment($_SESSION['uid'], $amount, $credits);
+            $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
             
-            // Redirect to PayPal or show payment instructions
+            // For now, just show success message (PayPal integration would go here)
             $success = "Payment created! You'll receive $credits credits for $$amount.";
         } catch (Exception $e) {
             $error = 'Failed to create payment: ' . $e->getMessage();
@@ -57,14 +56,14 @@ $payments = $stmt->fetchAll();
 
 // Get credit ledger (recent transactions)
 $stmt = $pdo->prepare('
-    SELECT cl.*, 
-           CASE 
-               WHEN cl.transaction_type = "payment" THEN "Payment"
-               WHEN cl.transaction_type = "task_creation" THEN "Task Creation"
-               WHEN cl.transaction_type = "task_resubmission" THEN "Task Resubmission"
-               WHEN cl.transaction_type = "admin_adjustment" THEN "Admin Adjustment"
-               ELSE cl.transaction_type
-           END as transaction_label
+         SELECT cl.*, 
+            CASE 
+                WHEN cl.reason = "payment" THEN "Payment"
+                WHEN cl.reason = "task_deduction" THEN "Task Creation"
+                WHEN cl.reason = "task_refund" THEN "Task Refund"
+                WHEN cl.reason = "admin_adjustment" THEN "Admin Adjustment"
+                ELSE cl.reason
+            END as transaction_label
     FROM credit_ledger cl 
     WHERE cl.user_id = ? 
     ORDER BY cl.created_at DESC 
@@ -150,7 +149,7 @@ $ledger_entries = $stmt->fetchAll();
                                                 <tr>
                                                     <th>Date</th>
                                                     <th>Amount</th>
-                                                    <th>Credits</th>
+                                                    <th>Credits Awarded</th>
                                                     <th>Status</th>
                                                     <th>Transaction ID</th>
                                                 </tr>
@@ -160,7 +159,7 @@ $ledger_entries = $stmt->fetchAll();
                                                     <tr>
                                                         <td><?php echo date('M j, Y g:i A', strtotime($payment['created_at'])); ?></td>
                                                         <td>$<?php echo number_format($payment['amount'], 2); ?></td>
-                                                        <td><?php echo number_format($payment['credits_amount']); ?></td>
+                                                                                                                 <td><?php echo number_format($payment['credits_awarded']); ?></td>
                                                         <td>
                                                             <?php
                                                             $status_class = 'secondary';
@@ -174,11 +173,11 @@ $ledger_entries = $stmt->fetchAll();
                                                                 <?php echo htmlspecialchars(ucfirst($payment['status'])); ?>
                                                             </span>
                                                         </td>
-                                                        <td>
-                                                            <small class="text-muted">
-                                                                <?php echo htmlspecialchars($payment['paypal_transaction_id'] ?: 'N/A'); ?>
-                                                            </small>
-                                                        </td>
+                                                                                                                 <td>
+                                                             <small class="text-muted">
+                                                                 <?php echo htmlspecialchars($payment['paypal_capture_id'] ?: 'N/A'); ?>
+                                                             </small>
+                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -211,9 +210,9 @@ $ledger_entries = $stmt->fetchAll();
                                                         <?php echo date('M j, g:i A', strtotime($entry['created_at'])); ?>
                                                     </small>
                                                 </div>
-                                                <span class="<?php echo $entry['amount'] >= 0 ? 'text-success' : 'text-danger'; ?>">
-                                                    <?php echo ($entry['amount'] >= 0 ? '+' : '') . number_format($entry['amount']); ?>
-                                                </span>
+                                                                                                 <span class="<?php echo $entry['delta'] >= 0 ? 'text-success' : 'text-danger'; ?>">
+                                                     <?php echo ($entry['delta'] >= 0 ? '+' : '') . number_format($entry['delta']); ?>
+                                                 </span>
                                             </div>
                                         <?php endforeach; ?>
                                     </div>

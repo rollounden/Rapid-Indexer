@@ -22,8 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $task_id = $_POST['task_id'];
                 try {
                     require_once __DIR__ . '/src/TaskService.php';
-                    $taskService = new TaskService();
-                    $taskService->syncTaskStatus($task_id, $_SESSION['uid']);
+                    TaskService::syncTaskStatus($_SESSION['uid'], $task_id);
                     $success = 'Task status updated successfully.';
                 } catch (Exception $e) {
                     $error = 'Failed to sync task status: ' . $e->getMessage();
@@ -34,8 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $task_id = $_POST['task_id'];
                 try {
                     require_once __DIR__ . '/src/TaskService.php';
-                    $taskService = new TaskService();
-                    $csv_data = $taskService->exportTaskResults($task_id, $_SESSION['uid']);
+                    $csv_data = TaskService::exportTaskCsv($_SESSION['uid'], $task_id);
                     
                     header('Content-Type: text/csv');
                     header('Content-Disposition: attachment; filename="task_' . $task_id . '_results.csv"');
@@ -131,11 +129,11 @@ $total_pages = ceil($total_tasks / $per_page);
                                             <tr>
                                                 <td>
                                                     <strong>#<?php echo htmlspecialchars($task['id']); ?></strong>
-                                                    <?php if ($task['is_vip']): ?>
-                                                        <span class="badge bg-warning">VIP</span>
-                                                    <?php endif; ?>
+                                                                                                         <?php if ($task['vip']): ?>
+                                                         <span class="badge bg-warning">VIP</span>
+                                                     <?php endif; ?>
                                                 </td>
-                                                <td><?php echo htmlspecialchars(ucfirst($task['task_type'])); ?></td>
+                                                <td><?php echo htmlspecialchars(ucfirst($task['type'])); ?></td>
                                                 <td>
                                                     <?php
                                                     $status_class = 'secondary';

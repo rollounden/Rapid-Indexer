@@ -25,8 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 try {
                     require_once __DIR__ . '/src/CreditsService.php';
-                    $creditsService = new CreditsService();
-                    $creditsService->adjustCredits($user_id, $amount, 'admin_adjustment', $reason);
+                    CreditsService::adjust($user_id, $amount, 'admin_adjustment', 'admin_actions', null);
                     $success = "Credits adjusted successfully for user #$user_id";
                 } catch (Exception $e) {
                     $error = 'Failed to adjust credits: ' . $e->getMessage();
@@ -259,7 +258,7 @@ $recent_errors = $stmt->fetchAll();
                                                 <tr>
                                                     <td><?php echo htmlspecialchars($payment['email']); ?></td>
                                                     <td>$<?php echo number_format($payment['amount'], 2); ?></td>
-                                                    <td><?php echo number_format($payment['credits_amount']); ?></td>
+                                                                                                             <td><?php echo number_format($payment['credits_awarded']); ?></td>
                                                     <td>
                                                         <span class="badge bg-<?php echo $payment['status'] === 'completed' ? 'success' : 'warning'; ?>">
                                                             <?php echo htmlspecialchars(ucfirst($payment['status'])); ?>
