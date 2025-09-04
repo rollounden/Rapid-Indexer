@@ -26,6 +26,8 @@ jobs:
           exclude: |
             **/.git*
             **/.github/**
+            **/.cursor/**
+            **/docs/**
             **/node_modules/**
             **/vendor/**
             **/.env*
