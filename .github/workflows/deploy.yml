@@ -14,12 +14,12 @@ jobs:
       - name: Deploy to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
+          server: ftp.cyan-peafowl-394593.hostingersite.com
+          username: 'u906310247.Testing123'
+          password: '/Nz!JdGZufu[dV3b'
+          server-dir: '/'
           protocol: ftps
-          port: ${{ secrets.FTP_PORT }}
+          port: 21
           exclude: |
             **/.git*
             **/.github/**

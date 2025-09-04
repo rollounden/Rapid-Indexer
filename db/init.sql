@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS users (
+	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	email VARCHAR(191) NOT NULL UNIQUE,
+	password_hash VARCHAR(255) NOT NULL,
+	status ENUM('active','suspended','deleted') NOT NULL DEFAULT 'active',
+	role ENUM('user','admin') NOT NULL DEFAULT 'user',
+	credits_balance BIGINT NOT NULL DEFAULT 0,
+	api_key VARCHAR(255) NULL,
+	last_login_at DATETIME NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS api_logs (
+	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	user_id BIGINT UNSIGNED NULL,
+	endpoint VARCHAR(255) NOT NULL,
+	request_payload JSON NULL,
+	response_payload JSON NULL,
+	status_code INT NULL,
+	error_message TEXT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	INDEX idx_api_logs_user_time (user_id, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

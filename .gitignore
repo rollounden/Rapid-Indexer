@@ -23,3 +23,7 @@ Thumbs.db
 
 # Reports/exports
 /reports/
+
+# Project docs and Cursor config
+/docs/
+/.cursor/
