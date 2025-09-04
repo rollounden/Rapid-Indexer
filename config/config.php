@@ -15,7 +15,7 @@ const DB_USER = 'REPLACE_DB_USER';
 const DB_PASS = 'REPLACE_DB_PASS';
 
 // Logging
-const LOG_FILE = __DIR__ . '/storage/logs/app.log';
+const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
 
 // Credits & Pricing
 const CREDITS_PER_URL = 1; // default credits per URL
