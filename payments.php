@@ -46,7 +46,7 @@ $user_credits = $stmt->fetchColumn();
 $stmt = $pdo->prepare('
     SELECT p.*, 
            CASE 
-               WHEN p.status = "completed" THEN p.credits_amount 
+               WHEN p.status = "completed" THEN p.credits_awarded 
                ELSE 0 
            END as credits_received
     FROM payments p 

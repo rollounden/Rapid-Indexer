@@ -58,8 +58,8 @@ $stats = [];
 $stmt = $pdo->query('SELECT COUNT(*) FROM users');
 $stats['total_users'] = $stmt->fetchColumn();
 
-// Active users (last 30 days)
-$stmt = $pdo->query('SELECT COUNT(*) FROM users WHERE last_login >= DATE_SUB(NOW(), INTERVAL 30 DAY)');
+// Active users (last 30 days) - using created_at as fallback since last_login doesn't exist
+$stmt = $pdo->query('SELECT COUNT(*) FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)');
 $stats['active_users'] = $stmt->fetchColumn();
 
 // Total tasks
@@ -80,7 +80,7 @@ $stats['total_revenue'] = $stmt->fetchColumn() ?: 0;
 
 // Get recent users
 $stmt = $pdo->query('
-    SELECT id, email, role, credits_balance, status, created_at, last_login 
+    SELECT id, email, role, credits_balance, status, created_at
     FROM users 
     ORDER BY created_at DESC 
     LIMIT 10
