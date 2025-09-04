@@ -11,8 +11,8 @@ const SPEEDYINDEX_API_KEY = 'REPLACE_WITH_YOUR_SPEEDYINDEX_API_KEY';
 // Database configuration (update with your Hostinger MySQL credentials)
 // Find these in your Hostinger control panel > Databases > MySQL Databases
 const DB_HOST = 'localhost';
-const DB_NAME = 'your_database_name';  // Replace with your actual database name
-const DB_USER = 'your_database_user';  // Replace with your actual database username
+const DB_NAME = 'u906310247_KEKRd';  // Using your most recent database
+const DB_USER = 'u906310247_FBapb';  // Corresponding user
 const DB_PASS = 'your_database_password';  // Replace with your actual database password
 
 // Logging
