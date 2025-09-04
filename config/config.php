@@ -6,7 +6,7 @@ const SPEEDYINDEX_BASE_URL = 'https://api.speedyindex.com';
 
 // TODO: Set your API key here for the server-side integration
 // For production, move to environment variables.
-const SPEEDYINDEX_API_KEY = 'REPLACE_WITH_YOUR_SPEEDYINDEX_API_KEY';
+const SPEEDYINDEX_API_KEY = 'e52842c5690fdc017a8949064c4b4d86';
 
 // Database configuration (update with your Hostinger MySQL credentials)
 // Find these in your Hostinger control panel > Databases > MySQL Databases
