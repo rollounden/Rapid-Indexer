@@ -46,7 +46,7 @@ switch ($path) {
 
     case '/webhook_paypal':
         // Keep webhook endpoint as is
-        require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/Db.php';
         require_once __DIR__ . '/src/PaymentService.php';
         
         // Read raw body and headers
