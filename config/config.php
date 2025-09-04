@@ -25,4 +25,7 @@ const PRICE_PER_CREDIT_USD = 0.01; // example price per credit (USD)
 
 // PayPal (placeholders; wire actual credentials in environment/config)
 const PAYPAL_ENV = 'sandbox'; // 'live' in production
-const PAYPAL_WEBHOOK_SECRET = 'REPLACE_WITH_WEBHOOK_SECRET';
+const PAYPAL_CLIENT_ID = 'AdsnzKeKmo5cHtx_QqYTG5nNQ_kyaoR012ltrAad107RUxiLu2H2Z59kKAYZei9XY4zcQyBW-Lj3_OKU';
+const PAYPAL_CLIENT_SECRET = 'ENWQ_M-NsZxmr_9s2qBEzSKcuLFhxG00wcF_uaEVTSh_Vs7rSZFjXgrYuzPxwgNHXR5u0r5im6dl-3Gt';
+const PAYPAL_WEBHOOK_SECRET = 'https://cyan-peafowl-394593.hostingersite.com/paypal_webhook.php';
+const PAYPAL_BN_CODE = 'FLAVORsb-j2gdy45737228_MP';

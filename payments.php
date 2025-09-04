@@ -26,11 +26,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $error = 'Minimum payment amount is $1.00';
     } else {
         try {
+            require_once __DIR__ . '/src/PayPalService.php';
             require_once __DIR__ . '/src/PaymentService.php';
+            
+            // Create PayPal order
+            $paypal = new PayPalService();
+            $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "SpeedyIndex Credits - $credits credits");
+            
+            // Record pending payment
             $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
             
-            // For now, just show success message (PayPal integration would go here)
-            $success = "Payment created! You'll receive $credits credits for $$amount.";
+            // Update payment with PayPal order ID
+            $stmt = $pdo->prepare('UPDATE payments SET paypal_order_id = ? WHERE id = ?');
+            $stmt->execute([$order['id'], $payment_id]);
+            
+            // Redirect to PayPal
+            $approval_url = null;
+            foreach ($order['links'] as $link) {
+                if ($link['rel'] === 'approve') {
+                    $approval_url = $link['href'];
+                    break;
+                }
+            }
+            
+            if ($approval_url) {
+                header('Location: ' . $approval_url);
+                exit;
+            } else {
+                throw new Exception('PayPal approval URL not found');
+            }
+            
         } catch (Exception $e) {
             $error = 'Failed to create payment: ' . $e->getMessage();
         }
