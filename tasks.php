@@ -2,60 +2,77 @@
 require_once __DIR__ . '/config/config.php';
 session_start();
 
-// Redirect if not logged in
+// Check if user is logged in
 if (!isset($_SESSION['uid'])) {
     header('Location: /login.php');
     exit;
 }
 
 require_once __DIR__ . '/src/Db.php';
-require_once __DIR__ . '/src/TaskService.php';
-
-$userId = $_SESSION['uid'];
 $pdo = Db::conn();
-$msg = '';
-$msgType = '';
 
-// Handle task synchronization
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'sync') {
-    try {
-        TaskService::syncTaskStatus($userId, intval($_POST['task_id']));
-        $msg = 'Task synchronized successfully!';
-        $msgType = 'success';
-    } catch (Exception $e) {
-        $msg = 'Error: ' . $e->getMessage();
-        $msgType = 'danger';
+$error = '';
+$success = '';
+
+// Handle task actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'sync_status':
+                $task_id = $_POST['task_id'];
+                try {
+                    require_once __DIR__ . '/src/TaskService.php';
+                    $taskService = new TaskService();
+                    $taskService->syncTaskStatus($task_id, $_SESSION['uid']);
+                    $success = 'Task status updated successfully.';
+                } catch (Exception $e) {
+                    $error = 'Failed to sync task status: ' . $e->getMessage();
+                }
+                break;
+                
+            case 'export_csv':
+                $task_id = $_POST['task_id'];
+                try {
+                    require_once __DIR__ . '/src/TaskService.php';
+                    $taskService = new TaskService();
+                    $csv_data = $taskService->exportTaskResults($task_id, $_SESSION['uid']);
+                    
+                    header('Content-Type: text/csv');
+                    header('Content-Disposition: attachment; filename="task_' . $task_id . '_results.csv"');
+                    echo $csv_data;
+                    exit;
+                } catch (Exception $e) {
+                    $error = 'Failed to export results: ' . $e->getMessage();
+                }
+                break;
+        }
     }
 }
 
-// Handle CSV export
-if (isset($_GET['action']) && $_GET['action'] === 'export' && isset($_GET['task_id'])) {
-    try {
-        $csv = TaskService::exportTaskCsv($userId, intval($_GET['task_id']));
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="task_' . intval($_GET['task_id']) . '.csv"');
-        echo $csv;
-        exit;
-    } catch (Exception $e) {
-        $msg = 'Export error: ' . $e->getMessage();
-        $msgType = 'danger';
-    }
-}
-
-// Get tasks with pagination
+// Get user's tasks with pagination
 $page = max(1, intval($_GET['page'] ?? 1));
-$limit = 20;
-$offset = ($page - 1) * $limit;
+$per_page = 10;
+$offset = ($page - 1) * $per_page;
 
-$stmt = $pdo->prepare('SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?');
-$stmt->execute([$userId, $limit, $offset]);
+$stmt = $pdo->prepare('
+    SELECT t.*, COUNT(tl.id) as total_links, 
+           SUM(CASE WHEN tl.status = "completed" THEN 1 ELSE 0 END) as completed_links,
+           SUM(CASE WHEN tl.status = "failed" THEN 1 ELSE 0 END) as failed_links
+    FROM tasks t 
+    LEFT JOIN task_links tl ON t.id = tl.task_id 
+    WHERE t.user_id = ? 
+    GROUP BY t.id 
+    ORDER BY t.created_at DESC 
+    LIMIT ? OFFSET ?
+');
+$stmt->execute([$_SESSION['uid'], $per_page, $offset]);
 $tasks = $stmt->fetchAll();
 
 // Get total count for pagination
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM tasks WHERE user_id = ?');
-$stmt->execute([$userId]);
-$totalTasks = $stmt->fetchColumn();
-$totalPages = ceil($totalTasks / $limit);
+$stmt->execute([$_SESSION['uid']]);
+$total_tasks = $stmt->fetchColumn();
+$total_pages = ceil($total_tasks / $per_page);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,143 +85,132 @@ $totalPages = ceil($totalTasks / $limit);
     <link href="/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/dashboard.php">RapidIndexer</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link active" href="/tasks.php">Tasks</a>
-                <a class="nav-link" href="/payments.php">Payments</a>
-                <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
-                <a class="nav-link" href="/admin.php">Admin</a>
+    <?php include __DIR__ . '/includes/navbar.php'; ?>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="h3 mb-0">My Tasks</h1>
+                    <a href="/dashboard.php" class="btn btn-primary">Create New Task</a>
+                </div>
+                
+                <?php if ($error): ?>
+                    <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
                 <?php endif; ?>
-                <a class="nav-link" href="/logout.php">Logout</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0">My Tasks</h1>
-            <a href="/dashboard.php" class="btn btn-outline-primary">Create New Task</a>
-        </div>
-
-        <?php if ($msg): ?>
-            <div class="alert alert-<?php echo $msgType; ?>"><?php echo htmlspecialchars($msg); ?></div>
-        <?php endif; ?>
-
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Task History</h5>
-            </div>
-            <div class="card-body p-0">
+                
+                <?php if ($success): ?>
+                    <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+                <?php endif; ?>
+                
                 <?php if (empty($tasks)): ?>
-                    <div class="p-4 text-center text-muted">
-                        <h5>No tasks yet</h5>
-                        <p>Create your first task to get started!</p>
-                        <a href="/dashboard.php" class="btn btn-primary">Create Task</a>
+                    <div class="card">
+                        <div class="card-body text-center py-5">
+                            <h5 class="text-muted">No tasks found</h5>
+                            <p class="text-muted">Create your first indexing task to get started.</p>
+                            <a href="/dashboard.php" class="btn btn-primary">Create Task</a>
+                        </div>
                     </div>
                 <?php else: ?>
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Engine</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                    <th>VIP</th>
-                                    <th>Created</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($tasks as $task): ?>
-                                    <tr>
-                                        <td>
-                                            <span class="badge bg-secondary">#<?php echo htmlspecialchars(strval($task['id'])); ?></span>
-                                        </td>
-                                        <td>
-                                            <strong><?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?></strong>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info"><?php echo htmlspecialchars(ucfirst($task['search_engine'])); ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-primary"><?php echo htmlspecialchars(ucfirst($task['type'])); ?></span>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            $statusClass = 'bg-secondary';
-                                            if ($task['status'] === 'completed') $statusClass = 'bg-success';
-                                            elseif ($task['status'] === 'processing') $statusClass = 'bg-warning';
-                                            elseif ($task['status'] === 'failed') $statusClass = 'bg-danger';
-                                            ?>
-                                            <span class="badge <?php echo $statusClass; ?>">
-                                                <?php echo htmlspecialchars(ucfirst($task['status'])); ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <?php if ($task['vip']): ?>
-                                                <span class="badge bg-warning">VIP</span>
-                                            <?php else: ?>
-                                                <span class="text-muted">-</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <small class="text-muted">
-                                                <?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?>
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <form method="post" class="d-inline">
-                                                    <input type="hidden" name="action" value="sync" />
-                                                    <input type="hidden" name="task_id" value="<?php echo htmlspecialchars(strval($task['id'])); ?>" />
-                                                    <button type="submit" class="btn btn-outline-primary" title="Sync Status">
-                                                        <i class="bi bi-arrow-clockwise"></i> Sync
-                                                    </button>
-                                                </form>
-                                                <a href="/tasks.php?action=export&task_id=<?php echo htmlspecialchars(strval($task['id'])); ?>" 
-                                                   class="btn btn-outline-secondary" title="Export CSV">
-                                                    <i class="bi bi-download"></i> Export
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Task ID</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Progress</th>
+                                            <th>Created</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($tasks as $task): ?>
+                                            <tr>
+                                                <td>
+                                                    <strong>#<?php echo htmlspecialchars($task['id']); ?></strong>
+                                                    <?php if ($task['is_vip']): ?>
+                                                        <span class="badge bg-warning">VIP</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo htmlspecialchars(ucfirst($task['task_type'])); ?></td>
+                                                <td>
+                                                    <?php
+                                                    $status_class = 'secondary';
+                                                    switch ($task['status']) {
+                                                        case 'pending': $status_class = 'warning'; break;
+                                                        case 'processing': $status_class = 'info'; break;
+                                                        case 'completed': $status_class = 'success'; break;
+                                                        case 'failed': $status_class = 'danger'; break;
+                                                    }
+                                                    ?>
+                                                    <span class="badge bg-<?php echo $status_class; ?>">
+                                                        <?php echo htmlspecialchars(ucfirst($task['status'])); ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <?php if ($task['total_links'] > 0): ?>
+                                                        <div class="progress" style="height: 20px;">
+                                                            <?php 
+                                                            $percentage = ($task['completed_links'] / $task['total_links']) * 100;
+                                                            ?>
+                                                            <div class="progress-bar" style="width: <?php echo $percentage; ?>%">
+                                                                <?php echo $task['completed_links']; ?>/<?php echo $task['total_links']; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <span class="text-muted">No links</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <form method="POST" style="display: inline;">
+                                                            <input type="hidden" name="action" value="sync_status">
+                                                            <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                                            <button type="submit" class="btn btn-outline-primary" 
+                                                                    <?php echo $task['status'] === 'completed' ? 'disabled' : ''; ?>>
+                                                                Sync
+                                                            </button>
+                                                        </form>
+                                                        
+                                                        <?php if ($task['status'] === 'completed'): ?>
+                                                            <form method="POST" style="display: inline;">
+                                                                <input type="hidden" name="action" value="export_csv">
+                                                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                                                <button type="submit" class="btn btn-outline-success">
+                                                                    Export
+                                                                </button>
+                                                            </form>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <?php if ($total_pages > 1): ?>
+                                <nav aria-label="Task pagination">
+                                    <ul class="pagination justify-content-center">
+                                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+                                    </ul>
+                                </nav>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
-
-        <!-- Pagination -->
-        <?php if ($totalPages > 1): ?>
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <?php if ($page > 1): ?>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<?php echo $page - 1; ?>">Previous</a>
-                        </li>
-                    <?php endif; ?>
-                    
-                    <?php for ($i = max(1, $page - 2); $i <= min($totalPages, $page + 2); $i++): ?>
-                        <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
-                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-                    
-                    <?php if ($page < $totalPages): ?>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<?php echo $page + 1; ?>">Next</a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-        <?php endif; ?>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
