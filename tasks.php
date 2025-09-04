@@ -64,9 +64,9 @@ $stmt = $pdo->prepare('
     WHERE t.user_id = ? 
     GROUP BY t.id 
     ORDER BY t.created_at DESC 
-    LIMIT ? OFFSET ?
-');
-$stmt->execute([$_SESSION['uid'], (int)$per_page, (int)$offset]);
+    LIMIT ' . (int)$per_page . ' OFFSET ' . (int)$offset
+);
+$stmt->execute([$_SESSION['uid']]);
 $tasks = $stmt->fetchAll();
 
 // Get total count for pagination
