@@ -13,7 +13,7 @@ const SPEEDYINDEX_API_KEY = 'REPLACE_WITH_YOUR_SPEEDYINDEX_API_KEY';
 const DB_HOST = 'localhost';
 const DB_NAME = 'u906310247_KEKRd';  // Using your most recent database
 const DB_USER = 'u906310247_FBapb';  // Corresponding user
-const DB_PASS = 'your_database_password';  // Replace with your actual database password
+const DB_PASS = 'test123456';  // Test password - change this in production!
 
 // Logging
 const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
