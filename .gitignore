@@ -1,0 +1,25 @@
+# Laravel / PHP
+/vendor/
+/node_modules/
+/public/storage
+/storage/*.key
+/.env
+/.env.*
+.phpunit.result.cache
+composer.lock
+
+# IDEs / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+/storage/logs/*
+*.log
+
+# Cache
+/bootstrap/cache/*
+
+# Reports/exports
+/reports/
