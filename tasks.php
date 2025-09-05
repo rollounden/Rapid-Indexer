@@ -131,7 +131,7 @@ $total_pages = ceil($total_tasks / $per_page);
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">My Tasks</h1>
-                    <a href="/dashboard.php" class="btn btn-primary">Create New Task</a>
+                    <a href="/dashboard" class="btn btn-primary">Create New Task</a>
                 </div>
                 
                 <?php if ($error): ?>
@@ -147,7 +147,7 @@ $total_pages = ceil($total_tasks / $per_page);
                         <div class="card-body text-center py-5">
                             <h5 class="text-muted">No tasks found</h5>
                             <p class="text-muted">Create your first indexing task to get started.</p>
-                            <a href="/dashboard.php" class="btn btn-primary">Create Task</a>
+                            <a href="/dashboard" class="btn btn-primary">Create Task</a>
                         </div>
                     </div>
                 <?php else: ?>
@@ -232,7 +232,7 @@ $total_pages = ceil($total_tasks / $per_page);
                                                             </form>
                                                         <?php endif; ?>
                                                         
-                                                        <a href="/task_results.php?id=<?php echo $task['id']; ?>" class="btn btn-outline-primary">
+                                                        <a href="/task_results?id=<?php echo $task['id']; ?>" class="btn btn-outline-primary">
                                                             <i class="fas fa-list"></i> View Results
                                                         </a>
                                                     </div>
