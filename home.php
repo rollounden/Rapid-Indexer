@@ -13,8 +13,8 @@ if (isset($_SESSION['uid'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RapidIndexer - Fast Google Indexing Service</title>
-    <meta name="description" content="Get your website pages indexed by Google quickly with RapidIndexer. Professional SEO indexing service for faster search engine visibility.">
+    <title>Rapid Indexer - Fast Google Indexing Service</title>
+    <meta name="description" content="Get your website pages indexed by Google quickly with Rapid Indexer. Professional SEO indexing service for faster search engine visibility.">
     <meta name="theme-color" content="#667eea">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -142,7 +142,7 @@ if (isset($_SESSION['uid'])) {
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary" href="/">
-                <i class="fas fa-rocket me-2"></i>RapidIndexer
+                <i class="fas fa-rocket me-2"></i>Rapid Indexer
             </a>
             
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -164,8 +164,8 @@ if (isset($_SESSION['uid'])) {
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">Get Your Pages Indexed by Google Fast</h1>
-                    <p class="lead mb-4">Stop waiting weeks for Google to discover your new content. RapidIndexer gets your pages indexed in hours, not days.</p>
+                    <h1 class="display-4 fw-bold mb-4">Get Your Backlinks Indexed by Google Fast</h1>
+                    <p class="lead mb-4">Stop waiting weeks for Google to discover your new content. Rapid Indexer gets your links indexed in hours, not days.</p>
                     <div class="d-flex gap-3 btn-group-mobile">
                         <a href="/register" class="btn btn-light btn-lg">
                             <i class="fas fa-rocket me-2"></i>Start Indexing Now
@@ -185,7 +185,7 @@ if (isset($_SESSION['uid'])) {
         <div class="container">
             <div class="row text-center mb-5">
                 <div class="col-lg-8 mx-auto">
-                    <h2 class="display-5 fw-bold mb-3">Why Choose RapidIndexer?</h2>
+                    <h2 class="display-5 fw-bold mb-3">Why Choose Rapid Indexer?</h2>
                     <p class="lead text-muted">Professional SEO indexing service designed for speed and reliability</p>
                 </div>
             </div>
@@ -266,7 +266,7 @@ if (isset($_SESSION['uid'])) {
     <section class="py-5 bg-primary text-white">
         <div class="container text-center">
             <h2 class="display-5 fw-bold mb-3">Ready to Get Indexed?</h2>
-            <p class="lead mb-4">Join thousands of websites that trust RapidIndexer for fast Google indexing.</p>
+            <p class="lead mb-4">Join thousands of websites that trust Rapid Indexer for fast Google indexing.</p>
             <a href="/register" class="btn btn-light btn-lg">
                 <i class="fas fa-rocket me-2"></i>Start Indexing Now
             </a>
@@ -278,11 +278,11 @@ if (isset($_SESSION['uid'])) {
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5><i class="fas fa-rocket me-2"></i>RapidIndexer</h5>
+                    <h5><i class="fas fa-rocket me-2"></i>Rapid Indexer</h5>
                     <p class="text-muted">Professional Google indexing service for faster SEO results.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="text-muted mb-0">&copy; 2025 RapidIndexer. All rights reserved.</p>
+                    <p class="text-muted mb-0">&copy; 2025 Rapid Indexer. All rights reserved.</p>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-# RapidIndexer URL Rewriting Rules
+# Rapid Indexer URL Rewriting Rules
 
 # Enable URL rewriting
 RewriteEngine On
