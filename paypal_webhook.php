@@ -183,10 +183,16 @@ function handlePaymentCompleted($pdo, $data) {
     if (!$user_id) {
         // For test webhooks, use a default user ID (you can change this)
         $user_id = 1; // Default test user
+        
+        // Log that we're using default user for test
+        error_log("PayPal Webhook: Using default user ID $user_id for test webhook");
     }
     
     // Calculate credits based on amount
     $credits_amount = intval($amount / PRICE_PER_CREDIT_USD);
+    
+    // Log processing details
+    error_log("PayPal Webhook Processing: User ID=$user_id, Amount=$amount, Credits=$credits_amount, Payment ID=$payment_id");
     
     // Find the payment record by PayPal order ID or capture ID
     $stmt = $pdo->prepare('SELECT id FROM payments WHERE paypal_order_id = ? OR paypal_capture_id = ?');
