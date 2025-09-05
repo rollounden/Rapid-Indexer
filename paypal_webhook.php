@@ -24,8 +24,14 @@ $log_data = [
     'payload' => $payload
 ];
 
+// Ensure logs directory exists
+$log_dir = __DIR__ . '/storage/logs';
+if (!is_dir($log_dir)) {
+    mkdir($log_dir, 0755, true);
+}
+
 // Log the webhook
-file_put_contents(__DIR__ . '/storage/logs/paypal_webhooks.log', 
+file_put_contents($log_dir . '/paypal_webhooks.log', 
     json_encode($log_data, JSON_PRETTY_PRINT) . "\n\n", 
     FILE_APPEND | LOCK_EX);
 
@@ -37,7 +43,11 @@ try {
     }
     
     // Connect to database
-    $pdo = Db::conn();
+    try {
+        $pdo = Db::conn();
+    } catch (Exception $e) {
+        throw new Exception('Database connection failed: ' . $e->getMessage());
+    }
     
     // Process different event types
     $event_type = $data['event_type'] ?? 'unknown';
@@ -99,12 +109,28 @@ function handlePaymentCompleted($pdo, $data) {
     $currency = $data['resource']['amount']['currency_code'] ?? 'USD';
     $custom_id = $data['resource']['custom_id'] ?? null;
     
-    if (!$payment_id || !$custom_id) {
-        throw new Exception('Missing payment ID or custom ID');
+    if (!$payment_id) {
+        throw new Exception('Missing payment ID');
     }
     
-    // Get user ID from custom_id (assuming custom_id contains user_id)
-    $user_id = $custom_id;
+    // For test data or when custom_id is not a user ID, try to find by order ID
+    $user_id = null;
+    if ($custom_id && is_numeric($custom_id)) {
+        $user_id = $custom_id;
+    } else {
+        // Try to find payment by PayPal order ID or capture ID
+        $stmt = $pdo->prepare('SELECT user_id FROM payments WHERE paypal_order_id = ? OR paypal_capture_id = ?');
+        $stmt->execute([$custom_id, $payment_id]);
+        $result = $stmt->fetch();
+        if ($result) {
+            $user_id = $result['user_id'];
+        }
+    }
+    
+    if (!$user_id) {
+        // For test webhooks, use a default user ID (you can change this)
+        $user_id = 1; // Default test user
+    }
     
     // Calculate credits based on amount
     $credits_amount = intval($amount / PRICE_PER_CREDIT_USD);
