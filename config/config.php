@@ -1,6 +1,12 @@
 <?php
 // Production config for SpeedyIndex SaaS MVP
 
+// Set up production error handling
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors to users
+ini_set('log_errors', 1); // Log errors to file
+ini_set('error_log', __DIR__ . '/../storage/logs/php_errors.log');
+
 // Load environment variables from .env file
 if (file_exists(__DIR__ . '/../.env')) {
     $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);

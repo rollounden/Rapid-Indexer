@@ -11,11 +11,11 @@ if (empty($path)) $path = '/';
 // Route handling
 switch ($path) {
     case '/':
-        // Redirect to dashboard if logged in, otherwise to login
+        // Redirect to dashboard if logged in, otherwise to home page
         if (isset($_SESSION['uid'])) {
-            header('Location: /dashboard.php');
+            header('Location: /dashboard');
         } else {
-            header('Location: /login.php');
+            header('Location: /home');
         }
         exit;
         break;

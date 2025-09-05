@@ -32,9 +32,3 @@ jobs:
             **/.env*
             **/storage/logs/**
             **/bootstrap/cache/**
-            **/AUTO_SYNC_SETUP.md
-            **/cron_test.php
-            **/debug_api_response.php
-            **/manual_task_sync.php
-            **/test_fixed_sync.php
-            **/analyze_api_response.php
