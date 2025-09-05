@@ -165,20 +165,7 @@ $paymentStats = $stmt->fetch();
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/dashboard.php">Rapid Indexer</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/tasks.php">Tasks</a>
-                <a class="nav-link" href="/payments.php">Payments</a>
-                <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
-                <a class="nav-link" href="/admin.php">Admin</a>
-                <?php endif; ?>
-                <a class="nav-link" href="/logout.php">Logout</a>
-            </div>
-        </div>
-    </nav>
+    <?php include __DIR__ . '/includes/navbar.php'; ?>
 
     <div class="container py-4">
         <?php if ($error): ?>
