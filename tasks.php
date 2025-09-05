@@ -193,10 +193,11 @@ $total_pages = ceil($total_tasks / $per_page);
                                                     <?php if ($task['total_links'] > 0): ?>
                                                         <div class="progress" style="height: 20px;">
                                                             <?php 
-                                                            $percentage = ($task['completed_links'] / $task['total_links']) * 100;
+                                                            $completed = $task['indexed_links'] + $task['unindexed_links'];
+                                                            $percentage = ($completed / $task['total_links']) * 100;
                                                             ?>
                                                             <div class="progress-bar" style="width: <?php echo $percentage; ?>%">
-                                                                <?php echo $task['completed_links']; ?>/<?php echo $task['total_links']; ?>
+                                                                <?php echo $completed; ?>/<?php echo $task['total_links']; ?>
                                                             </div>
                                                         </div>
                                                     <?php else: ?>

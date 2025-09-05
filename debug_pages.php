@@ -79,8 +79,10 @@ echo "<h2>6. Testing Tasks Page Queries</h2>";
 try {
     $stmt = $pdo->prepare('
         SELECT t.*, COUNT(tl.id) as total_links, 
-               SUM(CASE WHEN tl.status = "completed" THEN 1 ELSE 0 END) as completed_links,
-               SUM(CASE WHEN tl.status = "failed" THEN 1 ELSE 0 END) as failed_links
+               SUM(CASE WHEN tl.status = "indexed" THEN 1 ELSE 0 END) as indexed_links,
+               SUM(CASE WHEN tl.status = "unindexed" THEN 1 ELSE 0 END) as unindexed_links,
+               SUM(CASE WHEN tl.status = "pending" THEN 1 ELSE 0 END) as pending_links,
+               SUM(CASE WHEN tl.status = "error" THEN 1 ELSE 0 END) as error_links
         FROM tasks t 
         LEFT JOIN task_links tl ON t.id = tl.task_id 
         WHERE t.user_id = ? 
