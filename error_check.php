@@ -92,7 +92,7 @@ try {
         WHERE t.user_id = ? 
         GROUP BY t.id 
         ORDER BY t.created_at DESC 
-        LIMIT ? OFFSET ?
+        LIMIT 10 OFFSET 0
     ');
     echo "<p style='color: green;'>✅ Tasks query prepared</p>";
 } catch (Exception $e) {

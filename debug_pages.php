@@ -86,9 +86,9 @@ try {
         WHERE t.user_id = ? 
         GROUP BY t.id 
         ORDER BY t.created_at DESC 
-        LIMIT ? OFFSET ?
+        LIMIT 10 OFFSET 0
     ');
-    $stmt->execute([1, 10, 0]);
+    $stmt->execute([1]);
     $tasks = $stmt->fetchAll();
     echo "✅ Tasks query successful (found " . count($tasks) . " tasks)<br>";
 } catch (Exception $e) {
