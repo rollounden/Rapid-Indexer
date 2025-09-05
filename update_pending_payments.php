@@ -40,7 +40,8 @@ try {
                 echo "<a href='?action=cancel&id=" . $payment['id'] . "'>Cancel</a> ";
                 echo "<small>(" . round($age_minutes) . " min old)</small>";
             } else {
-                echo "<small>Too recent (" . round($age_minutes) . " min old)</small>";
+                echo "<a href='?action=complete&id=" . $payment['id'] . "'>Force Complete</a> ";
+                echo "<small>(" . round($age_minutes) . " min old)</small>";
             }
             
             echo "</td>";
@@ -59,20 +60,44 @@ try {
             $stmt->execute(['cancelled', $payment_id]);
             echo "<p>✅ Payment #$payment_id cancelled</p>";
             echo "<script>setTimeout(function(){ window.location.href = 'update_pending_payments.php'; }, 2000);</script>";
+        } elseif ($action === 'complete') {
+            // Get payment details
+            $stmt = $pdo->prepare('SELECT * FROM payments WHERE id = ?');
+            $stmt->execute([$payment_id]);
+            $payment = $stmt->fetch();
+            
+            if ($payment) {
+                $credits = intval($payment['amount'] / PRICE_PER_CREDIT_USD);
+                
+                // Update payment status
+                $stmt = $pdo->prepare('UPDATE payments SET status = ?, credits_awarded = ?, updated_at = NOW() WHERE id = ?');
+                $stmt->execute(['paid', $credits, $payment_id]);
+                
+                // Add credits to user account
+                $stmt = $pdo->prepare('UPDATE users SET credits_balance = credits_balance + ? WHERE id = ?');
+                $stmt->execute([$credits, $payment['user_id']]);
+                
+                // Log the credit addition
+                $stmt = $pdo->prepare('INSERT INTO credit_ledger (user_id, delta, reason, reference_table, reference_id) VALUES (?, ?, ?, ?, ?)');
+                $stmt->execute([$payment['user_id'], $credits, 'payment', 'payments', $payment_id]);
+                
+                echo "<p>✅ Payment #$payment_id completed - $credits credits awarded</p>";
+                echo "<script>setTimeout(function(){ window.location.href = 'update_pending_payments.php'; }, 2000);</script>";
+            }
         }
     }
     
     echo "<h2>Current User Credits:</h2>";
-    $stmt = $pdo->prepare('SELECT id, username, credits_balance FROM users ORDER BY id');
+    $stmt = $pdo->prepare('SELECT id, email, credits_balance FROM users ORDER BY id');
     $stmt->execute();
     $users = $stmt->fetchAll();
     
     echo "<table border='1'>";
-    echo "<tr><th>User ID</th><th>Username</th><th>Credits</th></tr>";
+    echo "<tr><th>User ID</th><th>Email</th><th>Credits</th></tr>";
     foreach ($users as $user) {
         echo "<tr>";
         echo "<td>" . $user['id'] . "</td>";
-        echo "<td>" . $user['username'] . "</td>";
+        echo "<td>" . $user['email'] . "</td>";
         echo "<td>" . $user['credits_balance'] . "</td>";
         echo "</tr>";
     }
