@@ -56,21 +56,33 @@ class TaskService
         $report = $client->fullReport($task['search_engine'], $task['type'], $task['speedyindex_task_id']);
         $payload = json_decode($report['body'] ?? '', true) ?: [];
 
-        // Expecting payload structure to include results per URL. This may need adaptation.
-        $links = $payload['links'] ?? $payload['data']['links'] ?? [];
+        // Parse SpeedyIndex API response structure
+        $indexed_links = $payload['indexed_links'] ?? [];
+        $unindexed_links = $payload['unindexed_links'] ?? [];
+        
         $update = $pdo->prepare('UPDATE task_links SET status = ?, result_data = ?, checked_at = NOW(), error_code = ? WHERE task_id = ? AND url = ?');
-        foreach ($links as $item) {
+        
+        // Process indexed links
+        foreach ($indexed_links as $item) {
             $url = $item['url'] ?? null;
             if (!$url) { continue; }
-            $status = $item['status'] ?? ($item['indexed'] ? 'indexed' : 'unindexed');
-            $error = isset($item['error_code']) ? intval($item['error_code']) : null;
-            $update->execute([$status, json_encode($item), $error, $taskId, $url]);
+            $update->execute(['indexed', json_encode($item), null, $taskId, $url]);
         }
+        
+        // Process unindexed links
+        foreach ($unindexed_links as $item) {
+            $url = $item['url'] ?? null;
+            if (!$url) { continue; }
+            $error_code = isset($item['error_code']) ? intval($item['error_code']) : null;
+            $update->execute(['unindexed', json_encode($item), $error_code, $taskId, $url]);
+        }
+        
+        $total_processed = count($indexed_links) + count($unindexed_links);
 
         $pdo->prepare('UPDATE tasks SET status = ?, completed_at = CASE WHEN ? = "completed" THEN NOW() ELSE completed_at END WHERE id = ?')
             ->execute(['completed', 'completed', $taskId]);
 
-        return ['ok' => true, 'updated' => count($links)];
+        return ['ok' => true, 'updated' => $total_processed];
     }
 
     public static function exportTaskCsv(int $userId, int $taskId): string
