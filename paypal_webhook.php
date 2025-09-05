@@ -97,12 +97,12 @@ try {
             
         default:
             // Log unknown event types
-            $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+            $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
             $stmt->execute([
                 'paypal_webhook',
                 $payload,
                 json_encode(['status' => 'unknown_event_type', 'event_type' => $event_type]),
-                'info'
+                200
             ]);
             break;
     }
@@ -216,12 +216,12 @@ function handlePaymentCompleted($pdo, $data) {
     }
     
     // Log the webhook
-    $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+    $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
     $stmt->execute([
         'paypal_webhook_payment_completed',
         json_encode($data),
         json_encode(['status' => 'success', 'credits_added' => $credits_amount]),
-        'success'
+        200
     ]);
 }
 
@@ -234,12 +234,12 @@ function handlePaymentDenied($pdo, $data) {
         $stmt->execute(['failed', $payment_id]);
         
         // Log the webhook
-        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
         $stmt->execute([
             'paypal_webhook_payment_denied',
             json_encode($data),
             json_encode(['status' => 'denied']),
-            'error'
+            400
         ]);
     }
 }
@@ -272,12 +272,12 @@ function handlePaymentRefunded($pdo, $data) {
         }
         
         // Log the webhook
-        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
         $stmt->execute([
             'paypal_webhook_payment_refunded',
             json_encode($data),
             json_encode(['status' => 'refunded', 'credits_deducted' => $credits_to_deduct ?? 0]),
-            'info'
+            200
         ]);
     }
 }
@@ -291,12 +291,12 @@ function handlePaymentPending($pdo, $data) {
         $stmt->execute(['pending', $payment_id]);
         
         // Log the webhook
-        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
         $stmt->execute([
             'paypal_webhook_payment_pending',
             json_encode($data),
             json_encode(['status' => 'pending']),
-            'info'
+            200
         ]);
     }
 }
@@ -325,12 +325,12 @@ function handlePaymentReversed($pdo, $data) {
         }
         
         // Log the webhook
-        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
         $stmt->execute([
             'paypal_webhook_payment_reversed',
             json_encode($data),
             json_encode(['status' => 'reversed', 'credits_deducted' => $payment['credits_awarded'] ?? 0]),
-            'error'
+            400
         ]);
     }
 }
@@ -340,12 +340,12 @@ function handleOrderApproved($pdo, $data) {
     
     if ($order_id) {
         // Log the order approval
-        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
         $stmt->execute([
             'paypal_webhook_order_approved',
             json_encode($data),
             json_encode(['status' => 'approved']),
-            'info'
+            200
         ]);
     }
 }

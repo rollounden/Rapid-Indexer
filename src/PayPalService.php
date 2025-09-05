@@ -98,7 +98,7 @@ class PayPalService {
         $data = json_decode($response, true);
         
         // Log the API call
-        $this->logApiCall('create_order', $order_data, $response, $http_code === 201 ? 'success' : 'error');
+        $this->logApiCall('create_order', $order_data, $response, $http_code);
         
         return $data;
     }
@@ -130,7 +130,7 @@ class PayPalService {
         $data = json_decode($response, true);
         
         // Log the API call
-        $this->logApiCall('capture_payment', ['order_id' => $order_id], $response, $http_code === 201 ? 'success' : 'error');
+        $this->logApiCall('capture_payment', ['order_id' => $order_id], $response, $http_code);
         
         return $data;
     }
@@ -161,7 +161,7 @@ class PayPalService {
         $data = json_decode($response, true);
         
         // Log the API call
-        $this->logApiCall('get_order', ['order_id' => $order_id], $response, $http_code === 200 ? 'success' : 'error');
+        $this->logApiCall('get_order', ['order_id' => $order_id], $response, $http_code);
         
         return $data;
     }
@@ -205,7 +205,7 @@ class PayPalService {
         $data = json_decode($response, true);
         
         // Log the API call
-        $this->logApiCall('refund_payment', array_merge(['capture_id' => $capture_id], $refund_data), $response, $http_code === 201 ? 'success' : 'error');
+        $this->logApiCall('refund_payment', array_merge(['capture_id' => $capture_id], $refund_data), $response, $http_code);
         
         return $data;
     }
@@ -213,15 +213,15 @@ class PayPalService {
     /**
      * Log API calls to database
      */
-    private function logApiCall($endpoint, $request_data, $response_data, $status) {
+    private function logApiCall($endpoint, $request_data, $response_data, $status_code) {
         try {
             $pdo = Db::conn();
-            $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_data, response_data, status) VALUES (?, ?, ?, ?)');
+            $stmt = $pdo->prepare('INSERT INTO api_logs (endpoint, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)');
             $stmt->execute([
                 'paypal_' . $endpoint,
                 json_encode($request_data),
                 $response_data,
-                $status
+                $status_code
             ]);
         } catch (Exception $e) {
             error_log('Failed to log PayPal API call: ' . $e->getMessage());
