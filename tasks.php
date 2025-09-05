@@ -121,7 +121,93 @@ $total_pages = ceil($total_tasks / $per_page);
     <title>Tasks - Rapid Indexer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
+    <style>
+        /* Enhanced Button Styling */
+        .btn {
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            border: none;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            color: white;
+        }
+        
+        /* Mobile Button Optimizations */
+        @media (max-width: 768px) {
+            .d-flex.gap-2 {
+                flex-direction: column;
+                gap: 0.5rem !important;
+            }
+            
+            .d-flex.gap-2 .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+        
+        /* Table Action Buttons */
+        .table td .d-flex {
+            min-width: 200px;
+        }
+        
+        @media (max-width: 576px) {
+            .table td .d-flex {
+                min-width: auto;
+            }
+        }
+        
+        /* Status Badge Improvements */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+        }
+        
+        /* Progress Bar Improvements */
+        .progress {
+            height: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        
+        .progress-bar {
+            border-radius: 0.25rem;
+        }
+    </style>
 </head>
 <body>
     <?php include __DIR__ . '/includes/navbar.php'; ?>
@@ -131,7 +217,9 @@ $total_pages = ceil($total_tasks / $per_page);
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">My Tasks</h1>
-                    <a href="/dashboard" class="btn btn-primary">Create New Task</a>
+                    <a href="/dashboard" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>Create New Task
+                    </a>
                 </div>
                 
                 <?php if ($error): ?>
@@ -145,9 +233,12 @@ $total_pages = ceil($total_tasks / $per_page);
                 <?php if (empty($tasks)): ?>
                     <div class="card">
                         <div class="card-body text-center py-5">
-                            <h5 class="text-muted">No tasks found</h5>
-                            <p class="text-muted">Create your first indexing task to get started.</p>
-                            <a href="/dashboard" class="btn btn-primary">Create Task</a>
+                            <i class="fas fa-tasks text-muted mb-3" style="font-size: 3rem;"></i>
+                            <h5 class="text-muted mb-3">No tasks found</h5>
+                            <p class="text-muted mb-4">Create your first indexing task to get started.</p>
+                            <a href="/dashboard" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>Create Your First Task
+                            </a>
                         </div>
                     </div>
                 <?php else: ?>
@@ -206,35 +297,31 @@ $total_pages = ceil($total_tasks / $per_page);
                                                 </td>
                                                 <td><?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?></td>
                                                 <td>
-                                                    <div class="btn-group btn-group-sm">
-                                                        <form method="POST" style="display: inline;">
-                                                            <input type="hidden" name="action" value="sync_status">
-                                                            <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                                            <button type="submit" class="btn btn-outline-primary" 
-                                                                    <?php echo $task['status'] === 'completed' ? 'disabled' : ''; ?>
-                                                                    title="<?php echo $task['type'] === 'checker' ? 'Auto-syncs every 15 seconds' : 'Auto-syncs every 2 minutes'; ?>">
-                                                                <i class="fas fa-sync"></i> Sync
-                                                                <?php if ($task['type'] === 'checker'): ?>
-                                                                    <small class="text-muted">(15s)</small>
-                                                                <?php else: ?>
-                                                                    <small class="text-muted">(2m)</small>
-                                                                <?php endif; ?>
-                                                            </button>
-                                                        </form>
+                                                    <div class="d-flex gap-2 flex-wrap">
+                                                        <a href="/task_results?id=<?php echo $task['id']; ?>" 
+                                                           class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-eye me-1"></i>View Results
+                                                        </a>
                                                         
                                                         <?php if ($task['status'] === 'completed'): ?>
                                                             <form method="POST" style="display: inline;">
                                                                 <input type="hidden" name="action" value="export_csv">
                                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                                                <button type="submit" class="btn btn-outline-success">
-                                                                    Export
+                                                                <button type="submit" class="btn btn-success btn-sm">
+                                                                    <i class="fas fa-download me-1"></i>Export CSV
                                                                 </button>
                                                             </form>
                                                         <?php endif; ?>
                                                         
-                                                        <a href="/task_results?id=<?php echo $task['id']; ?>" class="btn btn-outline-primary">
-                                                            <i class="fas fa-list"></i> View Results
-                                                        </a>
+                                                        <?php if ($task['status'] === 'pending' && $task['type'] === 'indexer'): ?>
+                                                            <form method="POST" style="display: inline;">
+                                                                <input type="hidden" name="action" value="vip_queue">
+                                                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                                                <button type="submit" class="btn btn-warning btn-sm">
+                                                                    <i class="fas fa-star me-1"></i>VIP Queue
+                                                                </button>
+                                                            </form>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </td>
                                             </tr>
