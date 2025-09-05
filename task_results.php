@@ -17,6 +17,8 @@ if (!$task_id) {
 require_once __DIR__ . '/src/Db.php';
 $pdo = Db::conn();
 
+require_once __DIR__ . '/src/TaskService.php';
+
 try {
     // Get task details
     $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?');
@@ -28,6 +30,16 @@ try {
         exit;
     }
     
+    // Handle resync action
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'sync_status') {
+        try {
+            TaskService::syncTaskStatus($_SESSION["uid"], $task_id);
+            // Refresh task/links after sync
+        } catch (Exception $e) {
+            // Non-fatal on this page; we still show current data
+        }
+    }
+
     // Get task links
     $stmt = $pdo->prepare('SELECT * FROM task_links WHERE task_id = ? ORDER BY id');
     $stmt->execute([$task_id]);
@@ -46,6 +58,7 @@ try {
     <title>Task Results - Rapid Indexer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
@@ -56,7 +69,17 @@ try {
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">Task Results - #<?php echo $task['id']; ?></h1>
-                    <a href="/tasks.php" class="btn btn-outline-secondary">Back to Tasks</a>
+                    <div class="d-flex gap-2">
+                        <?php if (in_array($task['status'], ['pending','processing'])): ?>
+                            <form method="POST" class="d-inline">
+                                <input type="hidden" name="action" value="sync_status" />
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrows-rotate me-1"></i>Resync
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                        <a href="/tasks.php" class="btn btn-outline-secondary">Back to Tasks</a>
+                    </div>
                 </div>
                 
                 <!-- Task Summary -->
@@ -69,7 +92,25 @@ try {
                                     <tr><td><strong>ID:</strong></td><td><?php echo $task['id']; ?></td></tr>
                                     <tr><td><strong>Type:</strong></td><td><?php echo ucfirst($task['type']); ?></td></tr>
                                     <tr><td><strong>Engine:</strong></td><td><?php echo ucfirst($task['search_engine']); ?></td></tr>
-                                    <tr><td><strong>Status:</strong></td><td><span class="badge bg-success"><?php echo ucfirst($task['status']); ?></span></td></tr>
+                                    <tr><td><strong>Status:</strong></td><td>
+                                        <?php
+                                            $badge = 'secondary';
+                                            if ($task['status'] === 'completed') { $badge = 'success'; }
+                                            elseif ($task['status'] === 'processing') { $badge = 'info'; }
+                                            elseif ($task['status'] === 'pending') { $badge = 'warning'; }
+                                            elseif ($task['status'] === 'failed') { $badge = 'danger'; }
+                                        ?>
+                                        <span class="badge bg-<?php echo $badge; ?>"><?php echo ucfirst($task['status']); ?></span>
+                                        <?php if (in_array($task['status'], ['pending','processing'])): ?>
+                                            <div class="text-muted small mt-1">
+                                                <?php if ($task['type'] === 'checker'): ?>
+                                                    Typically completes within 1-2 minutes. Use Resync to refresh.
+                                                <?php else: ?>
+                                                    Typically completes within 2-10 minutes. Use Resync to refresh.
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td></tr>
                                     <tr><td><strong>VIP:</strong></td><td><?php echo $task['vip'] ? '<span class="badge bg-warning">Yes</span>' : 'No'; ?></td></tr>
                                     <tr><td><strong>Created:</strong></td><td><?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?></td></tr>
                                     <?php if ($task['completed_at']): ?>

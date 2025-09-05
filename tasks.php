@@ -279,6 +279,15 @@ $total_pages = ceil($total_tasks / $per_page);
                                                     <span class="badge bg-<?php echo $status_class; ?>">
                                                         <?php echo htmlspecialchars(ucfirst($task['status'])); ?>
                                                     </span>
+                                                    <?php if (in_array($task['status'], ['pending', 'processing'])): ?>
+                                                        <div class="text-muted small mt-1">
+                                                            <?php if ($task['type'] === 'checker'): ?>
+                                                                Typically completes within 1-2 minutes. Use Resync to refresh.
+                                                            <?php else: ?>
+                                                                Typically completes within 2-10 minutes. Use Resync to refresh.
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <?php if ($task['total_links'] > 0): ?>
@@ -319,6 +328,16 @@ $total_pages = ceil($total_tasks / $per_page);
                                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                                                 <button type="submit" class="btn btn-warning btn-sm">
                                                                     <i class="fas fa-star me-1"></i>VIP Queue
+                                                                </button>
+                                                            </form>
+                                                        <?php endif; ?>
+
+                                                        <?php if (in_array($task['status'], ['pending', 'processing'])): ?>
+                                                            <form method="POST" style="display: inline;">
+                                                                <input type="hidden" name="action" value="sync_status">
+                                                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                                                    <i class="fas fa-arrows-rotate me-1"></i>Resync
                                                                 </button>
                                                             </form>
                                                         <?php endif; ?>
