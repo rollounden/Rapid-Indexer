@@ -3,8 +3,8 @@
 # Enable URL rewriting
 RewriteEngine On
 
-# Handle root path - redirect to home page
-RewriteRule ^$ /home [R=301,L]
+# Handle root path - serve home page directly
+RewriteRule ^$ home.php [L]
 
 # Remove .php extension from URLs
 RewriteCond %{REQUEST_FILENAME} !-d
