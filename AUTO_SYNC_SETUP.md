@@ -95,11 +95,11 @@ Replace `/path/to/your/site/` with your actual site path:
 
 ```bash
 # For Hostinger/cPanel - Checker tasks every 15 seconds
-* * * * * /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
-* * * * * sleep 15; /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
-* * * * * sleep 30; /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
-* * * * * sleep 45; /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
+* * * * * /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
+* * * * * sleep 15; /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
+* * * * * sleep 30; /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
+* * * * * sleep 45; /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
 
 # Indexer tasks every 2 minutes
-*/2 * * * * /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_task_sync.php
+*/2 * * * * /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_task_sync.php
 ```

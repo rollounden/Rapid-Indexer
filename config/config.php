@@ -21,7 +21,7 @@ const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
 // Credits & Pricing
 const CREDITS_PER_URL = 1; // default credits per URL
 const VIP_EXTRA_CREDITS_PER_URL = 1; // additional credits per URL when VIP is selected
-const PRICE_PER_CREDIT_USD = 0.01; // example price per credit (USD)
+const PRICE_PER_CREDIT_USD = 0.10; // example price per credit (USD)
 
 // PayPal (placeholders; wire actual credentials in environment/config)
 const PAYPAL_ENV = 'sandbox'; // 'live' in production
