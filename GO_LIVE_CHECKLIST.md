@@ -32,7 +32,7 @@
 
 ---
 
-## 🔧 **CONFIGURATION FIXES**
+## 🔧 **CONFIGURATION FIXES**.
 
 ### **1. Make Config Private**
 - **Move sensitive data** to environment variables
