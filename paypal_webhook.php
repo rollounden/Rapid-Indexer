@@ -35,6 +35,14 @@ file_put_contents($log_dir . '/paypal_webhooks.log',
     json_encode($log_data, JSON_PRETTY_PRINT) . "\n\n", 
     FILE_APPEND | LOCK_EX);
 
+// Also log to a simple debug file
+file_put_contents($log_dir . '/webhook_debug.log', 
+    date('Y-m-d H:i:s') . " - Webhook received\n" . 
+    "Method: " . $_SERVER['REQUEST_METHOD'] . "\n" .
+    "Headers: " . json_encode($headers) . "\n" .
+    "Payload: " . $payload . "\n\n", 
+    FILE_APPEND | LOCK_EX);
+
 try {
     $data = json_decode($payload, true);
     
