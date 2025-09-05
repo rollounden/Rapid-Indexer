@@ -1,19 +1,34 @@
 <?php
-// Basic config for SpeedyIndex SaaS MVP
+// Production config for SpeedyIndex SaaS MVP
+
+// Load environment variables from .env file
+if (file_exists(__DIR__ . '/../.env')) {
+    $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
+            list($key, $value) = explode('=', $line, 2);
+            $_ENV[trim($key)] = trim($value);
+        }
+    }
+}
 
 // SpeedyIndex API base
 const SPEEDYINDEX_BASE_URL = 'https://api.speedyindex.com';
 
-// TODO: Set your API key here for the server-side integration
-// For production, move to environment variables.
-const SPEEDYINDEX_API_KEY = 'e52842c5690fdc017a8949064c4b4d86';
+// SpeedyIndex API Key - Required from environment
+if (!isset($_ENV['SPEEDYINDEX_API_KEY'])) {
+    die('Missing required environment variable: SPEEDYINDEX_API_KEY');
+}
+const SPEEDYINDEX_API_KEY = $_ENV['SPEEDYINDEX_API_KEY'];
 
-// Database configuration (update with your Hostinger MySQL credentials)
-// Find these in your Hostinger control panel > Databases > MySQL Databases
-const DB_HOST = 'localhost';
-const DB_NAME = 'u906310247_KEKRd';  // Using your most recent database
-const DB_USER = 'u906310247_FBapb';  // Corresponding user
-const DB_PASS = 'Test123456**888';  // Updated password from Hostinger
+// Database configuration - Required from environment
+if (!isset($_ENV['DB_HOST']) || !isset($_ENV['DB_NAME']) || !isset($_ENV['DB_USER']) || !isset($_ENV['DB_PASS'])) {
+    die('Missing required database environment variables');
+}
+const DB_HOST = $_ENV['DB_HOST'];
+const DB_NAME = $_ENV['DB_NAME'];
+const DB_USER = $_ENV['DB_USER'];
+const DB_PASS = $_ENV['DB_PASS'];
 
 // Logging
 const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
@@ -23,9 +38,12 @@ const CREDITS_PER_URL = 1; // default credits per URL
 const VIP_EXTRA_CREDITS_PER_URL = 1; // additional credits per URL when VIP is selected
 const PRICE_PER_CREDIT_USD = 0.10; // example price per credit (USD)
 
-// PayPal (placeholders; wire actual credentials in environment/config)
-const PAYPAL_ENV = 'sandbox'; // 'live' in production
-const PAYPAL_CLIENT_ID = 'AdsnzKeKmo5cHtx_QqYTG5nNQ_kyaoR012ltrAad107RUxiLu2H2Z59kKAYZei9XY4zcQyBW-Lj3_OKU';
-const PAYPAL_CLIENT_SECRET = 'ENWQ_M-NsZxmr_9s2qBEzSKcuLFhxG00wcF_uaEVTSh_Vs7rSZFjXgrYuzPxwgNHXR5u0r5im6dl-3Gt';
-const PAYPAL_WEBHOOK_SECRET = '9M9241950W022223V';
-const PAYPAL_BN_CODE = 'FLAVORsb-j2gdy45737228_MP';
+// PayPal Configuration - Required from environment
+if (!isset($_ENV['PAYPAL_ENV']) || !isset($_ENV['PAYPAL_CLIENT_ID']) || !isset($_ENV['PAYPAL_CLIENT_SECRET'])) {
+    die('Missing required PayPal environment variables');
+}
+const PAYPAL_ENV = $_ENV['PAYPAL_ENV'];
+const PAYPAL_CLIENT_ID = $_ENV['PAYPAL_CLIENT_ID'];
+const PAYPAL_CLIENT_SECRET = $_ENV['PAYPAL_CLIENT_SECRET'];
+const PAYPAL_WEBHOOK_SECRET = $_ENV['PAYPAL_WEBHOOK_SECRET'] ?? '';
+const PAYPAL_BN_CODE = $_ENV['PAYPAL_BN_CODE'] ?? '';

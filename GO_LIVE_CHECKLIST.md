@@ -15,6 +15,7 @@
 * * * * * sleep 15; /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
 * * * * * sleep 30; /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
 * * * * * sleep 45; /usr/bin/php /home/u906310247/domains/rapid-indexer.com/public_html/auto_checker_sync.php
+
 ```
 
 #### **2. Indexer Tasks Sync (Every 2 minutes)**
@@ -30,6 +31,8 @@
 4. **Set frequency** as specified
 5. **Save all cron jobs**
 
+
+done
 ---
 
 ## 🔧 **CONFIGURATION FIXES**.
@@ -50,7 +53,8 @@
 
 ### **Update PayPal Webhook:**
 - **Current:** `https://cyan-peafowl-394593.hostingersite.com/paypal_webhook.php`
-- **New:** `https://rapid-indexer.com/paypal_webhook.php`
+- **New:** `https://rapid-indexer.com/paypal_webhook.php` 
+
 
 ### **Steps:**
 1. **Go to PayPal Developer Dashboard**
@@ -58,6 +62,7 @@
 3. **Update URL** to new domain
 4. **Test webhook** to ensure it works
 
+done
 ---
 
 ## 🔒 **SECURITY & PRODUCTION**
@@ -116,14 +121,16 @@
 ## 🚨 **CRITICAL ITEMS**
 
 ### **Must Fix Before Launch:**
-1. **Set up cron jobs** (tasks won't auto-sync without this)
-2. **Update PayPal webhook** (payments won't work)
-3. **Make config private** (security risk)
-4. **Remove .php extensions** (professional URLs)
+1. **Set up cron jobs** (tasks won't auto-sync without this) done
+2. **Update PayPal webhook** (payments won't work) done
+3. **Make config private** (security risk) not done
+4. **Remove .php extensions** (professional URLs) not done
 
 ### **Nice to Have:**
-- **SSL certificate** (already should work)
-- **Error pages** (404, 500)
+- **SSL certificate** (already should work) done
+- **Error pages** (404, 500) not done
+- ** a home page or landing page** not done
+- no more test pages
 - **Monitoring setup**
 - **Backup strategy**
 
