@@ -3,17 +3,29 @@
 ## Overview
 The system now has two auto-sync scripts for optimal performance:
 
-1. **Checker Tasks**: Sync every 30 seconds (faster completion)
+1. **Checker Tasks**: Sync every 15 seconds (completes in ~1 minute)
 2. **Indexer Tasks**: Sync every 2 minutes (longer processing time)
+
+## How Cron Jobs Work
+
+**Cron jobs run automatically** on your server at scheduled times. They don't require manual intervention once set up.
+
+### Setting Up Cron Jobs
+
+1. **Access cPanel** → **Cron Jobs** (or your hosting control panel)
+2. **Add the commands** below
+3. **Save** - they'll run automatically forever
 
 ## Cron Job Setup
 
 ### Option 1: Two Separate Cron Jobs (Recommended)
 
 ```bash
-# Checker tasks - every 30 seconds
+# Checker tasks - every 15 seconds (runs twice per minute)
 * * * * * /usr/bin/php /path/to/your/site/auto_checker_sync.php
+* * * * * sleep 15; /usr/bin/php /path/to/your/site/auto_checker_sync.php
 * * * * * sleep 30; /usr/bin/php /path/to/your/site/auto_checker_sync.php
+* * * * * sleep 45; /usr/bin/php /path/to/your/site/auto_checker_sync.php
 
 # Indexer tasks - every 2 minutes  
 */2 * * * * /usr/bin/php /path/to/your/site/auto_task_sync.php
@@ -29,10 +41,10 @@ The system now has two auto-sync scripts for optimal performance:
 ## How It Works
 
 ### Checker Tasks
-- **Frequency**: Every 30 seconds
+- **Frequency**: Every 15 seconds
 - **Logic**: Checker tasks typically complete in 30-60 seconds
 - **Script**: `auto_checker_sync.php`
-- **Priority**: Higher priority in sync queue
+- **Priority**: Highest priority in sync queue
 
 ### Indexer Tasks  
 - **Frequency**: Every 2 minutes
@@ -45,7 +57,7 @@ The system now has two auto-sync scripts for optimal performance:
 ### Tasks Page
 - **Individual Sync**: Click "Sync" button on each task
 - **Visual Indicators**: 
-  - Checker tasks show "(30s)" 
+  - Checker tasks show "(15s)" 
   - Indexer tasks show "(2m)"
 - **Tooltips**: Hover over sync button to see auto-sync frequency
 
@@ -71,10 +83,10 @@ Both scripts output detailed logs:
 
 ## Benefits
 
-1. **Faster Checker Results**: 30-second intervals for quick completion
+1. **Faster Checker Results**: 15-second intervals for quick completion
 2. **Efficient Indexer Processing**: 2-minute intervals for longer tasks
 3. **Automatic Updates**: No manual intervention needed
-4. **Priority Handling**: Checker tasks get priority in sync queue
+4. **Priority Handling**: Checker tasks get highest priority in sync queue
 5. **Error Handling**: Robust error logging and recovery
 
 ## Setup Commands
@@ -82,8 +94,12 @@ Both scripts output detailed logs:
 Replace `/path/to/your/site/` with your actual site path:
 
 ```bash
-# For Hostinger/cPanel
+# For Hostinger/cPanel - Checker tasks every 15 seconds
 * * * * * /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
+* * * * * sleep 15; /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
 * * * * * sleep 30; /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
+* * * * * sleep 45; /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_checker_sync.php
+
+# Indexer tasks every 2 minutes
 */2 * * * * /usr/bin/php /home/u906310247/domains/cyan-peafowl-394593.hostingersite.com/public_html/auto_task_sync.php
 ```

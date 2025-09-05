@@ -211,10 +211,10 @@ $total_pages = ceil($total_tasks / $per_page);
                                                             <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                                             <button type="submit" class="btn btn-outline-primary" 
                                                                     <?php echo $task['status'] === 'completed' ? 'disabled' : ''; ?>
-                                                                    title="<?php echo $task['type'] === 'checker' ? 'Auto-syncs every 30 seconds' : 'Auto-syncs every 2 minutes'; ?>">
+                                                                    title="<?php echo $task['type'] === 'checker' ? 'Auto-syncs every 15 seconds' : 'Auto-syncs every 2 minutes'; ?>">
                                                                 <i class="fas fa-sync"></i> Sync
                                                                 <?php if ($task['type'] === 'checker'): ?>
-                                                                    <small class="text-muted">(30s)</small>
+                                                                    <small class="text-muted">(15s)</small>
                                                                 <?php else: ?>
                                                                     <small class="text-muted">(2m)</small>
                                                                 <?php endif; ?>

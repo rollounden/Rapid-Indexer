@@ -10,7 +10,7 @@ try {
     $pdo = Db::conn();
     
     // Get all tasks that need syncing
-    // For checker tasks: sync if processing or older than 30 seconds
+    // For checker tasks: sync if processing or older than 15 seconds
     // For indexer tasks: sync if processing or older than 2 minutes
     $stmt = $pdo->prepare('
         SELECT * FROM tasks 
@@ -18,7 +18,7 @@ try {
         AND speedyindex_task_id IS NOT NULL 
         AND (
             status = ? OR 
-            (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 30 SECOND)) OR
+            (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 15 SECOND)) OR
             (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 2 MINUTE))
         )
         ORDER BY 

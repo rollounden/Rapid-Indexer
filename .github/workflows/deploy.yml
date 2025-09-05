@@ -17,11 +17,10 @@ jobs:
           server: 82.197.89.47
           username: 'u906310247.Testing123'
           password: '/Nz!JdGZufu[dV3b'
-          server-dir: '/'
+          server-dir: '/public_html/'
           protocol: ftp
           port: 21
           timeout: 120000
-          passive: false
           dangerous-clean-slate: true
           exclude: |
             **/.git*
@@ -33,3 +32,9 @@ jobs:
             **/.env*
             **/storage/logs/**
             **/bootstrap/cache/**
+            **/AUTO_SYNC_SETUP.md
+            **/cron_test.php
+            **/debug_api_response.php
+            **/manual_task_sync.php
+            **/test_fixed_sync.php
+            **/analyze_api_response.php

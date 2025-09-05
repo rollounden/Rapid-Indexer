@@ -9,13 +9,13 @@ require_once __DIR__ . '/src/TaskService.php';
 try {
     $pdo = Db::conn();
     
-    // Get checker tasks that need syncing (processing or older than 30 seconds)
+    // Get checker tasks that need syncing (processing or older than 15 seconds)
     $stmt = $pdo->prepare('
         SELECT * FROM tasks 
         WHERE type = ? 
         AND status IN (?, ?) 
         AND speedyindex_task_id IS NOT NULL 
-        AND (status = ? OR created_at < DATE_SUB(NOW(), INTERVAL 30 SECOND))
+        AND (status = ? OR created_at < DATE_SUB(NOW(), INTERVAL 15 SECOND))
         ORDER BY created_at ASC
     ');
     $stmt->execute(['checker', 'processing', 'pending', 'processing']);
