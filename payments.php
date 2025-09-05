@@ -62,6 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
+// Handle cancelled payments (when user returns without completing)
+if (isset($_GET['cancelled'])) {
+    $success = 'Payment was cancelled. No charges were made to your account.';
+    
+    // Clean up any pending payments older than 1 hour that haven't been completed
+    $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE user_id = ? AND status = ? AND created_at < DATE_SUB(NOW(), INTERVAL 1 HOUR)');
+    $stmt->execute(['cancelled', $_SESSION['uid'], 'pending']);
+}
+
 // Get user's current credits
 $stmt = $pdo->prepare('SELECT credits_balance FROM users WHERE id = ?');
 $stmt->execute([$_SESSION['uid']]);

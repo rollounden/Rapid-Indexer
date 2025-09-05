@@ -68,7 +68,7 @@ class PayPalService {
             ],
             'application_context' => [
                 'return_url' => 'https://' . $_SERVER['HTTP_HOST'] . '/payment_success.php',
-                'cancel_url' => 'https://' . $_SERVER['HTTP_HOST'] . '/payment_cancel.php',
+                'cancel_url' => 'https://' . $_SERVER['HTTP_HOST'] . '/payments.php?cancelled=1',
                 'brand_name' => 'SpeedyIndex',
                 'landing_page' => 'LOGIN',
                 'user_action' => 'PAY_NOW',
