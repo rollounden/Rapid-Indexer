@@ -64,6 +64,24 @@ try {
     // Process different event types
     $event_type = $data['event_type'] ?? 'unknown';
     
+    // Store webhook event in database
+    $webhook_id = $data['id'] ?? 'unknown_' . time();
+    $signature = $headers['Paypal-Transmission-Sig'] ?? '';
+    
+    try {
+        $stmt = $pdo->prepare('INSERT INTO webhook_events (provider, external_event_id, event_type, signature, payload, status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())');
+        $stmt->execute([
+            'paypal',
+            $webhook_id,
+            $event_type,
+            $signature,
+            $payload,
+            'received'
+        ]);
+    } catch (Exception $e) {
+        error_log('Failed to store webhook event: ' . $e->getMessage());
+    }
+    
     switch ($event_type) {
         case 'PAYMENT.CAPTURE.COMPLETED':
         case 'PAYMENT.SALE.COMPLETED':
@@ -105,6 +123,14 @@ try {
                 200
             ]);
             break;
+    }
+    
+    // Update webhook event status to processed
+    try {
+        $stmt = $pdo->prepare('UPDATE webhook_events SET status = ?, processed_at = NOW() WHERE external_event_id = ? AND provider = ?');
+        $stmt->execute(['processed', $webhook_id, 'paypal']);
+    } catch (Exception $e) {
+        error_log('Failed to update webhook event status: ' . $e->getMessage());
     }
     
     // Return success response
