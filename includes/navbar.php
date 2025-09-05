@@ -32,7 +32,24 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <?php echo htmlspecialchars($_SESSION['email'] ?? 'User'); ?>
+                        <?php 
+                        // Refresh user data from database if email is not in session
+                        if (!isset($_SESSION['email']) && isset($_SESSION['uid'])) {
+                            try {
+                                require_once __DIR__ . '/../src/Db.php';
+                                $pdo = Db::conn();
+                                $stmt = $pdo->prepare('SELECT email FROM users WHERE id = ? LIMIT 1');
+                                $stmt->execute([$_SESSION['uid']]);
+                                $user = $stmt->fetch();
+                                if ($user) {
+                                    $_SESSION['email'] = $user['email'];
+                                }
+                            } catch (Exception $e) {
+                                // Fallback to default
+                            }
+                        }
+                        echo htmlspecialchars($_SESSION['email'] ?? 'User'); 
+                        ?>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="/logout.php">Logout</a></li>
