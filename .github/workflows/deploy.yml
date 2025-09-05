@@ -17,7 +17,7 @@ jobs:
           server: 82.197.89.47
           username: 'u906310247.Testing123'
           password: '/Nz!JdGZufu[dV3b'
-          server-dir: '/public_html/'
+          server-dir: '/'
           protocol: ftp
           port: 21
           timeout: 120000
