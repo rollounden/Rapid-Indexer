@@ -24,7 +24,7 @@ echo "Session ID: " . session_id() . "<br>";
 // Test setting session data
 if (isset($_POST['test_login'])) {
     $_SESSION['uid'] = 1;
-    $_SESSION['email'] = 'test@example.com';
+    $_SESSION['email'] = 'rollounden@googlemail.com';
     $_SESSION['role'] = 'user';
     echo "<p style='color: green;'>✅ Session data set!</p>";
     echo "<p>Refresh the page to see if session persists.</p>";

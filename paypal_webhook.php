@@ -207,11 +207,9 @@ function handlePaymentCompleted($pdo, $data) {
     }
     
     if (!$user_id) {
-        // For test webhooks, use a default user ID (you can change this)
-        $user_id = 1; // Default test user
-        
-        // Log that we're using default user for test
-        error_log("PayPal Webhook: Using default user ID $user_id for test webhook");
+        // No user found for this payment - this shouldn't happen in production
+        error_log("PayPal Webhook: No user found for payment ID $payment_id, custom_id $custom_id");
+        throw new Exception("No user found for payment");
     }
     
     // Calculate credits based on amount
