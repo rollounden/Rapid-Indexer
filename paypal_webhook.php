@@ -62,23 +62,28 @@ try {
     
     switch ($event_type) {
         case 'PAYMENT.CAPTURE.COMPLETED':
+        case 'PAYMENT.SALE.COMPLETED':
             handlePaymentCompleted($pdo, $data);
             break;
             
         case 'PAYMENT.CAPTURE.DENIED':
         case 'PAYMENT.CAPTURE.DECLINED':
+        case 'PAYMENT.SALE.DENIED':
             handlePaymentDenied($pdo, $data);
             break;
             
         case 'PAYMENT.CAPTURE.REFUNDED':
+        case 'PAYMENT.SALE.REFUNDED':
             handlePaymentRefunded($pdo, $data);
             break;
             
         case 'PAYMENT.CAPTURE.PENDING':
+        case 'PAYMENT.SALE.PENDING':
             handlePaymentPending($pdo, $data);
             break;
             
         case 'PAYMENT.CAPTURE.REVERSED':
+        case 'PAYMENT.SALE.REVERSED':
             handlePaymentReversed($pdo, $data);
             break;
             
@@ -113,8 +118,21 @@ try {
 
 function handlePaymentCompleted($pdo, $data) {
     $payment_id = $data['resource']['id'] ?? null;
-    $amount = $data['resource']['amount']['value'] ?? 0;
-    $currency = $data['resource']['amount']['currency_code'] ?? 'USD';
+    
+    // Handle both CAPTURE and SALE event formats
+    if (isset($data['resource']['amount']['value'])) {
+        // CAPTURE format
+        $amount = $data['resource']['amount']['value'] ?? 0;
+        $currency = $data['resource']['amount']['currency_code'] ?? 'USD';
+    } elseif (isset($data['resource']['amount']['total'])) {
+        // SALE format
+        $amount = $data['resource']['amount']['total'] ?? 0;
+        $currency = $data['resource']['amount']['currency'] ?? 'USD';
+    } else {
+        $amount = 0;
+        $currency = 'USD';
+    }
+    
     $custom_id = $data['resource']['custom_id'] ?? null;
     
     if (!$payment_id) {
