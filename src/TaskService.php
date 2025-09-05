@@ -57,8 +57,9 @@ class TaskService
         $payload = json_decode($report['body'] ?? '', true) ?: [];
 
         // Parse SpeedyIndex API response structure
-        $indexed_links = $payload['indexed_links'] ?? [];
-        $unindexed_links = $payload['unindexed_links'] ?? [];
+        $result = $payload['result'] ?? [];
+        $indexed_links = $result['indexed_links'] ?? [];
+        $unindexed_links = $result['unindexed_links'] ?? [];
         
         $update = $pdo->prepare('UPDATE task_links SET status = ?, result_data = ?, checked_at = NOW(), error_code = ? WHERE task_id = ? AND url = ?');
         
