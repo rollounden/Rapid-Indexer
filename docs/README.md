@@ -13,7 +13,7 @@ Quick start (Windows PowerShell):
 ```powershell
 # Clone and prepare
 # git clone <your-repo-url>
-# cd RapidIndexer
+# cd Rapid Indexer
 
 # Copy env template
 # cp .env.example .env  # Note: use PowerShell Copy-Item if needed

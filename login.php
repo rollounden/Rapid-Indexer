@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - RapidIndexer</title>
+    <title>Login - Rapid Indexer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <h2 class="fw-bold text-primary">RapidIndexer</h2>
+                        <h2 class="fw-bold text-primary">Rapid Indexer</h2>
                         <p class="text-muted">Sign in to your account</p>
                     </div>
                     

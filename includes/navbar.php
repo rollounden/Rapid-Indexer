@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container">
-        <a class="navbar-brand fw-bold text-primary" href="/dashboard.php">RapidIndexer</a>
+        <a class="navbar-brand fw-bold text-primary" href="/dashboard.php">Rapid Indexer</a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>

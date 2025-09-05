@@ -28,7 +28,7 @@ winget install --id=Git.Git --source winget --silent
 Project setup
 ```powershell
 # Navigate to project root
-Set-Location "C:\Users\rollo\Documents\websites\Development\RapidIndexer"
+Set-Location "C:\Users\rollo\Documents\websites\Development\Rapid Indexer"
 
 # Copy env
 If (Test-Path .env -PathType Leaf) { Write-Host ".env exists" } Else { Copy-Item .env.example .env }

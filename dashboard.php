@@ -61,7 +61,7 @@ $paymentStats = $stmt->fetch();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - RapidIndexer</title>
+    <title>Dashboard - Rapid Indexer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
@@ -70,7 +70,7 @@ $paymentStats = $stmt->fetch();
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="/dashboard.php">RapidIndexer</a>
+            <a class="navbar-brand" href="/dashboard.php">Rapid Indexer</a>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/tasks.php">Tasks</a>
                 <a class="nav-link" href="/payments.php">Payments</a>
