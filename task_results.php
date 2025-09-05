@@ -91,17 +91,31 @@ try {
                                     $unindexed = array_filter($links, fn($l) => $l['status'] === 'unindexed');
                                     $pending = array_filter($links, fn($l) => $l['status'] === 'pending');
                                     $error = array_filter($links, fn($l) => $l['status'] === 'error');
+                                    
+                                    // For indexing tasks, show different labels
+                                    if ($task['type'] === 'indexer') {
+                                        $clicked_links = array_filter($links, fn($l) => $l['status'] === 'unindexed');
+                                    }
                                     ?>
                                     
-                                    <tr><td><strong>Indexed:</strong></td><td><span class="text-success"><?php echo count($indexed); ?></span></td></tr>
-                                    <tr><td><strong>Unindexed:</strong></td><td><span class="text-warning"><?php echo count($unindexed); ?></span></td></tr>
-                                    <tr><td><strong>Pending:</strong></td><td><span class="text-info"><?php echo count($pending); ?></span></td></tr>
+                                    <?php if ($task['type'] === 'indexer'): ?>
+                                        <tr><td><strong>Googlebot Clicked:</strong></td><td><span class="text-success"><?php echo count($clicked_links); ?></span></td></tr>
+                                        <tr><td><strong>Pending:</strong></td><td><span class="text-info"><?php echo count($pending); ?></span></td></tr>
+                                    <?php else: ?>
+                                        <tr><td><strong>Indexed:</strong></td><td><span class="text-success"><?php echo count($indexed); ?></span></td></tr>
+                                        <tr><td><strong>Unindexed:</strong></td><td><span class="text-warning"><?php echo count($unindexed); ?></span></td></tr>
+                                        <tr><td><strong>Pending:</strong></td><td><span class="text-info"><?php echo count($pending); ?></span></td></tr>
+                                    <?php endif; ?>
                                     <?php if (count($error) > 0): ?>
                                         <tr><td><strong>Errors:</strong></td><td><span class="text-danger"><?php echo count($error); ?></span></td></tr>
                                     <?php endif; ?>
                                     
                                     <?php
-                                    $progress = count($links) > 0 ? round(((count($indexed) + count($unindexed)) / count($links)) * 100) : 0;
+                                    if ($task['type'] === 'indexer') {
+                                        $progress = count($links) > 0 ? round(((count($clicked_links) + count($pending)) / count($links)) * 100) : 0;
+                                    } else {
+                                        $progress = count($links) > 0 ? round(((count($indexed) + count($unindexed)) / count($links)) * 100) : 0;
+                                    }
                                     ?>
                                     <tr><td><strong>Progress:</strong></td><td><?php echo $progress; ?>%</td></tr>
                                 </table>
@@ -137,15 +151,24 @@ try {
                                             switch ($link['status']) {
                                                 case 'indexed':
                                                     $status_class = 'success';
+                                                    $status_text = 'Indexed';
                                                     break;
                                                 case 'unindexed':
-                                                    $status_class = 'warning';
+                                                    if ($task['type'] === 'indexer') {
+                                                        $status_class = 'success';
+                                                        $status_text = 'Googlebot Clicked';
+                                                    } else {
+                                                        $status_class = 'warning';
+                                                        $status_text = 'Unindexed';
+                                                    }
                                                     break;
                                                 case 'pending':
                                                     $status_class = 'info';
+                                                    $status_text = 'Pending';
                                                     break;
                                                 case 'error':
                                                     $status_class = 'danger';
+                                                    $status_text = 'Error';
                                                     break;
                                             }
                                             ?>

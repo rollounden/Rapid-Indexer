@@ -232,10 +232,6 @@ $total_pages = ceil($total_tasks / $per_page);
                                                             </form>
                                                         <?php endif; ?>
                                                         
-                                                        <button type="button" class="btn btn-outline-info" onclick="viewTaskDetails(<?php echo $task['id']; ?>)">
-                                                            <i class="fas fa-eye"></i> View Details
-                                                        </button>
-                                                        
                                                         <a href="/task_results.php?id=<?php echo $task['id']; ?>" class="btn btn-outline-primary">
                                                             <i class="fas fa-list"></i> View Results
                                                         </a>
@@ -265,37 +261,6 @@ $total_pages = ceil($total_tasks / $per_page);
         </div>
     </div>
     
-    <!-- Task Details Modal -->
-    <div class="modal fade" id="taskDetailsModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Task Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="taskDetailsContent">
-                    <!-- Content will be loaded here -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
-    <script>
-        function viewTaskDetails(taskId) {
-            // Load task details via AJAX
-            fetch(`task_details.php?id=${taskId}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('taskDetailsContent').innerHTML = html;
-                    new bootstrap.Modal(document.getElementById('taskDetailsModal')).show();
-                })
-                .catch(error => {
-                    console.error('Error loading task details:', error);
-                    alert('Failed to load task details');
-                });
-        }
-    </script>
 </body>
 </html>
