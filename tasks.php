@@ -12,6 +12,7 @@ if (!isset($_SESSION['uid'])) {
 }
 
 require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/TaskService.php';
 $pdo = Db::conn();
 
 $error = '';
@@ -24,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'sync_status':
                 $task_id = $_POST['task_id'];
                 try {
-                    require_once __DIR__ . '/src/TaskService.php';
                     TaskService::syncTaskStatus($_SESSION['uid'], $task_id);
                     $success = 'Task status updated successfully.';
                 } catch (Exception $e) {
@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'export_csv':
                 $task_id = $_POST['task_id'];
                 try {
-                    require_once __DIR__ . '/src/TaskService.php';
                     $csv_data = TaskService::exportTaskCsv($_SESSION['uid'], $task_id);
                     
                     header('Content-Type: text/csv');
@@ -44,6 +43,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 } catch (Exception $e) {
                     $error = 'Failed to export results: ' . $e->getMessage();
+                }
+                break;
+                
+            case 'vip_queue':
+                $task_id = $_POST['task_id'];
+                try {
+                    // Get task details
+                    $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ? AND type = ?');
+                    $stmt->execute([$task_id, $_SESSION['uid'], 'indexer']);
+                    $task = $stmt->fetch();
+                    
+                    if (!$task) {
+                        throw new Exception('Task not found or not an indexer task');
+                    }
+                    
+                    // Check if task has links
+                    $stmt = $pdo->prepare('SELECT COUNT(*) FROM task_links WHERE task_id = ?');
+                    $stmt->execute([$task_id]);
+                    $link_count = $stmt->fetchColumn();
+                    
+                    if ($link_count > 100) {
+                        throw new Exception('VIP queue is only available for tasks with ≤ 100 links');
+                    }
+                    
+                    // Add VIP queue request to SpeedyIndex
+                    require_once __DIR__ . '/src/SpeedyIndexClient.php';
+                    $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $_SESSION['uid']);
+                    $result = $client->request('POST', '/v2/task/google/indexer/vip', ['task_id' => $task['speedyindex_task_id']]);
+                    
+                    if ($result['httpCode'] === 200) {
+                        $success = 'VIP queue request submitted successfully.';
+                    } else {
+                        throw new Exception('Failed to submit VIP queue request');
+                    }
+                } catch (Exception $e) {
+                    $error = 'Failed to submit VIP queue: ' . $e->getMessage();
                 }
                 break;
         }
@@ -56,17 +91,20 @@ $per_page = 10;
 $offset = ($page - 1) * $per_page;
 
 $stmt = $pdo->prepare('
-    SELECT t.*, COUNT(tl.id) as total_links, 
-           SUM(CASE WHEN tl.status = "completed" THEN 1 ELSE 0 END) as completed_links,
-           SUM(CASE WHEN tl.status = "failed" THEN 1 ELSE 0 END) as failed_links
+    SELECT t.*, 
+           COUNT(tl.id) as total_links,
+           SUM(CASE WHEN tl.status = "indexed" THEN 1 ELSE 0 END) as indexed_links,
+           SUM(CASE WHEN tl.status = "unindexed" THEN 1 ELSE 0 END) as unindexed_links,
+           SUM(CASE WHEN tl.status = "pending" THEN 1 ELSE 0 END) as pending_links,
+           SUM(CASE WHEN tl.status = "error" THEN 1 ELSE 0 END) as error_links
     FROM tasks t 
     LEFT JOIN task_links tl ON t.id = tl.task_id 
     WHERE t.user_id = ? 
     GROUP BY t.id 
     ORDER BY t.created_at DESC 
-    LIMIT ' . (int)$per_page . ' OFFSET ' . (int)$offset
-);
-$stmt->execute([$_SESSION['uid']]);
+    LIMIT ? OFFSET ?
+');
+$stmt->execute([$_SESSION['uid'], $per_page, $offset]);
 $tasks = $stmt->fetchAll();
 
 // Get total count for pagination

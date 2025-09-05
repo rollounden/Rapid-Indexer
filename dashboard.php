@@ -169,11 +169,11 @@ $paymentStats = $stmt->fetch();
                                 <textarea class="form-control" rows="6" name="urls" placeholder="https://example.com/page1&#10;https://example.com/page2" required></textarea>
                             </div>
                             
-                            <div class="mb-3">
+                            <div class="mb-3" id="vipSection" style="display: none;">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="vip" value="1" id="vipCheck">
                                     <label class="form-check-label" for="vipCheck">
-                                        VIP Queue (extra credits per URL)
+                                        VIP Queue (extra credits per URL) - Indexing only
                                     </label>
                                 </div>
                             </div>
@@ -220,6 +220,25 @@ $paymentStats = $stmt->fetch();
                 </div>
             </div>
         </div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show/hide VIP section based on task type
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.querySelector('select[name="type"]');
+            const vipSection = document.getElementById('vipSection');
+            
+            function toggleVipSection() {
+                if (typeSelect.value === 'indexer') {
+                    vipSection.style.display = 'block';
+                } else {
+                    vipSection.style.display = 'none';
+                    document.getElementById('vipCheck').checked = false;
+                }
+            }
+            
+            typeSelect.addEventListener('change', toggleVipSection);
+            toggleVipSection(); // Initial call
+        });
+    </script>
 </body>
 </html>
