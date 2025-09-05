@@ -1,4 +1,8 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/src/Db.php';
 
@@ -108,12 +112,35 @@ try {
     echo json_encode(['status' => 'success', 'message' => 'Webhook processed']);
     
 } catch (Exception $e) {
-    // Log error
-    error_log("PayPal Webhook Error: " . $e->getMessage());
+    // Log detailed error
+    $error_details = [
+        'message' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString(),
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+    
+    error_log("PayPal Webhook Error: " . json_encode($error_details));
+    
+    // Also log to webhook debug file
+    $log_dir = __DIR__ . '/storage/logs';
+    if (!is_dir($log_dir)) {
+        mkdir($log_dir, 0755, true);
+    }
+    
+    file_put_contents($log_dir . '/webhook_errors.log', 
+        json_encode($error_details, JSON_PRETTY_PRINT) . "\n\n", 
+        FILE_APPEND | LOCK_EX);
     
     // Return error response
     http_response_code(500);
-    echo json_encode(['error' => 'Internal server error']);
+    echo json_encode([
+        'error' => 'Internal server error',
+        'message' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine()
+    ]);
 }
 
 function handlePaymentCompleted($pdo, $data) {
