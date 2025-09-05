@@ -12,12 +12,130 @@ if (isset($_SESSION['uid'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RapidIndexer - Fast Google Indexing Service</title>
     <meta name="description" content="Get your website pages indexed by Google quickly with RapidIndexer. Professional SEO indexing service for faster search engine visibility.">
+    <meta name="theme-color" content="#667eea">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .display-4 {
+                font-size: 2.5rem !important;
+            }
+            .display-5 {
+                font-size: 2rem !important;
+            }
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+            .py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+            .hero-section h1 {
+                font-size: 2rem !important;
+                line-height: 1.2;
+            }
+            .hero-section .lead {
+                font-size: 1.1rem;
+            }
+            .feature-icon {
+                font-size: 2.5rem !important;
+            }
+            .pricing-card {
+                margin-bottom: 1rem;
+            }
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            .btn-group-mobile {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .btn-group-mobile .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .display-4 {
+                font-size: 2rem !important;
+            }
+            .hero-section h1 {
+                font-size: 1.75rem !important;
+            }
+            .btn-lg {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+        }
+        
+        /* Touch-friendly buttons */
+        .btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Prevent zoom on input focus */
+        input, textarea, select {
+            font-size: 16px;
+        }
+        
+        /* Mobile Navigation Enhancements */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background-color: #fff;
+                border-top: 1px solid #dee2e6;
+                margin-top: 0.5rem;
+                padding-top: 1rem;
+            }
+            .navbar-nav .nav-link {
+                padding: 0.75rem 1rem;
+                border-radius: 0.375rem;
+                margin: 0.25rem 0;
+            }
+            .navbar-nav .nav-link:hover {
+                background-color: #f8f9fa;
+            }
+            .navbar-nav .btn {
+                margin-left: 0 !important;
+                margin-top: 0.5rem;
+            }
+        }
+        
+        /* Touch-friendly navbar toggler */
+        .navbar-toggler {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        
+        /* Brand icon animation */
+        .navbar-brand i {
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -26,9 +144,17 @@ if (isset($_SESSION['uid'])) {
             <a class="navbar-brand fw-bold text-primary" href="/">
                 <i class="fas fa-rocket me-2"></i>RapidIndexer
             </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/login">Login</a>
-                <a class="btn btn-primary ms-2" href="/register">Get Started</a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="btn btn-primary ms-2" href="/register">Get Started</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -40,7 +166,7 @@ if (isset($_SESSION['uid'])) {
                 <div class="col-lg-6">
                     <h1 class="display-4 fw-bold mb-4">Get Your Pages Indexed by Google Fast</h1>
                     <p class="lead mb-4">Stop waiting weeks for Google to discover your new content. RapidIndexer gets your pages indexed in hours, not days.</p>
-                    <div class="d-flex gap-3">
+                    <div class="d-flex gap-3 btn-group-mobile">
                         <a href="/register" class="btn btn-light btn-lg">
                             <i class="fas fa-rocket me-2"></i>Start Indexing Now
                         </a>
@@ -66,21 +192,21 @@ if (isset($_SESSION['uid'])) {
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card h-100 p-4 text-center">
-                        <i class="fas fa-bolt text-primary mb-3" style="font-size: 3rem;"></i>
+                        <i class="fas fa-bolt text-primary mb-3 feature-icon" style="font-size: 3rem;"></i>
                         <h4>Lightning Fast</h4>
                         <p class="text-muted">Get your pages indexed in hours instead of waiting weeks for Google to discover them naturally.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 p-4 text-center">
-                        <i class="fas fa-shield-alt text-primary mb-3" style="font-size: 3rem;"></i>
+                        <i class="fas fa-shield-alt text-primary mb-3 feature-icon" style="font-size: 3rem;"></i>
                         <h4>Safe & Reliable</h4>
                         <p class="text-muted">Our indexing methods are Google-compliant and won't harm your website's SEO performance.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 p-4 text-center">
-                        <i class="fas fa-chart-line text-primary mb-3" style="font-size: 3rem;"></i>
+                        <i class="fas fa-chart-line text-primary mb-3 feature-icon" style="font-size: 3rem;"></i>
                         <h4>Track Progress</h4>
                         <p class="text-muted">Monitor your indexing progress with detailed reports and real-time status updates.</p>
                     </div>
@@ -100,10 +226,10 @@ if (isset($_SESSION['uid'])) {
             </div>
             <div class="row g-4 justify-content-center">
                 <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 p-4">
+                    <div class="card h-100 p-4 pricing-card">
                         <div class="text-center mb-4">
                             <h3 class="fw-bold">Standard</h3>
-                            <div class="display-4 fw-bold text-primary">$0.01</div>
+                            <div class="display-4 fw-bold text-primary">$0.05</div>
                             <p class="text-muted">per URL indexed</p>
                         </div>
                         <ul class="list-unstyled">
@@ -116,11 +242,11 @@ if (isset($_SESSION['uid'])) {
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 p-4 border-primary">
+                    <div class="card h-100 p-4 pricing-card border-primary">
                         <div class="text-center mb-4">
                             <div class="badge bg-primary mb-2">Most Popular</div>
                             <h3 class="fw-bold">VIP Queue</h3>
-                            <div class="display-4 fw-bold text-primary">$0.02</div>
+                            <div class="display-4 fw-bold text-primary">$0.10</div>
                             <p class="text-muted">per URL indexed</p>
                         </div>
                         <ul class="list-unstyled">

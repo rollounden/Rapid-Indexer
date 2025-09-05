@@ -60,11 +60,109 @@ $paymentStats = $stmt->fetch();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Rapid Indexer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - RapidIndexer</title>
+    <meta name="theme-color" content="#667eea">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
+    <style>
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+            .form-control-lg {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            .card-body {
+                padding: 1rem;
+            }
+            .btn-group-mobile {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .btn-group-mobile .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .btn-lg {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+            .display-4 {
+                font-size: 2rem !important;
+            }
+        }
+        
+        /* Touch-friendly buttons */
+        .btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Prevent zoom on input focus */
+        input, textarea, select {
+            font-size: 16px;
+        }
+        
+        /* Mobile Navigation Enhancements */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background-color: #fff;
+                border-top: 1px solid #dee2e6;
+                margin-top: 0.5rem;
+                padding-top: 1rem;
+            }
+            .navbar-nav .nav-link {
+                padding: 0.75rem 1rem;
+                border-radius: 0.375rem;
+                margin: 0.25rem 0;
+            }
+            .navbar-nav .nav-link:hover {
+                background-color: #f8f9fa;
+            }
+            .navbar-nav .nav-link.active {
+                background-color: #667eea;
+                color: white !important;
+            }
+            .dropdown-menu {
+                border: none;
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            }
+        }
+        
+        /* Touch-friendly navbar toggler */
+        .navbar-toggler {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        
+        /* Brand icon animation */
+        .navbar-brand i {
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
