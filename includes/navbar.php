@@ -1,7 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container">
         <a class="navbar-brand fw-bold text-primary" href="/dashboard">
-            <i class="fas fa-rocket me-2"></i>Rapid Indexer
+            <?php if (basename($_SERVER['PHP_SELF']) !== 'tasks.php'): ?>
+                <i class="fas fa-rocket me-2"></i>
+            <?php endif; ?>
+            Rapid Indexer
         </a>
         
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -43,7 +46,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" 
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle me-2"></i>
+                        <?php if (basename($_SERVER['PHP_SELF']) !== 'tasks.php'): ?>
+                            <i class="fas fa-user-circle me-2"></i>
+                        <?php endif; ?>
                         <span class="d-none d-md-inline">
                             <?php 
                             // Refresh user data from database if email is not in session
