@@ -80,10 +80,16 @@ class TaskService
         
         $total_processed = count($indexed_links) + count($unindexed_links);
 
-        $pdo->prepare('UPDATE tasks SET status = ?, completed_at = CASE WHEN ? = "completed" THEN NOW() ELSE completed_at END WHERE id = ?')
-            ->execute(['completed', 'completed', $taskId]);
+        // Determine if there are any pending links left for this task
+        $pendingCountStmt = $pdo->prepare('SELECT COUNT(*) FROM task_links WHERE task_id = ? AND status = ?');
+        $pendingCountStmt->execute([$taskId, 'pending']);
+        $pendingCount = (int) $pendingCountStmt->fetchColumn();
 
-        return ['ok' => true, 'updated' => $total_processed];
+        $newStatus = $pendingCount === 0 ? 'completed' : 'processing';
+        $pdo->prepare('UPDATE tasks SET status = ?, completed_at = CASE WHEN ? = "completed" THEN NOW() ELSE completed_at END WHERE id = ?')
+            ->execute([$newStatus, $newStatus, $taskId]);
+
+        return ['ok' => true, 'updated' => $total_processed, 'pending' => $pendingCount, 'status' => $newStatus];
     }
 
     public static function exportTaskCsv(int $userId, int $taskId): string
