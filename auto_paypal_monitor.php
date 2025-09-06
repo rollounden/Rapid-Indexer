@@ -7,6 +7,10 @@ require_once __DIR__ . '/src/PayPalService.php';
 // Run every 5 minutes to check for completed payments
 
 try {
+    // Ensure log directory exists
+    $logDir = __DIR__ . '/storage/logs';
+    if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+    $logFile = $logDir . '/cron_paypal_monitor.log';
     $pdo = Db::conn();
     $paypal = new PayPalService();
     
@@ -17,6 +21,9 @@ try {
     
     if (empty($pending_payments)) {
         // No pending payments to check
+        $line = '[' . gmdate('Y-m-d H:i:s') . " UTC] auto_paypal_monitor: 0 payments\n";
+        @file_put_contents($logFile, $line, FILE_APPEND);
+        echo "No pending payments to check.\n";
         exit;
     }
     
@@ -48,6 +55,8 @@ try {
                             $stmt->execute([$payment['user_id'], $credits, 'payment_auto', 'payments', $payment['id']]);
                             
                             // Log the successful processing
+                            $line = '[' . gmdate('Y-m-d H:i:s') . " UTC] payment #{$payment['id']} processed, user #{$payment['user_id']} +{$credits} credits\n";
+                            @file_put_contents($logFile, $line, FILE_APPEND);
                             error_log("Auto-processed payment #{$payment['id']} - Awarded {$credits} credits to user #{$payment['user_id']}");
                             
                             break; // Only process the first completed capture

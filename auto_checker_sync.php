@@ -7,6 +7,10 @@ require_once __DIR__ . '/src/TaskService.php';
 // This focuses on checker tasks which complete faster
 
 try {
+    // Ensure log directory exists
+    $logDir = __DIR__ . '/storage/logs';
+    if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+    $logFile = $logDir . '/cron_checker_sync.log';
     $pdo = Db::conn();
     
     // Get checker tasks that need syncing (processing or older than 15 seconds)
@@ -23,6 +27,9 @@ try {
     
     if (empty($checker_tasks)) {
         // No checker tasks to sync
+        $line = '[' . gmdate('Y-m-d H:i:s') . " UTC] auto_checker_sync: 0 tasks\n";
+        @file_put_contents($logFile, $line, FILE_APPEND);
+        echo "No checker tasks to sync.\n";
         exit;
     }
     
@@ -35,7 +42,7 @@ try {
             
             $result = TaskService::syncTaskStatus($task['user_id'], $task['id']);
             
-            if ($result['updated'] > 0) {
+            if (($result['updated'] ?? 0) > 0) {
                 echo "✅ Checker task #{$task['id']} synced - {$result['updated']} links updated\n";
                 $synced_count++;
             } else {

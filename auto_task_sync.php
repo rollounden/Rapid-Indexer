@@ -7,6 +7,10 @@ require_once __DIR__ . '/src/TaskService.php';
 // This will automatically sync all pending/processing tasks
 
 try {
+    // Ensure log directory exists
+    $logDir = __DIR__ . '/storage/logs';
+    if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+    $logFile = $logDir . '/cron_task_sync.log';
     $pdo = Db::conn();
     
     // Get all tasks that need syncing
@@ -30,6 +34,9 @@ try {
     
     if (empty($tasks)) {
         // No tasks to sync
+        $line = '[' . gmdate('Y-m-d H:i:s') . " UTC] auto_task_sync: 0 tasks\n";
+        @file_put_contents($logFile, $line, FILE_APPEND);
+        echo "No tasks to sync.\n";
         exit;
     }
     
