@@ -229,12 +229,43 @@ class PayPalService {
     }
     
     /**
-     * Verify webhook signature (for production)
+     * Verify webhook signature using PayPal's verify endpoint
      */
     public function verifyWebhookSignature($payload, $headers) {
-        // In production, implement proper webhook signature verification
-        // For now, we'll just return true for sandbox testing
-        return true;
+        // Get the webhook ID from your PayPal dashboard
+        $webhook_id = '16W66105RA190263Y'; // Your live webhook ID
+        
+        // Prepare verification data
+        $verification_data = [
+            'auth_algo' => $headers['PAYPAL-AUTH-ALGO'] ?? '',
+            'cert_id' => $headers['PAYPAL-CERT-ID'] ?? '',
+            'transmission_id' => $headers['PAYPAL-TRANSMISSION-ID'] ?? '',
+            'transmission_sig' => $headers['PAYPAL-TRANSMISSION-SIG'] ?? '',
+            'transmission_time' => $headers['PAYPAL-TRANSMISSION-TIME'] ?? '',
+            'webhook_id' => $webhook_id,
+            'webhook_event' => json_decode($payload, true)
+        ];
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->base_url . '/v1/notifications/verify-webhook-signature');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($verification_data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $this->getAccessToken()
+        ]);
+        
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($http_code === 200) {
+            $data = json_decode($response, true);
+            return $data['verification_status'] === 'SUCCESS';
+        }
+        
+        return false;
     }
 }
 ?>
