@@ -25,7 +25,7 @@ class TaskService
             throw new Exception('RalfyIndex does not support Yandex. Please use Google.');
         }
 
-        CreditsService::reserveForTask($userId, count($urls), $vip);
+        CreditsService::reserveForTask($userId, count($urls), $vip, $type);
 
         $pdo = Db::conn();
         $pdo->beginTransaction();

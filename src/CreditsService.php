@@ -31,9 +31,15 @@ class CreditsService
         }
     }
 
-    public static function reserveForTask(int $userId, int $numUrls, bool $vip): void
+    public static function reserveForTask(int $userId, int $numUrls, bool $vip, string $type = 'indexer'): void
     {
-        $required = (CREDITS_PER_URL * $numUrls) + ($vip ? VIP_EXTRA_CREDITS_PER_URL * $numUrls : 0);
+        // Determine cost based on type
+        $baseCost = ($type === 'checker') ? COST_CHECKING : COST_INDEXING;
+        $vipCost = $vip ? COST_VIP_EXTRA : 0;
+        
+        $totalPerUrl = $baseCost + $vipCost;
+        $required = $totalPerUrl * $numUrls;
+
         $pdo = Db::conn();
         $pdo->beginTransaction();
         try {
@@ -42,7 +48,7 @@ class CreditsService
             $row = $stmt->fetch();
             $balance = intval($row['credits_balance'] ?? 0);
             if ($balance < $required) {
-                throw new Exception('Insufficient credits');
+                throw new Exception("Insufficient credits. Required: $required, Available: $balance");
             }
             $stmt = $pdo->prepare('UPDATE users SET credits_balance = credits_balance - ? WHERE id = ?');
             $stmt->execute([$required, $userId]);

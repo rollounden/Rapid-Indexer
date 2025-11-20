@@ -45,6 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             SettingsService::set('enable_paypal', $_POST['enable_paypal']);
         }
 
+        if (isset($_POST['enable_vip_queue'])) {
+            SettingsService::set('enable_vip_queue', $_POST['enable_vip_queue']);
+        }
+
         $success = 'Settings saved successfully.';
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -55,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $current_provider = SettingsService::get('indexing_provider', 'speedyindex');
 $ralfy_api_key = SettingsService::get('ralfy_api_key', '');
 $enable_paypal = SettingsService::get('enable_paypal', '1');
+$enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
 
 // Check Ralfy Status if key is present
 if ($ralfy_api_key) {
@@ -169,6 +174,28 @@ if ($ralfy_api_key) {
                                 document.querySelector('input[type="hidden"][name="enable_paypal"]').disabled = document.getElementById('enablePaypal').checked;
                             </script>
                             <button type="submit" class="btn btn-primary">Save Payment Settings</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Feature Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3 form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="enable_vip_queue" value="1" id="enableVip" <?php echo $enable_vip_queue === '1' ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="enableVip">Enable VIP Queue</label>
+                                <input type="hidden" name="enable_vip_queue" value="0">
+                            </div>
+                            <script>
+                                document.getElementById('enableVip').addEventListener('change', function() {
+                                    this.nextElementSibling.nextElementSibling.disabled = this.checked;
+                                });
+                                document.querySelector('input[type="hidden"][name="enable_vip_queue"]').disabled = document.getElementById('enableVip').checked;
+                            </script>
+                            <button type="submit" class="btn btn-primary">Save Feature Settings</button>
                         </form>
                     </div>
                 </div>

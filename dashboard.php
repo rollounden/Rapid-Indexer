@@ -14,6 +14,7 @@ require_once __DIR__ . '/src/TaskService.php';
 require_once __DIR__ . '/src/SettingsService.php';
 
 $userId = $_SESSION['uid'];
+$enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
 $error = '';
 $success = '';
 
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $title = $_POST['title'] ?? null;
         $urlsRaw = $_POST['urls'] ?? '';
         $urls = array_values(array_filter(array_map('trim', preg_split('/\r?\n/', $urlsRaw))));
-        $vip = isset($_POST['vip']) && $_POST['vip'] === '1';
+        $vip = isset($_POST['vip']) && $_POST['vip'] === '1' && $enable_vip_queue === '1';
         
         if (empty($urls)) {
             $error = 'Please enter at least one URL.';
@@ -263,20 +264,39 @@ $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
                             </div>
                             
                             <div class="mb-3" id="vipSection" style="display: none;">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="vip" value="1" id="vipCheck">
-                                    <label class="form-check-label" for="vipCheck">
-                                        VIP Queue (extra credits per URL) - Indexing only
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="vipQueue" name="vip" value="1">
+                                    <label class="form-check-label" for="vipQueue">
+                                        VIP Queue 
+                                        <span class="badge bg-warning text-dark">
+                                            +<?php echo COST_VIP_EXTRA; ?> credits/link
+                                        </span>
                                     </label>
                                 </div>
+                                <div class="form-text">Faster processing time</div>
                             </div>
                             
-                            <button type="submit" class="btn btn-primary">Create Task</button>
+                            <div class="card bg-light mb-3">
+                                <div class="card-body p-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Estimated Cost:</span>
+                                        <strong><span id="estimatedCost">0</span> credits</strong>
+                                    </div>
+                                    <small class="text-muted d-block mt-1">
+                                        Indexing: <?php echo COST_INDEXING; ?> credits/link | 
+                                        Checking: <?php echo COST_CHECKING; ?> credits/link
+                                    </small>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-rocket me-2"></i>Submit Task
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Recent Tasks -->
             <div class="col-lg-4">
                 <div class="card">
@@ -315,22 +335,46 @@ $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Show/hide VIP section based on task type
         document.addEventListener('DOMContentLoaded', function() {
+            const urlsInput = document.querySelector('textarea[name="urls"]');
             const typeSelect = document.querySelector('select[name="type"]');
             const vipSection = document.getElementById('vipSection');
+            const vipCheckbox = document.getElementById('vipQueue');
+            const costDisplay = document.getElementById('estimatedCost');
+            const engineSelect = document.getElementById('engineSelect'); // Might be null if Yandex hidden
             
-            function toggleVipSection() {
-                if (typeSelect.value === 'indexer') {
+            const COST_INDEXING = <?php echo COST_INDEXING; ?>;
+            const COST_CHECKING = <?php echo COST_CHECKING; ?>;
+            const COST_VIP = <?php echo COST_VIP_EXTRA; ?>;
+            const ENABLE_VIP = <?php echo $enable_vip_queue === '1' ? 'true' : 'false'; ?>;
+            
+            function updateCost() {
+                const urls = urlsInput.value.trim().split('\n').filter(line => line.trim() !== '');
+                const count = urls.length;
+                const type = typeSelect.value;
+                const isVip = vipCheckbox && vipCheckbox.checked;
+                
+                let baseCost = (type === 'checker') ? COST_CHECKING : COST_INDEXING;
+                let extra = (isVip && type === 'indexer') ? COST_VIP : 0;
+                
+                let total = count * (baseCost + extra);
+                costDisplay.textContent = new Intl.NumberFormat().format(total);
+                
+                // VIP logic
+                if (type === 'indexer' && ENABLE_VIP) {
                     vipSection.style.display = 'block';
                 } else {
                     vipSection.style.display = 'none';
-                    document.getElementById('vipCheck').checked = false;
+                    if (vipCheckbox) vipCheckbox.checked = false;
                 }
             }
             
-            typeSelect.addEventListener('change', toggleVipSection);
-            toggleVipSection(); // Initial call
+            urlsInput.addEventListener('input', updateCost);
+            typeSelect.addEventListener('change', updateCost);
+            if (vipCheckbox) vipCheckbox.addEventListener('change', updateCost);
+            
+            // Initial check
+            updateCost();
         });
     </script>
 </body>
