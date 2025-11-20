@@ -241,7 +241,7 @@ $total_pages = ceil($total_tasks / $per_page);
                                                 </td>
                                                 <td>
                                                     <div class="btn-group-mobile">
-                                                        <a href="/task_details.php?id=<?php echo $task['id']; ?>" 
+                                                        <a href="/task_results.php?id=<?php echo $task['id']; ?>" 
                                                            class="btn btn-primary btn-sm">
                                                             <i class="fas fa-eye"></i> View
                                                         </a>
