@@ -14,12 +14,29 @@ if (!isset($_SESSION['uid']) || ($_SESSION['role'] ?? '') !== 'admin') {
 require_once __DIR__ . '/src/Db.php';
 $pdo = Db::conn();
 
-// Ensure table exists (temporary auto-migration for convenience)
+// Ensure table exists (auto-migration)
 try {
     $pdo->query("SELECT 1 FROM contact_messages LIMIT 1");
 } catch (Exception $e) {
-    // Table likely doesn't exist
-    // This is a fallback if the user didn't run migration manually
+    // Table doesn't exist, create it
+    $sql = "
+    CREATE TABLE IF NOT EXISTS contact_messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NULL,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        subject VARCHAR(255) NOT NULL,
+        message TEXT NOT NULL,
+        status ENUM('new', 'read', 'replied') DEFAULT 'new',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ";
+    try {
+        $pdo->exec($sql);
+    } catch (Exception $ex) {
+        die("Database initialization error: " . $ex->getMessage());
+    }
 }
 
 // Handle actions
@@ -200,4 +217,3 @@ $messages = $stmt->fetchAll();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
