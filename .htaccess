@@ -13,7 +13,7 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
 # Redirect .php URLs to clean URLs
 RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
-RewriteRule ^ /%1? [NC,L,R=301]
+RewriteRule ^ /%1 [NC,L,R=301]
 
 # Security: Block access to sensitive files
 <Files ".env">
