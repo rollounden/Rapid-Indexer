@@ -57,53 +57,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="card">
-                <div class="card-body p-4">
-                    <div class="text-center mb-4">
-                        <h2 class="fw-bold text-primary">Rapid Indexer</h2>
-                        <p class="text-muted">Create your account</p>
-                    </div>
-                    
-                    <?php if ($error): ?>
-                        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-                    <?php endif; ?>
-                    
-                    <?php if ($success): ?>
-                        <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-                    <?php endif; ?>
-                    
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="email" name="email" required 
-                                   value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required 
-                                   minlength="6">
-                            <div class="form-text">Must be at least 6 characters long</div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                        </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Create Account</button>
-                        </div>
-                    </form>
-                    
-                    <div class="text-center mt-4">
-                        <p class="mb-0">Already have an account? <a href="/login.php" class="text-primary">Sign in</a></p>
-                    </div>
+    <div class="auth-wrapper">
+        <div class="text-center">
+            <a href="/" class="auth-logo">
+                <i class="fas fa-rocket me-2"></i>Rapid Indexer
+            </a>
+        </div>
+        
+        <div class="auth-box">
+            <div class="text-center mb-4">
+                <h4 class="fw-bold">Create Account</h4>
+                <p class="text-muted">Start indexing your links today</p>
+            </div>
+            
+            <?php if ($error): ?>
+                <div class="alert alert-danger py-2 text-center"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            
+            <?php if ($success): ?>
+                <div class="alert alert-success py-2 text-center"><?php echo htmlspecialchars($success); ?></div>
+            <?php endif; ?>
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input type="email" class="form-control form-control-lg" name="email" required 
+                           placeholder="name@company.com"
+                           value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
                 </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" name="password" required 
+                           minlength="6" placeholder="••••••••">
+                    <div class="form-text">At least 6 characters</div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control form-control-lg" name="confirm_password" required placeholder="••••••••">
+                </div>
+                
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+                </div>
+            </form>
+            
+            <div class="text-center mt-4">
+                <p class="mb-0 text-muted">Already have an account? <a href="/login.php" class="fw-bold text-primary text-decoration-none">Sign in</a></p>
             </div>
         </div>
+        
+        <div class="text-center mt-4 text-muted small">
+            &copy; <?php echo date('Y'); ?> Rapid Indexer. All rights reserved.
+        </div>
     </div>
+    
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

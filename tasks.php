@@ -124,88 +124,22 @@ $total_pages = ceil($total_tasks / $per_page);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <style>
-        /* Enhanced Button Styling */
-        .btn {
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .btn-group-mobile {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
         
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-            border: none;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border: none;
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            color: white;
-        }
-        
-        /* Mobile Button Optimizations */
         @media (max-width: 768px) {
-            .d-flex.gap-2 {
+            .btn-group-mobile {
                 flex-direction: column;
-                gap: 0.5rem !important;
             }
-            
-            .d-flex.gap-2 .btn {
+            .btn-group-mobile .btn {
                 width: 100%;
-                justify-content: center;
             }
-            
-            .btn-lg {
-                padding: 0.75rem 1.5rem;
-                font-size: 1rem;
+            .table-responsive {
+                border: 0;
             }
-        }
-        
-        /* Table Action Buttons */
-        .table td .d-flex {
-            min-width: 200px;
-        }
-        
-        @media (max-width: 576px) {
-            .table td .d-flex {
-                min-width: auto;
-            }
-        }
-        
-        /* Status Badge Improvements */
-        .badge {
-            font-size: 0.75rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem;
-        }
-        
-        /* Progress Bar Improvements */
-        .progress {
-            height: 0.5rem;
-            border-radius: 0.25rem;
-        }
-        
-        .progress-bar {
-            border-radius: 0.25rem;
         }
     </style>
 </head>
@@ -217,7 +151,7 @@ $total_pages = ceil($total_tasks / $per_page);
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">My Tasks</h1>
-                    <a href="/dashboard" class="btn btn-primary btn-lg">
+                    <a href="/dashboard" class="btn btn-primary">
                         <i class="fas fa-plus me-2"></i>Create New Task
                     </a>
                 </div>
@@ -245,14 +179,13 @@ $total_pages = ceil($total_tasks / $per_page);
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover align-middle">
                                     <thead>
                                         <tr>
                                             <th>Task ID</th>
-                                            <th>Type</th>
+                                            <th>Details</th>
                                             <th>Status</th>
                                             <th>Progress</th>
-                                            <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -261,11 +194,20 @@ $total_pages = ceil($total_tasks / $per_page);
                                             <tr>
                                                 <td>
                                                     <strong>#<?php echo htmlspecialchars($task['id']); ?></strong>
-                                                                                                         <?php if ($task['vip']): ?>
-                                                         <span class="badge bg-warning">VIP</span>
-                                                     <?php endif; ?>
+                                                    <?php if ($task['vip']): ?>
+                                                        <span class="badge bg-warning text-dark ms-1">VIP</span>
+                                                    <?php endif; ?>
+                                                    <div class="small text-muted d-md-none">
+                                                        <?php echo date('M j, Y', strtotime($task['created_at'])); ?>
+                                                    </div>
                                                 </td>
-                                                <td><?php echo htmlspecialchars(ucfirst($task['type'])); ?></td>
+                                                <td>
+                                                    <div class="fw-bold"><?php echo htmlspecialchars(ucfirst($task['type'])); ?></div>
+                                                    <div class="text-muted small"><?php echo htmlspecialchars(ucfirst($task['search_engine'])); ?></div>
+                                                    <div class="text-muted small d-none d-md-block">
+                                                        <?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?>
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <?php
                                                     $status_class = 'secondary';
@@ -279,37 +221,29 @@ $total_pages = ceil($total_tasks / $per_page);
                                                     <span class="badge bg-<?php echo $status_class; ?>">
                                                         <?php echo htmlspecialchars(ucfirst($task['status'])); ?>
                                                     </span>
-                                                    <?php if (in_array($task['status'], ['pending', 'processing'])): ?>
-                                                        <div class="text-muted small mt-1">
-                                                            <?php if ($task['type'] === 'checker'): ?>
-                                                                Typically completes within 1-2 minutes. Use Resync to refresh.
-                                                            <?php else: ?>
-                                                                Typically completes within 2-10 minutes. Use Resync to refresh.
-                                                            <?php endif; ?>
-                                                        </div>
-                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <?php if ($task['total_links'] > 0): ?>
-                                                        <div class="progress" style="height: 20px;">
-                                                            <?php 
-                                                            $completed = $task['indexed_links'] + $task['unindexed_links'];
-                                                            $percentage = ($completed / $task['total_links']) * 100;
-                                                            ?>
-                                                            <div class="progress-bar" style="width: <?php echo $percentage; ?>%">
-                                                                <?php echo $completed; ?>/<?php echo $task['total_links']; ?>
+                                                        <?php 
+                                                        $completed = $task['indexed_links'] + $task['unindexed_links'];
+                                                        $percentage = ($completed / $task['total_links']) * 100;
+                                                        ?>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                                                <div class="progress-bar" style="width: <?php echo $percentage; ?>%"></div>
                                                             </div>
+                                                            <small class="text-muted"><?php echo round($percentage); ?>%</small>
                                                         </div>
+                                                        <small class="text-muted"><?php echo $completed; ?>/<?php echo $task['total_links']; ?></small>
                                                     <?php else: ?>
-                                                        <span class="text-muted">No links</span>
+                                                        <span class="text-muted small">No links</span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td><?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?></td>
                                                 <td>
-                                                    <div class="d-flex gap-2 flex-wrap">
-                                                        <a href="/task_results?id=<?php echo $task['id']; ?>" 
+                                                    <div class="btn-group-mobile">
+                                                        <a href="/task_details.php?id=<?php echo $task['id']; ?>" 
                                                            class="btn btn-primary btn-sm">
-                                                            <i class="fas fa-eye me-1"></i>View Results
+                                                            <i class="fas fa-eye"></i> View
                                                         </a>
                                                         
                                                         <?php if ($task['status'] === 'completed'): ?>
@@ -317,7 +251,7 @@ $total_pages = ceil($total_tasks / $per_page);
                                                                 <input type="hidden" name="action" value="export_csv">
                                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                                                 <button type="submit" class="btn btn-success btn-sm">
-                                                                    <i class="fas fa-download me-1"></i>Export CSV
+                                                                    <i class="fas fa-download"></i> CSV
                                                                 </button>
                                                             </form>
                                                         <?php endif; ?>
@@ -326,8 +260,8 @@ $total_pages = ceil($total_tasks / $per_page);
                                                             <form method="POST" style="display: inline;">
                                                                 <input type="hidden" name="action" value="vip_queue">
                                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                                                <button type="submit" class="btn btn-warning btn-sm">
-                                                                    <i class="fas fa-star me-1"></i>VIP Queue
+                                                                <button type="submit" class="btn btn-warning btn-sm text-dark">
+                                                                    <i class="fas fa-star"></i> VIP
                                                                 </button>
                                                             </form>
                                                         <?php endif; ?>
@@ -337,7 +271,7 @@ $total_pages = ceil($total_tasks / $per_page);
                                                                 <input type="hidden" name="action" value="sync_status">
                                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                                                 <button type="submit" class="btn btn-outline-secondary btn-sm">
-                                                                    <i class="fas fa-arrows-rotate me-1"></i>Resync
+                                                                    <i class="fas fa-sync-alt"></i> Sync
                                                                 </button>
                                                             </form>
                                                         <?php endif; ?>
@@ -350,7 +284,7 @@ $total_pages = ceil($total_tasks / $per_page);
                             </div>
                             
                             <?php if ($total_pages > 1): ?>
-                                <nav aria-label="Task pagination">
+                                <nav aria-label="Task pagination" class="mt-4">
                                     <ul class="pagination justify-content-center">
                                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                                             <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">

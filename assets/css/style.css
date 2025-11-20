@@ -159,6 +159,35 @@ body {
     to { transform: rotate(360deg); }
 }
 
+/* Login/Register Page Enhancements */
+.auth-wrapper {
+    min-height: 100vh;
+    background-color: var(--light-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-logo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    display: inline-block;
+}
+
+.auth-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .auth-card {
@@ -167,5 +196,24 @@ body {
     
     .stats-number {
         font-size: 1.5rem;
+    }
+    
+    .btn-lg {
+        width: 100%;
+    }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+
+    /* Better mobile tables */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }

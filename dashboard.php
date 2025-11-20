@@ -377,5 +377,7 @@ $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
             updateCost();
         });
     </script>
+    
+    <?php include __DIR__ . '/includes/footer.php'; ?>
 </body>
 </html>
