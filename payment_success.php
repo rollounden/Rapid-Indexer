@@ -15,70 +15,97 @@ $message = '';
 $error = '';
 
 try {
-    // Get the token from PayPal
-    $token = $_GET['token'] ?? null;
-    
-    if (!$token) {
-        throw new Exception('No payment token provided');
-    }
-    
-    // Initialize PayPal service
-    $paypal = new PayPalService();
-    
-    // Get order details
-    $order = $paypal->getOrder($token);
-    
-    if ($order['status'] !== 'APPROVED') {
-        throw new Exception('Payment not approved');
-    }
-    
-    // Capture the payment
-    $capture = $paypal->capturePayment($token);
-    
-    if ($capture['status'] !== 'COMPLETED') {
-        throw new Exception('Payment capture failed');
-    }
-    
-    // Get payment details
-    $payment_id = $capture['purchase_units'][0]['payments']['captures'][0]['id'];
-    $amount = $capture['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
-    $currency = $capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
-    
-    // Calculate credits
-    $credits_amount = intval($amount / PRICE_PER_CREDIT_USD);
-    
-    // Connect to database
-    $pdo = Db::conn();
-    
-            // Check if payment already exists
-        $stmt = $pdo->prepare('SELECT id FROM payments WHERE paypal_capture_id = ?');
-        $stmt->execute([$payment_id]);
+    // Case 1: Cryptomus Return (order_id in GET)
+    if (isset($_GET['order_id'])) {
+        $order_id = $_GET['order_id'];
         
-        if ($stmt->fetch()) {
-            $message = 'Payment already processed. Credits have been added to your account.';
+        $pdo = Db::conn();
+        // Find payment by order ID
+        $stmt = $pdo->prepare('SELECT * FROM payments WHERE paypal_order_id = ? LIMIT 1');
+        $stmt->execute([$order_id]);
+        $payment = $stmt->fetch();
+        
+        if ($payment) {
+            if ($payment['status'] === 'paid') {
+                $message = "Payment successful! Credits have been added to your account.";
+                $amount = $payment['amount'];
+                $credits_amount = $payment['credits_awarded'];
+            } else {
+                // It might not be confirmed yet by webhook
+                $message = "Payment initiated. Credits will be added once the transaction is confirmed on the blockchain (this may take a few minutes).";
+                $amount = $payment['amount'];
+                $credits_amount = 0;
+            }
         } else {
-            // Insert payment record
-            $stmt = $pdo->prepare('
-                INSERT INTO payments (user_id, amount, currency, method, paypal_capture_id, paypal_order_id, credits_awarded, status, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
-            ');
-            $stmt->execute([
-                $user_id,
-                $amount,
-                $currency,
-                'paypal',
-                $payment_id,
-                $token,
-                $credits_amount,
-                'paid'
-            ]);
-            
-            // Add credits to user account using CreditsService
-            require_once __DIR__ . '/src/CreditsService.php';
-            CreditsService::adjust($user_id, $credits_amount, 'payment', 'payments', $pdo->lastInsertId());
-            
-            $message = "Payment successful! $credits_amount credits have been added to your account.";
+            $error = 'Order not found.';
         }
+        
+    } 
+    // Case 2: PayPal Return (token in GET)
+    elseif (isset($_GET['token'])) {
+        
+        $token = $_GET['token'];
+        
+        // Initialize PayPal service
+        $paypal = new PayPalService();
+        
+        // Get order details
+        $order = $paypal->getOrder($token);
+        
+        if ($order['status'] !== 'APPROVED') {
+            throw new Exception('Payment not approved');
+        }
+        
+        // Capture the payment
+        $capture = $paypal->capturePayment($token);
+        
+        if ($capture['status'] !== 'COMPLETED') {
+            throw new Exception('Payment capture failed');
+        }
+        
+        // Get payment details
+        $payment_id = $capture['purchase_units'][0]['payments']['captures'][0]['id'];
+        $amount = $capture['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
+        $currency = $capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
+        
+        // Calculate credits
+        $credits_amount = intval($amount / PRICE_PER_CREDIT_USD);
+        
+        // Connect to database
+        $pdo = Db::conn();
+        
+                // Check if payment already exists
+            $stmt = $pdo->prepare('SELECT id FROM payments WHERE paypal_capture_id = ?');
+            $stmt->execute([$payment_id]);
+            
+            if ($stmt->fetch()) {
+                $message = 'Payment already processed. Credits have been added to your account.';
+            } else {
+                // Insert payment record
+                $stmt = $pdo->prepare('
+                    INSERT INTO payments (user_id, amount, currency, method, paypal_capture_id, paypal_order_id, credits_awarded, status, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+                ');
+                $stmt->execute([
+                    $user_id,
+                    $amount,
+                    $currency,
+                    'paypal',
+                    $payment_id,
+                    $token,
+                    $credits_amount,
+                    'paid'
+                ]);
+                
+                // Add credits to user account using CreditsService
+                require_once __DIR__ . '/src/CreditsService.php';
+                CreditsService::adjust($user_id, $credits_amount, 'payment', 'payments', $pdo->lastInsertId());
+                
+                $message = "Payment successful! $credits_amount credits have been added to your account.";
+            }
+    } else {
+        throw new Exception('No payment reference provided');
+    }
     
 } catch (Exception $e) {
     $error = 'Payment processing error: ' . $e->getMessage();
@@ -114,7 +141,7 @@ try {
                     <div class="card-header bg-success text-white">
                         <h4 class="mb-0">
                             <i class="fas fa-check-circle me-2"></i>
-                            Payment Successful
+                            Payment Status
                         </h4>
                     </div>
                     <div class="card-body">

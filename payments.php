@@ -18,46 +18,70 @@ $error = '';
 $success = '';
 
 // Handle payment creation
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_payment') {
-    $amount = floatval($_POST['amount']);
-    $credits = intval($amount / PRICE_PER_CREDIT_USD);
-    
-    if ($amount < 1) {
-        $error = 'Minimum payment amount is $1.00';
-    } else {
-        try {
-            require_once __DIR__ . '/src/PayPalService.php';
-            require_once __DIR__ . '/src/PaymentService.php';
-            
-            // Create PayPal order
-            $paypal = new PayPalService();
-            $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "SpeedyIndex Credits - $credits credits");
-            
-            // Record pending payment
-            $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
-            
-            // Update payment with PayPal order ID
-            $stmt = $pdo->prepare('UPDATE payments SET paypal_order_id = ? WHERE id = ?');
-            $stmt->execute([$order['id'], $payment_id]);
-            
-            // Redirect to PayPal
-            $approval_url = null;
-            foreach ($order['links'] as $link) {
-                if ($link['rel'] === 'approve') {
-                    $approval_url = $link['href'];
-                    break;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    if ($_POST['action'] === 'create_payment') {
+        $amount = floatval($_POST['amount']);
+        $credits = intval($amount / PRICE_PER_CREDIT_USD);
+        
+        if ($amount < 1) {
+            $error = 'Minimum payment amount is $1.00';
+        } else {
+            try {
+                require_once __DIR__ . '/src/PayPalService.php';
+                require_once __DIR__ . '/src/PaymentService.php';
+                
+                // Create PayPal order
+                $paypal = new PayPalService();
+                $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "SpeedyIndex Credits - $credits credits");
+                
+                // Record pending payment
+                $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
+                
+                // Update payment with PayPal order ID
+                $stmt = $pdo->prepare('UPDATE payments SET paypal_order_id = ? WHERE id = ?');
+                $stmt->execute([$order['id'], $payment_id]);
+                
+                // Redirect to PayPal
+                $approval_url = null;
+                foreach ($order['links'] as $link) {
+                    if ($link['rel'] === 'approve') {
+                        $approval_url = $link['href'];
+                        break;
+                    }
                 }
+                
+                if ($approval_url) {
+                    header('Location: ' . $approval_url);
+                    exit;
+                } else {
+                    throw new Exception('PayPal approval URL not found');
+                }
+                
+            } catch (Exception $e) {
+                $error = 'Failed to create payment: ' . $e->getMessage();
             }
-            
-            if ($approval_url) {
-                header('Location: ' . $approval_url);
-                exit;
-            } else {
-                throw new Exception('PayPal approval URL not found');
+        }
+    } elseif ($_POST['action'] === 'create_crypto_payment') {
+        $amount = floatval($_POST['amount']);
+        
+        if ($amount < 1) {
+            $error = 'Minimum payment amount is $1.00';
+        } else {
+            try {
+                require_once __DIR__ . '/src/CryptomusService.php';
+                
+                $crypto = new CryptomusService();
+                $result = $crypto->createPayment($_SESSION['uid'], $amount);
+                
+                if (isset($result['payment_url'])) {
+                    header('Location: ' . $result['payment_url']);
+                    exit;
+                } else {
+                    throw new Exception('Failed to get payment URL');
+                }
+            } catch (Exception $e) {
+                $error = 'Crypto payment error: ' . $e->getMessage();
             }
-            
-        } catch (Exception $e) {
-            $error = 'Failed to create payment: ' . $e->getMessage();
         }
     }
 }
@@ -154,16 +178,43 @@ $ledger_entries = $stmt->fetchAll();
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Add Credits</h5>
-                                <form method="POST">
-                                    <input type="hidden" name="action" value="create_payment">
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" name="amount" 
-                                               placeholder="Amount" min="1" step="0.01" required>
-                                        <button type="submit" class="btn btn-primary">Add Credits</button>
+                                
+                                <ul class="nav nav-tabs mb-3" id="paymentTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="paypal-tab" data-bs-toggle="tab" data-bs-target="#paypal" type="button" role="tab">PayPal</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto" type="button" role="tab">Crypto</button>
+                                    </li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="paypal" role="tabpanel">
+                                        <form method="POST">
+                                            <input type="hidden" name="action" value="create_payment">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">$</span>
+                                                <input type="number" class="form-control" name="amount" 
+                                                       placeholder="Amount" min="1" step="0.01" required>
+                                                <button type="submit" class="btn btn-primary">Pay with PayPal</button>
+                                            </div>
+                                            <small class="text-muted">Minimum $1.00</small>
+                                        </form>
                                     </div>
-                                    <small class="text-muted">Minimum $1.00</small>
-                                </form>
+                                    
+                                    <div class="tab-pane fade" id="crypto" role="tabpanel">
+                                        <form method="POST">
+                                            <input type="hidden" name="action" value="create_crypto_payment">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">$</span>
+                                                <input type="number" class="form-control" name="amount" 
+                                                       placeholder="Amount" min="1" step="0.01" required>
+                                                <button type="submit" class="btn btn-success">Pay with Crypto</button>
+                                            </div>
+                                            <small class="text-muted">Powered by Cryptomus</small>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

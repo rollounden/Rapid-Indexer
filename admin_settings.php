@@ -36,6 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             SettingsService::set('ralfy_api_key', $key);
         }
 
+        if (isset($_POST['cryptomus_merchant_id'])) {
+            SettingsService::set('cryptomus_merchant_id', trim($_POST['cryptomus_merchant_id']));
+            SettingsService::set('cryptomus_api_key', trim($_POST['cryptomus_api_key']));
+        }
+
         $success = 'Settings saved successfully.';
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -150,6 +155,25 @@ if ($ralfy_api_key) {
                             <input type="password" class="form-control" value="************************" readonly disabled>
                             <div class="form-text">To change this, update the .env file on the server.</div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Cryptomus Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Merchant ID</label>
+                                <input type="text" name="cryptomus_merchant_id" class="form-control" value="<?php echo htmlspecialchars(SettingsService::get('cryptomus_merchant_id', '')); ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Payment Key</label>
+                                <input type="text" name="cryptomus_api_key" class="form-control" value="<?php echo htmlspecialchars(SettingsService::get('cryptomus_api_key', '')); ?>">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Crypto Settings</button>
+                        </form>
                     </div>
                 </div>
             </div>
