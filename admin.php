@@ -122,7 +122,12 @@ $recent_errors = $stmt->fetchAll();
     <div class="container mt-4">
         <div class="row">
             <div class="col-12">
-                <h1 class="h3 mb-4">Admin Dashboard</h1>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="h3">Admin Dashboard</h1>
+                    <a href="/admin_settings.php" class="btn btn-primary">
+                        <i class="fas fa-cog me-2"></i>Settings
+                    </a>
+                </div>
                 
                 <?php if ($error): ?>
                     <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>

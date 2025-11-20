@@ -3,6 +3,8 @@
 require_once __DIR__ . '/Db.php';
 require_once __DIR__ . '/CreditsService.php';
 require_once __DIR__ . '/SpeedyIndexClient.php';
+require_once __DIR__ . '/RalfyIndexClient.php';
+require_once __DIR__ . '/SettingsService.php';
 
 class TaskService
 {
@@ -12,13 +14,20 @@ class TaskService
         if (!in_array($engine, ['google','yandex'], true)) { throw new Exception('Invalid engine'); }
         if (!in_array($type, ['indexer','checker'], true)) { throw new Exception('Invalid type'); }
 
+        // Determine provider
+        $provider = SettingsService::get('indexing_provider', 'speedyindex');
+        if ($type === 'checker') {
+            $provider = 'speedyindex';
+        }
+
         CreditsService::reserveForTask($userId, count($urls), $vip);
 
         $pdo = Db::conn();
         $pdo->beginTransaction();
         try {
-            $stmt = $pdo->prepare('INSERT INTO tasks (user_id, type, search_engine, title, vip, status) VALUES (?, ?, ?, ?, ?, ?)');
-            $stmt->execute([$userId, $type, $engine, $title, $vip ? 1 : 0, 'pending']);
+            // Insert task with provider
+            $stmt = $pdo->prepare('INSERT INTO tasks (user_id, type, search_engine, title, vip, status, provider) VALUES (?, ?, ?, ?, ?, ?, ?)');
+            $stmt->execute([$userId, $type, $engine, $title, $vip ? 1 : 0, 'pending', $provider]);
             $taskId = intval($pdo->lastInsertId());
 
             $insertLink = $pdo->prepare('INSERT INTO task_links (task_id, url, status) VALUES (?, ?, ?)');
@@ -26,17 +35,56 @@ class TaskService
                 $insertLink->execute([$taskId, $url, 'pending']);
             }
 
-            $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);
-            $api = $client->createTask($engine, $type, $urls, $title);
-            $body = json_decode($api['body'] ?? '', true) ?: [];
-            $siTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
-            if (!$siTaskId) { throw new Exception('Failed to create SpeedyIndex task'); }
+            if ($provider === 'ralfy') {
+                $apiKey = SettingsService::get('ralfy_api_key');
+                if (!$apiKey) {
+                    throw new Exception('RalfyIndex API key not configured');
+                }
+                $client = new RalfyIndexClient($apiKey, $userId);
+                
+                // Ralfy doesn't support VIP queue explicitly in the same way (or maybe it does but no endpoint), 
+                // and 'engine' parameter is not used in Ralfy /project endpoint, only URLs.
+                // But we'll just send URLs.
+                
+                $projectName = $title ? preg_replace('/[^a-zA-Z0-9 _.-]/', '', $title) : null;
+                $api = $client->createProject($urls, $projectName);
+                
+                // Check response
+                $body = json_decode($api['body'] ?? '', true) ?: [];
+                
+                if (($api['httpCode'] ?? 500) >= 400 || isset($body['errorCode'])) {
+                    $msg = $body['message'] ?? 'Unknown RalfyIndex error';
+                    throw new Exception("RalfyIndex Error: $msg");
+                }
 
-            $stmt = $pdo->prepare('UPDATE tasks SET speedyindex_task_id = ?, status = ? WHERE id = ?');
-            $stmt->execute([$siTaskId, 'processing', $taskId]);
+                // Success - Ralfy is fire and forget
+                // Mark task as completed immediately
+                $stmt = $pdo->prepare('UPDATE tasks SET status = ?, completed_at = NOW() WHERE id = ?');
+                $stmt->execute(['completed', $taskId]);
 
-            $pdo->commit();
-            return ['task_id' => $taskId, 'speedyindex_task_id' => $siTaskId];
+                // Mark links as indexed (submitted)
+                $stmt = $pdo->prepare('UPDATE task_links SET status = ?, result_data = ?, checked_at = NOW() WHERE task_id = ?');
+                $stmt->execute(['indexed', json_encode(['status' => 'submitted_to_ralfy']), $taskId]);
+                
+                // We don't have a remote task ID to store for Ralfy.
+                
+                $pdo->commit();
+                return ['task_id' => $taskId, 'provider' => 'ralfy'];
+
+            } else {
+                // Default: SpeedyIndex
+                $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);
+                $api = $client->createTask($engine, $type, $urls, $title);
+                $body = json_decode($api['body'] ?? '', true) ?: [];
+                $siTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
+                if (!$siTaskId) { throw new Exception('Failed to create SpeedyIndex task'); }
+
+                $stmt = $pdo->prepare('UPDATE tasks SET speedyindex_task_id = ?, provider_task_id = ?, status = ? WHERE id = ?');
+                $stmt->execute([$siTaskId, $siTaskId, 'processing', $taskId]);
+
+                $pdo->commit();
+                return ['task_id' => $taskId, 'speedyindex_task_id' => $siTaskId, 'provider' => 'speedyindex'];
+            }
         } catch (Throwable $e) {
             $pdo->rollBack();
             throw $e;
