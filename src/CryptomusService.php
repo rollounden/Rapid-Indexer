@@ -11,8 +11,8 @@ class CryptomusService
 
     public function __construct()
     {
-        $merchantId = SettingsService::get('cryptomus_merchant_id');
-        $apiKey = SettingsService::get('cryptomus_api_key');
+        $merchantId = SettingsService::getDecrypted('cryptomus_merchant_id');
+        $apiKey = SettingsService::getDecrypted('cryptomus_api_key');
 
         if (!$merchantId || !$apiKey) {
             throw new Exception('Cryptomus is not configured');
@@ -56,7 +56,7 @@ class CryptomusService
         $sign = $data['sign'] ?? '';
         unset($data['sign']);
         
-        $apiKey = SettingsService::get('cryptomus_api_key');
+        $apiKey = SettingsService::getDecrypted('cryptomus_api_key');
         $hash = md5(base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE)) . $apiKey);
 
         if ($hash !== $sign) {
