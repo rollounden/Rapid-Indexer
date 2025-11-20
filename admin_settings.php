@@ -40,8 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (isset($_POST['cryptomus_merchant_id'])) {
-            SettingsService::set('cryptomus_merchant_id', trim($_POST['cryptomus_merchant_id']));
-            SettingsService::set('cryptomus_api_key', trim($_POST['cryptomus_api_key']));
+            $merchantId = trim($_POST['cryptomus_merchant_id']);
+            $apiKey = trim($_POST['cryptomus_api_key']);
+            
+            if (!empty($merchantId) && strpos($merchantId, '*') === false) {
+                SettingsService::setEncrypted('cryptomus_merchant_id', $merchantId);
+            }
+            
+            if (!empty($apiKey) && strpos($apiKey, '*') === false) {
+                SettingsService::setEncrypted('cryptomus_api_key', $apiKey);
+            }
         }
 
         if (isset($_POST['enable_paypal'])) {
@@ -63,6 +71,14 @@ $current_provider = SettingsService::get('indexing_provider', 'speedyindex');
 $ralfy_api_key_decrypted = SettingsService::getDecrypted('ralfy_api_key', '');
 // Mask the key for display if it exists
 $ralfy_api_key_display = $ralfy_api_key_decrypted ? substr($ralfy_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($ralfy_api_key_decrypted, -4) : '';
+
+// Cryptomus settings
+$cryptomus_merchant_id_decrypted = SettingsService::getDecrypted('cryptomus_merchant_id', '');
+$cryptomus_merchant_id_display = $cryptomus_merchant_id_decrypted ? substr($cryptomus_merchant_id_decrypted, 0, 4) . str_repeat('*', 20) . substr($cryptomus_merchant_id_decrypted, -4) : '';
+
+$cryptomus_api_key_decrypted = SettingsService::getDecrypted('cryptomus_api_key', '');
+$cryptomus_api_key_display = $cryptomus_api_key_decrypted ? substr($cryptomus_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($cryptomus_api_key_decrypted, -4) : '';
+
 $enable_paypal = SettingsService::get('enable_paypal', '1');
 $enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
 
@@ -231,11 +247,11 @@ if ($ralfy_api_key_decrypted) {
                         <form method="POST">
                             <div class="mb-3">
                                 <label class="form-label">Merchant ID</label>
-                                <input type="text" name="cryptomus_merchant_id" class="form-control" value="<?php echo htmlspecialchars(SettingsService::get('cryptomus_merchant_id', '')); ?>">
+                                <input type="text" name="cryptomus_merchant_id" class="form-control" value="<?php echo htmlspecialchars($cryptomus_merchant_id_display); ?>" placeholder="Enter new Merchant ID to update">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Payment Key</label>
-                                <input type="text" name="cryptomus_api_key" class="form-control" value="<?php echo htmlspecialchars(SettingsService::get('cryptomus_api_key', '')); ?>">
+                                <input type="text" name="cryptomus_api_key" class="form-control" value="<?php echo htmlspecialchars($cryptomus_api_key_display); ?>" placeholder="Enter new Payment Key to update">
                             </div>
                             <button type="submit" class="btn btn-primary">Save Crypto Settings</button>
                         </form>
