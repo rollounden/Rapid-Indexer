@@ -84,3 +84,9 @@ define('PAYPAL_CLIENT_ID', $_ENV['PAYPAL_CLIENT_ID']);
 define('PAYPAL_CLIENT_SECRET', $_ENV['PAYPAL_CLIENT_SECRET']);
 define('PAYPAL_WEBHOOK_SECRET', $_ENV['PAYPAL_WEBHOOK_SECRET'] ?? '');
 define('PAYPAL_BN_CODE', $_ENV['PAYPAL_BN_CODE'] ?? '');
+
+// Admin API Key - Optional, but required for using the Admin API
+if (isset($_ENV['ADMIN_API_KEY'])) {
+    define('ADMIN_API_KEY', $_ENV['ADMIN_API_KEY']);
+}
+
