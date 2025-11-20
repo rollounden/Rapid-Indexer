@@ -8,6 +8,11 @@ All API requests must be authenticated using an API Key.
 
 - **Header**: `X-Admin-Key: YOUR_ADMIN_API_KEY`
 
+
+# Admin API Key
+# Generate a strong random string for this (e.g., openssl rand -hex 32)
+ADMIN_API_KEY=HhJhdikJ&^G&tGVyT&Vgdf
+
 Ensure `ADMIN_API_KEY` is set in your `.env` file.
 
 ## Base URL

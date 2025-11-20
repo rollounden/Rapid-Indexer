@@ -10,7 +10,22 @@ $headers = getallheaders();
 $apiKey = $headers['X-Admin-Key'] ?? $_SERVER['HTTP_X_ADMIN_KEY'] ?? $_GET['api_key'] ?? null;
 
 // Check against environment variable or config constant
+// Force reload from .env just in case config.php loaded it before it was populated in some environments
+if (!isset($_ENV['ADMIN_API_KEY']) && file_exists(__DIR__ . '/../../../.env')) {
+    $lines = file(__DIR__ . '/../../../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, 'ADMIN_API_KEY=') === 0) {
+            $_ENV['ADMIN_API_KEY'] = trim(substr($line, 14));
+            break;
+        }
+    }
+}
+
 $validKey = $_ENV['ADMIN_API_KEY'] ?? (defined('ADMIN_API_KEY') ? ADMIN_API_KEY : null);
+
+// DEBUG: Uncomment to debug key issues (DO NOT LEAVE IN PRODUCTION)
+// error_log("Received Key: " . ($apiKey ? 'YES' : 'NO'));
+// error_log("Valid Key Configured: " . ($validKey ? 'YES' : 'NO'));
 
 if (!$validKey || $apiKey !== $validKey) {
     http_response_code(401);
