@@ -125,6 +125,12 @@ $recent_errors = $stmt->fetchAll();
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3">Admin Dashboard</h1>
                     <div>
+                        <a href="/admin_users.php" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-users me-2"></i>Users
+                        </a>
+                        <a href="/admin_payments.php" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-credit-card me-2"></i>Payments
+                        </a>
                         <a href="/admin_messages.php" class="btn btn-outline-primary me-2">
                             <i class="fas fa-envelope me-2"></i>Messages
                         </a>
