@@ -19,7 +19,8 @@
             <div class="col-md-3 col-6">
                 <h6 class="fw-bold mb-3">Support</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="mailto:support@rapid-indexer.com" class="text-decoration-none text-secondary">Contact Support</a></li>
+                    <li class="mb-2"><a href="/faq.php" class="text-decoration-none text-secondary">FAQ</a></li>
+                    <li class="mb-2"><a href="/contact.php" class="text-decoration-none text-secondary">Contact Us</a></li>
                     <li class="mb-2"><a href="/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
                 </ul>
             </div>

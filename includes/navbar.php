@@ -32,6 +32,15 @@
                         Payments
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Support
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="supportDropdown">
+                        <li><a class="dropdown-item" href="/faq.php">FAQ</a></li>
+                        <li><a class="dropdown-item" href="/contact.php">Contact Us</a></li>
+                    </ul>
+                </li>
                 <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'admin.php' ? 'active' : ''; ?>" 
