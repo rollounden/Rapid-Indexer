@@ -91,7 +91,7 @@ if (isset($_SESSION['uid'])) {
                 <div class="col-lg-6">
                     <div class="position-relative">
                         <div class="absolute top-0 start-0 w-100 h-100 bg-primary opacity-10 rounded-4" style="transform: rotate(-3deg);"></div>
-                        <img src="https://placehold.co/600x400/f8fafc/cbd5e1?text=Dashboard+Preview" alt="Dashboard Preview" class="img-fluid rounded-4 shadow-lg position-relative bg-white border">
+                        <img src="assets/img/dashboard-preview.png" alt="Dashboard Preview" class="img-fluid rounded-4 shadow-lg position-relative bg-white border">
                     </div>
                 </div>
             </div>
@@ -159,11 +159,11 @@ if (isset($_SESSION['uid'])) {
                     <div class="card h-100 border-0 shadow-sm hover-card">
                         <div class="card-body p-4">
                             <div class="bg-warning-subtle text-warning rounded-3 d-inline-flex p-3 mb-4">
-                                <i class="fas fa-shield-alt fa-2x"></i>
+                                <i class="fas fa-chart-bar fa-2x"></i>
                             </div>
-                            <h4 class="fw-bold mb-3">100% White Hat</h4>
+                            <h4 class="fw-bold mb-3">Detailed Analytics</h4>
                             <p class="text-muted">
-                                We use official indexing APIs provided by search engines. No spammy tactics that could get your site penalized.
+                                Track the indexing status of every single URL. Export comprehensive reports to CSV for your clients or records.
                             </p>
                         </div>
                     </div>
