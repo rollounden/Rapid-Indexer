@@ -1,0 +1,55 @@
+Project: SpeedyIndex SaaS Layer
+
+Assistant ground rules
+- Use Windows PowerShell commands only. Do not suggest macOS/Linux commands.
+- Prefer concise outputs with copy-pastable snippets. Use Markdown headings, bullets, and fenced code blocks only for code/commands.
+- Never expose real API keys, PayPal secrets, or credentials in code or logs. Use placeholders and environment variables.
+- Cite code from the repository using path blocks when referencing existing files.
+- Before edits, ensure TODO list is updated: only one task in_progress at a time.
+- After each successful step (file created/updated), mark corresponding TODO as completed.
+
+Tech stack guidance
+- Primary framework: Laravel (PHP) for auth, billing flows, jobs/queues, and admin UI. If plain PHP is required, mirror structure and security practices.
+- Database: MySQL 8.x, utf8mb4, InnoDB. Use foreign keys and appropriate indexes.
+- Queues: Start with Laravel database queue on Windows. Redis optional. Jobs must be idempotent.
+- Frontend: Blade + Bootstrap for MVP. Vue.js optional for richer admin UI.
+- Logging: Store all external API calls in MySQL `ApiLogs` and mirror critical events to application logs.
+
+Security & compliance
+- Store passwords with bcrypt (Laravel default). Enforce HTTPS and CSRF protection.
+- Never send the SpeedyIndex API key to the browser. All API calls go through server-side services.
+- Use per-user roles (user/admin). Include account status (active/suspended).
+- Implement data retention and account deletion; provide data export on request.
+- Record activity logs (logins, IPs) and detect suspicious activity.
+
+SpeedyIndex integration
+- Base URL: https://api.speedyindex.com
+- Implement services for: balance, task create, task list, task status, full report, single URL, invoice create, VIP queue.
+- Respect limits: 10,000 URLs per create request; up to 1,000 task IDs per status request.
+- Implement retry with backoff for temporary overload (code 2). Map provider codes to internal error taxonomy.
+
+Payments (PayPal)
+- Use REST Webhooks to credit balances after `PAYMENT.CAPTURE.COMPLETED`.
+- Validate signatures and ensure idempotency by transaction ID.
+- Record full payment lifecycle in `Payments` table.
+
+Operational expectations
+- Provide Windows-first setup steps (winget/PowerShell). Avoid WSL.
+- Prefer environment variables via `.env` for secrets. Do not commit secrets.
+- Background workers: `php artisan queue:work` for jobs; scheduled polling for task status.
+- Reports stored locally with optional S3-compatible backup.
+
+Coding style
+- Use clear, descriptive names. Avoid single-letter variables except for trivial iterators.
+- Guard clauses for error handling; avoid deep nesting.
+- Add comments only where non-trivial. Explain "why", not "how".
+- Keep functions small and single-responsibility. Avoid long procedural scripts.
+
+Documentation structure
+- Maintain `docs/` with: README.md, PRD.md, IMPLEMENTATION_PLAN.md, SETUP_WINDOWS.md, DB_SCHEMA.sql, SPEEDYINDEX_API.md, PAYPAL_INTEGRATION.md, SECURITY.md, LOGGING_MONITORING.md.
+
+Review checklist before changes
+- Does this expose any secret? If yes, stop and refactor.
+- Is the change aligned with PRD and implementation plan?
+- Are DB migrations and indices updated accordingly?
+- Are logs and error handling sufficient for auditing?
