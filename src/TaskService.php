@@ -20,6 +20,11 @@ class TaskService
             $provider = 'speedyindex';
         }
 
+        // RalfyIndex doesn't support Yandex
+        if ($provider === 'ralfy' && $engine === 'yandex') {
+            throw new Exception('RalfyIndex does not support Yandex. Please use Google.');
+        }
+
         CreditsService::reserveForTask($userId, count($urls), $vip);
 
         $pdo = Db::conn();

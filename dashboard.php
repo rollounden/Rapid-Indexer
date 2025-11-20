@@ -11,6 +11,7 @@ if (!isset($_SESSION['uid'])) {
 require_once __DIR__ . '/src/Db.php';
 require_once __DIR__ . '/src/CreditsService.php';
 require_once __DIR__ . '/src/TaskService.php';
+require_once __DIR__ . '/src/SettingsService.php';
 
 $userId = $_SESSION['uid'];
 $error = '';
@@ -55,6 +56,8 @@ $taskStats = $stmt->fetch();
 $stmt = $pdo->prepare('SELECT COUNT(*) as total_payments, SUM(amount) as total_spent FROM payments WHERE user_id = ? AND status = "paid"');
 $stmt->execute([$userId]);
 $paymentStats = $stmt->fetch();
+
+$currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -229,8 +232,13 @@ $paymentStats = $stmt->fetch();
                                         <label class="form-label">Search Engine</label>
                                         <select name="engine" class="form-select">
                                             <option value="google">Google</option>
+                                            <?php if ($currentProvider !== 'ralfy'): ?>
                                             <option value="yandex">Yandex</option>
+                                            <?php endif; ?>
                                         </select>
+                                        <?php if ($currentProvider === 'ralfy'): ?>
+                                        <small class="text-muted">RalfyIndex only supports Google</small>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
