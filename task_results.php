@@ -130,11 +130,22 @@ $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Links</h5>
                 <?php if ($task['status'] === 'completed'): ?>
-                    <form method="POST" action="/tasks">
-                        <input type="hidden" name="action" value="export_csv">
-                        <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
-                        <button type="submit" class="btn btn-sm btn-outline-success">Export CSV</button>
-                    </form>
+                    <div class="btn-group">
+                        <?php if ($task['type'] === 'indexer'): ?>
+                            <form method="POST" action="/tasks">
+                                <input type="hidden" name="action" value="check_indexing">
+                                <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
+                                <button type="submit" class="btn btn-sm btn-info text-white">
+                                    <i class="fas fa-search me-1"></i>Check Indexing
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                        <form method="POST" action="/tasks" class="ms-2">
+                            <input type="hidden" name="action" value="export_csv">
+                            <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Export CSV</button>
+                        </form>
+                    </div>
                 <?php endif; ?>
             </div>
             <div class="card-body p-0">

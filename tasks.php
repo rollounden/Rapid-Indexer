@@ -81,6 +81,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Failed to submit VIP queue: ' . $e->getMessage();
                 }
                 break;
+
+            case 'check_indexing':
+                $task_id = $_POST['task_id'];
+                try {
+                    // Fetch original task details
+                    $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?');
+                    $stmt->execute([$task_id, $_SESSION['uid']]);
+                    $originalTask = $stmt->fetch();
+
+                    if (!$originalTask) {
+                        throw new Exception('Task not found');
+                    }
+
+                    // Fetch URLs
+                    $stmt = $pdo->prepare('SELECT url FROM task_links WHERE task_id = ?');
+                    $stmt->execute([$task_id]);
+                    $urls = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+                    if (empty($urls)) {
+                        throw new Exception('No URLs found in this task');
+                    }
+
+                    // Create new checker task
+                    // Force engine='google' for checking as usually checking is google specific in this context, 
+                    // or use original engine if supported. SpeedyIndex supports checking for Google.
+                    $engine = 'google'; 
+                    $title = 'Check: ' . ($originalTask['title'] ?: 'Task #' . $originalTask['id']);
+                    
+                    $result = TaskService::createTask($_SESSION['uid'], $engine, 'checker', $urls, $title, false);
+                    
+                    $newTaskId = $result['task_id'];
+                    header("Location: /task_results?id=$newTaskId");
+                    exit;
+
+                } catch (Exception $e) {
+                    $error = 'Failed to create checking task: ' . $e->getMessage();
+                }
+                break;
         }
     }
 }
@@ -247,6 +285,15 @@ $total_pages = ceil($total_tasks / $per_page);
                                                         </a>
                                                         
                                                         <?php if ($task['status'] === 'completed'): ?>
+                                                            <?php if ($task['type'] === 'indexer'): ?>
+                                                                <form method="POST" style="display: inline;">
+                                                                    <input type="hidden" name="action" value="check_indexing">
+                                                                    <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                                                    <button type="submit" class="btn btn-info btn-sm text-white">
+                                                                        <i class="fas fa-search"></i> Check
+                                                                    </button>
+                                                                </form>
+                                                            <?php endif; ?>
                                                             <form method="POST" style="display: inline;">
                                                                 <input type="hidden" name="action" value="export_csv">
                                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
