@@ -66,8 +66,8 @@
                                 <div class="accordion-body">
                                     We use a credit-based system.
                                     <ul>
-                                        <li><strong>Indexing:</strong> 15 credits ($0.15) per URL</li>
-                                        <li><strong>Checking:</strong> 5 credits ($0.05) per URL</li>
+                                        <li><strong>Indexing:</strong> 3 credits ($0.03) per URL</li>
+                                        <li><strong>Checking:</strong> 1 credit ($0.01) per URL</li>
                                     </ul>
                                     Credits can be purchased via PayPal or Cryptocurrency starting at $1.00.
                                 </div>

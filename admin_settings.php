@@ -33,7 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (isset($_POST['ralfy_api_key'])) {
             $key = trim($_POST['ralfy_api_key']);
-            SettingsService::set('ralfy_api_key', $key);
+            // Only update if not empty (to allow keeping existing masked value)
+            if (!empty($key) && strpos($key, '*') === false) {
+                SettingsService::setEncrypted('ralfy_api_key', $key);
+            }
         }
 
         if (isset($_POST['cryptomus_merchant_id'])) {
@@ -57,14 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Load current settings
 $current_provider = SettingsService::get('indexing_provider', 'speedyindex');
-$ralfy_api_key = SettingsService::get('ralfy_api_key', '');
+$ralfy_api_key_decrypted = SettingsService::getDecrypted('ralfy_api_key', '');
+// Mask the key for display if it exists
+$ralfy_api_key_display = $ralfy_api_key_decrypted ? substr($ralfy_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($ralfy_api_key_decrypted, -4) : '';
 $enable_paypal = SettingsService::get('enable_paypal', '1');
 $enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
 
 // Check Ralfy Status if key is present
-if ($ralfy_api_key) {
+if ($ralfy_api_key_decrypted) {
     try {
-        $client = new RalfyIndexClient($ralfy_api_key);
+        $client = new RalfyIndexClient($ralfy_api_key_decrypted);
         $status = $client->getStatus();
         $balance = $client->getBalance();
         
@@ -126,10 +131,10 @@ if ($ralfy_api_key) {
                             <h6 class="mb-3">RalfyIndex Configuration</h6>
                             <div class="mb-3">
                                 <label class="form-label">API Key</label>
-                                <input type="text" name="ralfy_api_key" class="form-control" value="<?php echo htmlspecialchars($ralfy_api_key); ?>">
+                                <input type="text" name="ralfy_api_key" class="form-control" value="<?php echo htmlspecialchars($ralfy_api_key_display); ?>" placeholder="Enter new key to update">
                             </div>
 
-                            <?php if ($ralfy_api_key): ?>
+                            <?php if ($ralfy_api_key_decrypted): ?>
                                 <div class="alert alert-info">
                                     <strong>RalfyIndex Status:</strong>
                                     <?php 

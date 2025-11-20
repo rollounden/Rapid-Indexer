@@ -41,7 +41,7 @@ class TaskService
             }
 
             if ($provider === 'ralfy') {
-                $apiKey = SettingsService::get('ralfy_api_key');
+                $apiKey = SettingsService::getDecrypted('ralfy_api_key');
                 if (!$apiKey) {
                     throw new Exception('RalfyIndex API key not configured');
                 }

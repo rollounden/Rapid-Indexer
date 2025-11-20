@@ -187,7 +187,7 @@ if (isset($_SESSION['uid'])) {
                         <div class="card-body p-5">
                             <div class="text-center">
                                 <h5 class="fw-bold text-muted mb-4">LINK CHECKING</h5>
-                                <div class="display-4 fw-bold mb-2">$0.05</div>
+                                <div class="display-4 fw-bold mb-2">$0.01</div>
                                 <p class="text-muted mb-4">per URL check</p>
                             </div>
                             <ul class="list-unstyled mb-4">
@@ -212,7 +212,7 @@ if (isset($_SESSION['uid'])) {
                         <div class="card-body p-5">
                             <div class="text-center">
                                 <h5 class="fw-bold text-primary mb-4">PREMIUM INDEXING</h5>
-                                <div class="display-4 fw-bold mb-2">$0.15</div>
+                                <div class="display-4 fw-bold mb-2">$0.03</div>
                                 <p class="text-muted mb-4">per URL submission</p>
                             </div>
                             <ul class="list-unstyled mb-4">

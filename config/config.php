@@ -39,6 +39,9 @@ define('DB_PASS', $_ENV['DB_PASS']);
 // Logging
 const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
 
+// Encryption Key (generated)
+const ENCRYPTION_KEY = 'D6XcXFGWrDiByIpRyuNZap1d+OlBsHjwk/IaXCzq5wI=';
+
 // Credits & Pricing
 // Costs in USD (internal reference)
 // Indexing cost: 0.005 (Ralfy) / 0.006 (Speedy)
@@ -62,68 +65,11 @@ const LOG_FILE = __DIR__ . '/../storage/logs/app.log';
 // But integers are easier.
 
 // Let's stick to 1 Credit = $0.10 (current default)
-const PRICE_PER_CREDIT_USD = 0.10; 
-
-// Task Costs in Credits
-const CREDITS_PER_INDEX_URL = 1;   // 1 credit ($0.10) per URL. Cost: ~$0.006. Margin: ~16x
-const CREDITS_PER_CHECK_URL = 0.2; // 0.2 credits ($0.02) per URL. Cost: ~$0.0012. Margin: ~16x
-// Note: To support fractional credits, we need to update database column to decimal or handle floats.
-// Current DB schema uses BIGINT for credits_balance.
-// Quick fix: Multiply everything by 100 to work with integers?
-// OR: Just charge 1 credit for checking but give more credits per dollar?
-
-// ADJUSTMENT: The user wants "Checking cheaper than indexing".
-// If DB is BIGINT, we can't do 0.2 credits easily without migration.
-// Let's CHANGE the base unit.
-// OLD: 1 Credit = $0.10
-// NEW: 1 Credit = $0.01 (1 cent)
-// Price per credit: $0.01
-
-// Checking: 2 Credits ($0.02) -> Cost $0.0012 -> Margin ~16x
-// Indexing: 10 Credits ($0.10) -> Cost $0.006 -> Margin ~16x
-
-// User's request: "make checking tasks cheaper... we want a good 50, 100x margin"
-// Checking Cost: 0.0012
-// 100x margin target price: $0.12
-// 50x margin target price: $0.06
-
-// Indexing Cost: 0.006
-// 20x margin target price: $0.12
-
-// Proposal:
-// 1 Credit = $0.01 USD
-// Indexing = 15 Credits ($0.15)
-// Checking = 5 Credits ($0.05)
-
-// Let's update config to use these new constants.
-// We will assume the system can handle the logic change.
-// IMPORTANT: Existing users have credits based on old valuation ($0.10/credit).
-// If we change valuation to $0.01/credit, their balance is effectively 1/10th value if we just change price.
-// We should multiply their existing balance by 10 (or whatever factor) to be fair, OR just start new pricing.
-// Given this is "SaaS MVP", maybe just change it.
-
-// Let's stick to the existing "1 Credit = 1 URL Indexing" mental model if possible, but use floats if needed?
-// No, BIGINT credits.
-// Let's change: 1 Credit = $0.01.
-// DB Migration needed to multiply existing credits by 10.
-
-// WAIT. Easier path:
-// Keep 1 Credit = $0.10.
-// Indexing = 1 Credit ($0.10).
-// Checking = 0.5 Credits? No, integer math.
-// Checking = 1 Credit per 5 URLs?
-// That logic is complex to implement "per batch".
-
-// Better Path:
-// Rename "Credits" to "Funds" in cents/points internally?
-// Let's go with: 1 Credit = $0.01 (1 Cent).
-// This gives enough granularity.
-
 const PRICE_PER_CREDIT_USD = 0.01; 
 
 // Task Costs (in Credits/Cents)
-const COST_INDEXING = 15; // $0.15 per URL
-const COST_CHECKING = 5;  // $0.05 per URL
+const COST_INDEXING = 3; // $0.03 per URL
+const COST_CHECKING = 1;  // $0.01 per URL
 const COST_VIP_EXTRA = 5; // +$0.05 for VIP
 
 // This requires migrating existing user balances (multiply by 10 if old price was 0.10).
