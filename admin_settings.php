@@ -41,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             SettingsService::set('cryptomus_api_key', trim($_POST['cryptomus_api_key']));
         }
 
+        if (isset($_POST['enable_paypal'])) {
+            SettingsService::set('enable_paypal', $_POST['enable_paypal']);
+        }
+
         $success = 'Settings saved successfully.';
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -50,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Load current settings
 $current_provider = SettingsService::get('indexing_provider', 'speedyindex');
 $ralfy_api_key = SettingsService::get('ralfy_api_key', '');
+$enable_paypal = SettingsService::get('enable_paypal', '1');
 
 // Check Ralfy Status if key is present
 if ($ralfy_api_key) {
@@ -140,6 +145,34 @@ if ($ralfy_api_key) {
                     </div>
                 </div>
                 
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Payment Providers</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3 form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="enable_paypal" value="1" id="enablePaypal" <?php echo $enable_paypal === '1' ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="enablePaypal">Enable PayPal</label>
+                                <input type="hidden" name="enable_paypal" value="0"> <!-- Fallback if unchecked -->
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <input class="form-check-input" type="checkbox" checked disabled>
+                                <label class="form-check-label">Enable Cryptomus (Always enabled if keys provided)</label>
+                            </div>
+                            <script>
+                                // Ensure the fallback hidden input doesn't override if checked
+                                document.getElementById('enablePaypal').addEventListener('change', function() {
+                                    this.nextElementSibling.nextElementSibling.disabled = this.checked;
+                                });
+                                // Initial state
+                                document.querySelector('input[type="hidden"][name="enable_paypal"]').disabled = document.getElementById('enablePaypal').checked;
+                            </script>
+                            <button type="submit" class="btn btn-primary">Save Payment Settings</button>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0">SpeedyIndex Configuration</h5>

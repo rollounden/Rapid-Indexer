@@ -12,15 +12,23 @@ if (!isset($_SESSION['uid'])) {
 }
 
 require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/SettingsService.php';
 $pdo = Db::conn();
 
 $error = '';
 $success = '';
 
+$enable_paypal = SettingsService::get('enable_paypal', '1');
+
 // Handle payment creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'create_payment') {
-        $amount = floatval($_POST['amount']);
+        if ($enable_paypal !== '1') {
+            $error = 'PayPal payments are currently disabled.';
+        } else {
+            $amount = floatval($_POST['amount']);
+            // ... rest of PayPal logic ...
+
         $credits = intval($amount / PRICE_PER_CREDIT_USD);
         
         if ($amount < 1) {
@@ -180,15 +188,18 @@ $ledger_entries = $stmt->fetchAll();
                                 <h5 class="card-title">Add Credits</h5>
                                 
                                 <ul class="nav nav-tabs mb-3" id="paymentTabs" role="tablist">
+                                    <?php if ($enable_paypal === '1'): ?>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link active" id="paypal-tab" data-bs-toggle="tab" data-bs-target="#paypal" type="button" role="tab">PayPal</button>
                                     </li>
+                                    <?php endif; ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto" type="button" role="tab">Crypto</button>
+                                        <button class="nav-link <?php echo $enable_paypal !== '1' ? 'active' : ''; ?>" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto" type="button" role="tab">Crypto</button>
                                     </li>
                                 </ul>
                                 
                                 <div class="tab-content">
+                                    <?php if ($enable_paypal === '1'): ?>
                                     <div class="tab-pane fade show active" id="paypal" role="tabpanel">
                                         <form method="POST">
                                             <input type="hidden" name="action" value="create_payment">
@@ -201,8 +212,9 @@ $ledger_entries = $stmt->fetchAll();
                                             <small class="text-muted">Minimum $1.00</small>
                                         </form>
                                     </div>
+                                    <?php endif; ?>
                                     
-                                    <div class="tab-pane fade" id="crypto" role="tabpanel">
+                                    <div class="tab-pane fade <?php echo $enable_paypal !== '1' ? 'show active' : ''; ?>" id="crypto" role="tabpanel">
                                         <form method="POST">
                                             <input type="hidden" name="action" value="create_crypto_payment">
                                             <div class="input-group mb-2">
