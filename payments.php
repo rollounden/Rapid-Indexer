@@ -1,8 +1,19 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once __DIR__ . '/config/config.php';
+// Ensure logs work
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+error_reporting(E_ALL);
+
+// Create log dir if missing
+if (!is_dir(__DIR__ . '/storage/logs')) {
+    mkdir(__DIR__ . '/storage/logs', 0777, true);
+}
+ini_set('error_log', __DIR__ . '/storage/logs/php_errors.log');
+
+// Trigger a test error to verify logging
+// error_log("Debug: Log system initialized successfully.");
+
 session_start();
 
 // Check if user is logged in
@@ -69,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $error = 'Failed to create payment: ' . $e->getMessage();
             }
         }
+    }
     } elseif ($_POST['action'] === 'create_crypto_payment') {
         $amount = floatval($_POST['amount']);
         
