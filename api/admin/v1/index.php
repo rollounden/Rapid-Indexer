@@ -29,9 +29,17 @@ $validKey = $_ENV['ADMIN_API_KEY'] ?? (defined('ADMIN_API_KEY') ? ADMIN_API_KEY 
 
 if (!$validKey || $apiKey !== $validKey) {
     http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized. Invalid or missing X-Admin-Key.']);
+    // Debugging info - remove in production if sensitive
+    echo json_encode([
+        'error' => 'Unauthorized. Invalid or missing X-Admin-Key.',
+        'debug_received_key_length' => strlen($apiKey ?? ''),
+        'debug_configured_key_length' => strlen($validKey ?? ''),
+        // 'debug_received' => $apiKey, // Uncomment if you really can't see why they don't match
+        // 'debug_expected' => $validKey
+    ]);
     exit;
 }
+
 
 // 2. Router
 $method = $_SERVER['REQUEST_METHOD'];
