@@ -90,3 +90,8 @@ if (isset($_ENV['ADMIN_API_KEY'])) {
     define('ADMIN_API_KEY', $_ENV['ADMIN_API_KEY']);
 }
 
+// Cryptomus Configuration
+if (isset($_ENV['CRYPTOMUS_MERCHANT_ID']) && isset($_ENV['CRYPTOMUS_PAYMENT_KEY'])) {
+    define('CRYPTOMUS_MERCHANT_ID', $_ENV['CRYPTOMUS_MERCHANT_ID']);
+    define('CRYPTOMUS_PAYMENT_KEY', $_ENV['CRYPTOMUS_PAYMENT_KEY']);
+}

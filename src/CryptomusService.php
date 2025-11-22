@@ -11,8 +11,17 @@ class CryptomusService
 
     public function __construct()
     {
+        // Try to get from SettingsService first (DB), then fallback to constants (Config/.env)
         $merchantId = SettingsService::getDecrypted('cryptomus_merchant_id');
         $apiKey = SettingsService::getDecrypted('cryptomus_api_key');
+
+        if (!$merchantId && defined('CRYPTOMUS_MERCHANT_ID')) {
+            $merchantId = CRYPTOMUS_MERCHANT_ID;
+        }
+        
+        if (!$apiKey && defined('CRYPTOMUS_PAYMENT_KEY')) {
+            $apiKey = CRYPTOMUS_PAYMENT_KEY;
+        }
 
         if (!$merchantId || !$apiKey) {
             throw new Exception('Cryptomus is not configured');
@@ -20,6 +29,7 @@ class CryptomusService
 
         $this->client = new CryptomusClient($merchantId, $apiKey);
     }
+
 
     public function createPayment(int $userId, float $amount)
     {
