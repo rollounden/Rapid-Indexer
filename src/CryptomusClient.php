@@ -15,7 +15,16 @@ class CryptomusClient
     private function request(string $endpoint, array $data = [])
     {
         $url = $this->baseUrl . $endpoint;
-        $payload = json_encode($data);
+        // Cryptomus requires JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES to match signature
+        $payload = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        
+        // If empty array, use empty string for signature calculation sometimes? 
+        // Documentation says: $sign = md5(base64_encode($data) . $API_KEY); where $data is json_encoded
+        
+        if ($data === []) {
+            $payload = '{}'; // Force empty JSON object
+        }
+
         $sign = md5(base64_encode($payload) . $this->apiKey);
 
         $ch = curl_init($url);
@@ -41,11 +50,12 @@ class CryptomusClient
 
         $result = json_decode($response, true);
         
-        // Log API call if needed (optional)
-        // file_put_contents(__DIR__ . '/../storage/logs/cryptomus.log', date('Y-m-d H:i:s') . " $endpoint $httpCode " . json_encode($result) . "\n", FILE_APPEND);
+        // Log API call for debugging
+        // file_put_contents(__DIR__ . '/../storage/logs/cryptomus.log', date('Y-m-d H:i:s') . " REQUEST: $endpoint PAYLOAD: $payload SIGN: $sign RESP: $response\n", FILE_APPEND);
 
         return $result;
     }
+
 
     public function createPayment(string $orderId, float $amount, string $currency, string $urlReturn, string $urlCallback)
     {
