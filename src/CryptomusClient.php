@@ -8,8 +8,8 @@ class CryptomusClient
 
     public function __construct(string $merchantId, string $apiKey)
     {
-        $this->merchantId = $merchantId;
-        $this->apiKey = $apiKey;
+        $this->merchantId = trim($merchantId); // Trim whitespace
+        $this->apiKey = trim($apiKey); // Trim whitespace
     }
 
     private function request(string $endpoint, array $data = [])
@@ -18,13 +18,11 @@ class CryptomusClient
         // Cryptomus requires JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES to match signature
         $payload = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         
-        // If empty array, use empty string for signature calculation sometimes? 
-        // Documentation says: $sign = md5(base64_encode($data) . $API_KEY); where $data is json_encoded
-        
         if ($data === []) {
-            $payload = '{}'; // Force empty JSON object
+            $payload = '{}';
         }
 
+        // Sign: md5(base64_encode(json_encode($data)) . $API_KEY)
         $sign = md5(base64_encode($payload) . $this->apiKey);
 
         $ch = curl_init($url);
@@ -38,20 +36,40 @@ class CryptomusClient
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        
+        // Enable verbose debug output for curl if needed (optional)
+        // curl_setopt($ch, CURLOPT_VERBOSE, true);
 
         $response = curl_exec($ch);
         $error = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
+        // --- EXTREME DEBUGGING LOG ---
+        // Writes to storage/logs/cryptomus_debug.log
+        // Check this file after making a request!
+        $logData = "----------------------------------------\n";
+        $logData .= "Date: " . date('Y-m-d H:i:s') . "\n";
+        $logData .= "Endpoint: $endpoint\n";
+        $logData .= "Merchant ID Sent: '" . $this->merchantId . "' (Length: " . strlen($this->merchantId) . ")\n";
+        $logData .= "API Key Used (First 5 chars): " . substr($this->apiKey, 0, 5) . "...\n";
+        $logData .= "Payload: $payload\n";
+        $logData .= "Calculated Sign: $sign\n";
+        $logData .= "HTTP Code: $httpCode\n";
+        $logData .= "Response Body: $response\n";
+        $logData .= "Curl Error: $error\n";
+        $logData .= "----------------------------------------\n";
+        
+        $logDir = __DIR__ . '/../storage/logs';
+        if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+        file_put_contents($logDir . '/cryptomus_debug.log', $logData, FILE_APPEND);
+        // -----------------------------
+
         if ($error) {
             throw new Exception('Cryptomus Curl Error: ' . $error);
         }
 
         $result = json_decode($response, true);
-        
-        // Log API call for debugging
-        // file_put_contents(__DIR__ . '/../storage/logs/cryptomus.log', date('Y-m-d H:i:s') . " REQUEST: $endpoint PAYLOAD: $payload SIGN: $sign RESP: $response\n", FILE_APPEND);
 
         return $result;
     }
