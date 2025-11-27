@@ -3,6 +3,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Default Meta Data
+$page_title = $page_title ?? 'Rapid Indexer - Premium SEO Link Indexing';
+$meta_description = $meta_description ?? 'Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.';
+$meta_keywords = $meta_keywords ?? 'seo link indexing, google indexer, backlink checker, rapid indexer, seo tools';
+$canonical_url = $canonical_url ?? 'https://rapid-indexer.com' . $_SERVER['REQUEST_URI'];
+$robots_tag = $robots_tag ?? 'index, follow';
+$og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview.png';
 ?>
 <!DOCTYPE html>
 <html lang="en" class="dark">
@@ -11,11 +19,27 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Rapid Indexer - Premium SEO Link Indexing</title>
-    <meta name="description" content="Boost your SEO with Rapid Indexer.">
+    <title><?php echo htmlspecialchars($page_title); ?></title>
+    <meta name="description" content="<?php echo htmlspecialchars($meta_description); ?>">
+    <meta name="keywords" content="<?php echo htmlspecialchars($meta_keywords); ?>">
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonical_url); ?>">
+    <meta name="robots" content="<?php echo htmlspecialchars($robots_tag); ?>">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?php echo htmlspecialchars($canonical_url); ?>">
+    <meta property="og:title" content="<?php echo htmlspecialchars($page_title); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($meta_description); ?>">
+    <meta property="og:image" content="<?php echo htmlspecialchars($og_image); ?>">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?php echo htmlspecialchars($canonical_url); ?>">
+    <meta property="twitter:title" content="<?php echo htmlspecialchars($page_title); ?>">
+    <meta property="twitter:description" content="<?php echo htmlspecialchars($meta_description); ?>">
+    <meta property="twitter:image" content="<?php echo htmlspecialchars($og_image); ?>">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <!-- Fonts -->

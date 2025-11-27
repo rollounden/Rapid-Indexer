@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/config/config.php';
 session_start();
+
+$page_title = 'Terms of Service - Rapid Indexer';
+$meta_description = 'Read our Terms of Service regarding the use of Rapid Indexer services.';
+$canonical_url = 'https://rapid-indexer.com/terms.php';
+
 include __DIR__ . '/includes/header_new.php';
 ?>
 

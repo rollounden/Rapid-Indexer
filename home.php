@@ -16,8 +16,23 @@ if (isset($_SESSION['uid'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Rapid Indexer - Premium SEO Link Indexing & Checking Service</title>
-    <meta name="description"
-        content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
+    <meta name="description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
+    <meta name="keywords" content="seo link indexing, google indexer, backlink checker, rapid indexer, seo tools, fast indexing, url submission">
+    <link rel="canonical" href="https://rapid-indexer.com/">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rapid-indexer.com/">
+    <meta property="og:title" content="Rapid Indexer - Premium SEO Link Indexing & Checking Service">
+    <meta property="og:description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
+    <meta property="og:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://rapid-indexer.com/">
+    <meta property="twitter:title" content="Rapid Indexer - Premium SEO Link Indexing & Checking Service">
+    <meta property="twitter:description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
+    <meta property="twitter:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -169,10 +184,11 @@ if (isset($_SESSION['uid'])) {
     <section class="relative pt-20 lg:pt-28 pb-20">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-4xl mx-auto">
-                <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
+                <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">Website Indexing Service</h1>
+                <h2 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
                     Backlinks have zero value <br>
                     <span class="text-primary-500">until they're indexed.</span>
-                </h1>
+                </h2>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
                     "What can't be measured doesn't exist". Rapid Indexer uses a multi-pronged system to speed up and help indexation to power up pages with positive metrics.

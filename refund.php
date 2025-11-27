@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/config/config.php';
 session_start();
+
+$page_title = 'Refund Policy - Rapid Indexer';
+$meta_description = 'Understand our refund policy for credit purchases and subscription services.';
+$canonical_url = 'https://rapid-indexer.com/refund.php';
+
 include __DIR__ . '/includes/header_new.php';
 ?>
 

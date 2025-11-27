@@ -52,7 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Rapid Indexer</title>
+    <title>Create Account - Rapid Indexer</title>
+    <meta name="description" content="Join Rapid Indexer today. Get 30 free credits to start indexing your backlinks immediately.">
+    <link rel="canonical" href="https://rapid-indexer.com/register.php">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Create Account - Rapid Indexer">
+    <meta property="og:description" content="Join Rapid Indexer today. Get 30 free credits to start indexing your backlinks immediately.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rapid-indexer.com/register.php">
+    <meta property="og:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

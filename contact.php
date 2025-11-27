@@ -47,6 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$page_title = 'Contact Support - Rapid Indexer';
+$meta_description = 'Need help? Contact Rapid Indexer support team for assistance with indexing, payments, or account issues.';
+$canonical_url = 'https://rapid-indexer.com/contact.php';
+
 include __DIR__ . '/includes/header_new.php';
 ?>
 

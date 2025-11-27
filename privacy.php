@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/config/config.php';
 session_start();
+
+$page_title = 'Privacy Policy - Rapid Indexer';
+$meta_description = 'Learn how Rapid Indexer collects, uses, and protects your personal information.';
+$canonical_url = 'https://rapid-indexer.com/privacy.php';
+
 include __DIR__ . '/includes/header_new.php';
 ?>
 
