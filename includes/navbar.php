@@ -2,7 +2,7 @@
     <div class="container">
         <a class="navbar-brand fw-bold text-white d-flex align-items-center gap-2" href="/dashboard">
             <?php if (basename($_SERVER['PHP_SELF']) !== 'tasks.php'): ?>
-                <i class="fas fa-check text-danger"></i>
+                <i class="fas fa-rocket text-danger"></i>
             <?php endif; ?>
             Rapid Indexer
         </a>

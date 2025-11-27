@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="w-full lg:w-1/2 flex flex-col justify-center p-8 lg:p-16 bg-[#141414]">
         <div class="max-w-md mx-auto w-full">
             <a href="/" class="inline-flex items-center gap-2 mb-12 text-2xl font-bold text-white hover:text-primary-500 transition-colors">
-                <i class="fa-solid fa-check text-primary-500"></i>
+                <i class="fas fa-rocket text-primary-500"></i>
                 Rapid Indexer
             </a>
             
