@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
         $credits = intval($amount / PRICE_PER_CREDIT_USD);
         
-        if ($amount < 1) {
-            $error = 'Minimum payment amount is $1.00';
+        if ($amount < 10) {
+            $error = 'Minimum payment amount is $10.00';
         } else {
             try {
                 require_once __DIR__ . '/src/PayPalService.php';
@@ -84,8 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     } elseif ($_POST['action'] === 'create_crypto_payment') {
         $amount = floatval($_POST['amount']);
         
-        if ($amount < 1) {
-            $error = 'Minimum payment amount is $1.00';
+        if ($amount < 10) {
+            $error = 'Minimum payment amount is $10.00';
         } else {
             try {
                 require_once __DIR__ . '/src/CryptomusService.php';
@@ -221,7 +221,7 @@ $ledger_entries = $stmt->fetchAll();
                                                        placeholder="Amount" min="1" step="0.01" required>
                                                 <button type="submit" class="btn btn-primary">Pay with PayPal</button>
                                             </div>
-                                            <small class="text-muted">Minimum $1.00</small>
+                                            <small class="text-muted">Minimum $10.00</small>
                                         </form>
                                     </div>
                                     <?php endif; ?>
