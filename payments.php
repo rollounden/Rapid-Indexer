@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 }
 
 // Handle cancelled payments (when user returns without completing)
-if (isset($_GET['cancelled'])) {
+if (isset($_GET['cancelled']) && $pdo) {
     $success = 'Payment was cancelled. No charges were made to your account.';
     
     // Clean up any pending payments older than 1 hour that haven't been completed
@@ -125,7 +125,7 @@ if (isset($_GET['cancelled'])) {
     try {
         $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE user_id = ? AND status = ? AND created_at < DATE_SUB(NOW(), INTERVAL 1 HOUR)');
         $stmt->execute(['failed', $_SESSION['uid'], 'pending']);
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         // Ignore cleanup errors
         error_log('Cleanup error: ' . $e->getMessage());
     }

@@ -2,18 +2,22 @@
 // Production config for SpeedyIndex SaaS MVP
 
 // Set up production error handling
+// Temporarily enabling display_errors for debugging if requested
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Don't display errors to users
 ini_set('log_errors', 1); // Log errors to file
 ini_set('error_log', __DIR__ . '/../storage/logs/php_errors.log');
 
 // Load environment variables from .env file
 if (file_exists(__DIR__ . '/../.env')) {
-    $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
-            list($key, $value) = explode('=', $line, 2);
-            $_ENV[trim($key)] = trim($value);
+    $lines = @file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if ($lines !== false) {
+        foreach ($lines as $line) {
+            if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
+                list($key, $value) = explode('=', $line, 2);
+                $_ENV[trim($key)] = trim($value);
+            }
         }
     }
 }
