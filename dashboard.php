@@ -237,9 +237,6 @@ $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
                                             <option value="yandex">Yandex</option>
                                             <?php endif; ?>
                                         </select>
-                                        <?php if ($currentProvider === 'ralfy'): ?>
-                                        <small class="text-muted">RalfyIndex only supports Google</small>
-                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

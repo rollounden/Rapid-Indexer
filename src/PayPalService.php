@@ -50,7 +50,7 @@ class PayPalService {
     /**
      * Create a PayPal order
      */
-    public function createOrder($amount, $currency = 'USD', $custom_id = null, $description = 'SpeedyIndex Credits') {
+    public function createOrder($amount, $currency = 'USD', $custom_id = null, $description = 'Rapid Indexer Credits') {
         $access_token = $this->getAccessToken();
         
         $order_data = [
@@ -63,13 +63,13 @@ class PayPalService {
                     ],
                     'description' => $description,
                     'custom_id' => $custom_id,
-                    'soft_descriptor' => 'SpeedyIndex'
+                    'soft_descriptor' => 'RapidIndexer'
                 ]
             ],
             'application_context' => [
                 'return_url' => 'https://' . $_SERVER['HTTP_HOST'] . '/payment_success.php',
                 'cancel_url' => 'https://' . $_SERVER['HTTP_HOST'] . '/payments.php?cancelled=1',
-                'brand_name' => 'SpeedyIndex',
+                'brand_name' => 'Rapid Indexer',
                 'landing_page' => 'LOGIN',
                 'user_action' => 'PAY_NOW',
                 'shipping_preference' => 'NO_SHIPPING'

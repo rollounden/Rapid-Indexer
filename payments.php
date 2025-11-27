@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 
                 // Create PayPal order
                 $paypal = new PayPalService();
-                $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "SpeedyIndex Credits - $credits credits");
+                $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "Rapid Indexer Credits - $credits credits");
                 
                 // Record pending payment
                 $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
