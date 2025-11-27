@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,9 +18,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: '/'
-          protocol: ftp
+          protocol: ftps
           port: 21
-          timeout: 120000
+          timeout: 30000
           dangerous-clean-slate: false
           exclude: |
             **/.git*
