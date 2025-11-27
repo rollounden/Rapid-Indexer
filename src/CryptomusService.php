@@ -45,9 +45,10 @@ class CryptomusService
         $stmt->execute([$orderId, 'cryptomus', $paymentId]);
 
         $callbackUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/cryptomus_webhook.php';
-        $returnUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/payment_success.php?order_id=' . $orderId;
+        $successUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/payment_success.php?order_id=' . $orderId;
+        $cancelUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/payment_cancel.php?token=' . $orderId; // payment_cancel.php uses 'token' for order ID display
 
-        $response = $this->client->createPayment($orderId, $amount, $currency, $returnUrl, $callbackUrl);
+        $response = $this->client->createPayment($orderId, $amount, $currency, $successUrl, $cancelUrl, $callbackUrl);
 
         if (isset($response['result']['url'])) {
             return [

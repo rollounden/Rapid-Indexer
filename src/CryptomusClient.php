@@ -15,8 +15,12 @@ class CryptomusClient
     private function request(string $endpoint, array $data = [])
     {
         $url = $this->baseUrl . $endpoint;
-        // Cryptomus requires JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES to match signature
-        $payload = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        // Cryptomus requires JSON_UNESCAPED_UNICODE to match signature logic if we strictly follow their docs
+        // The docs example says: $sign = md5(base64_encode(json_encode($data)) . $API_KEY);
+        // Default json_encode escapes slashes (e.g. / -> \/).
+        // We should just use standard json_encode or at least ensure we match what we send.
+        // However, for unicode, docs recommend JSON_UNESCAPED_UNICODE.
+        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
         
         if ($data === []) {
             $payload = '{}';
@@ -75,13 +79,14 @@ class CryptomusClient
     }
 
 
-    public function createPayment(string $orderId, float $amount, string $currency, string $urlReturn, string $urlCallback)
+    public function createPayment(string $orderId, float $amount, string $currency, string $urlSuccess, string $urlReturn, string $urlCallback)
     {
         $data = [
             'amount' => (string)$amount,
             'currency' => $currency,
             'order_id' => $orderId,
             'url_return' => $urlReturn,
+            'url_success' => $urlSuccess,
             'url_callback' => $urlCallback,
             'is_payment_multiple' => false,
             'lifetime' => 3600, // 1 hour
@@ -105,10 +110,11 @@ class CryptomusClient
         $receivedSign = $data['sign'];
         unset($data['sign']);
         
-        $payload = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        // Use JSON_UNESCAPED_UNICODE as per documentation for verification
+        // Do NOT use JSON_UNESCAPED_SLASHES because docs say "we send a webhook data with all escaped slashes"
+        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
         $calculatedSign = md5(base64_encode($payload) . $this->apiKey);
         
         return $calculatedSign === $receivedSign;
     }
 }
-
