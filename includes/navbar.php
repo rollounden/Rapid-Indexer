@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
     <div class="container">
-        <a class="navbar-brand fw-bold text-primary" href="/dashboard">
+        <a class="navbar-brand fw-bold text-white d-flex align-items-center gap-2" href="/dashboard">
             <?php if (basename($_SERVER['PHP_SELF']) !== 'tasks.php'): ?>
-                <i class="fas fa-rocket me-2"></i>
+                <i class="fas fa-check text-danger"></i>
             <?php endif; ?>
             Rapid Indexer
         </a>
@@ -22,13 +22,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'tasks.php' ? 'active' : ''; ?>" 
-                       href="/tasks">
+                       href="/tasks.php">
                         Tasks
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'payments.php' ? 'active' : ''; ?>" 
-                       href="/payments">
+                       href="/payments.php">
                         Payments
                     </a>
                 </li>
@@ -44,7 +44,7 @@
                 <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'admin.php' ? 'active' : ''; ?>" 
-                       href="/admin">
+                       href="/admin.php">
                         Admin
                     </a>
                 </li>
@@ -82,7 +82,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><h6 class="dropdown-header d-md-none"><?php echo htmlspecialchars($_SESSION['email'] ?? 'User'); ?></h6></li>
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <li><a class="dropdown-item" href="/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>

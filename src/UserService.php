@@ -23,7 +23,7 @@ class UserService
         }
 
         $hash = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 150)');
+        $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 30)');
         $stmt->execute([$email, $hash]);
         
         $userId = $pdo->lastInsertId();

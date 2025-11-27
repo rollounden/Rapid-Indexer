@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Email address already registered.';
             } else {
                 $hash = password_hash($password, PASSWORD_BCRYPT);
-                // Give 150 free credits on signup
-                $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 150)');
+                // Give 30 free credits on signup
+                $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 30)');
                 $stmt->execute([$email, $hash]);
                 
                 $success = 'Account created successfully! You can now sign in.';
@@ -48,187 +48,173 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Rapid Indexer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Rubik"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48', 
+                            700: '#be123c', // Base primary - deep rose
+                            800: '#9f1239',
+                            900: '#881337', 
+                            950: '#4c0519',
+                        },
+                        dark: {
+                            850: '#262626',
+                            900: '#1a1a1a',
+                            950: '#111111',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            background-color: #f8fafc;
+        body {
+            background-color: #141414;
+            color: #efefef;
         }
-        .split-screen {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+        .dark input {
+            background-color: #111111;
+            border-color: #333333;
+            color: #e2e8f0;
         }
-        .auth-side {
-            width: 40%;
-            min-width: 450px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 3rem;
-            position: relative;
-            z-index: 10;
-            box-shadow: 5px 0 30px rgba(0,0,0,0.05);
-            overflow-y: auto;
-        }
-        .brand-side {
-            flex: 1;
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            padding: 3rem;
-        }
-        .brand-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .auth-logo {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #2563eb;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-        .form-control {
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            border-color: #e2e8f0;
-            font-size: 1rem;
-        }
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        .btn-primary {
-            padding: 0.75rem;
-            font-weight: 600;
-            font-size: 1rem;
-            border-radius: 0.5rem;
-        }
-        @media (max-width: 992px) {
-            .brand-side {
-                display: none;
-            }
-            .auth-side {
-                width: 100%;
-                min-width: 0;
-            }
+        .dark input:focus {
+            border-color: #be123c;
+            outline: none;
+            box-shadow: 0 0 0 1px #be123c;
         }
     </style>
 </head>
-<body>
-    <div class="split-screen">
-        <div class="auth-side">
-            <a href="/" class="auth-logo">
-                <i class="fas fa-rocket me-2"></i>Rapid Indexer
+<body class="min-h-screen flex">
+    <!-- Left Side: Form -->
+    <div class="w-full lg:w-1/2 flex flex-col justify-center p-8 lg:p-16 bg-[#141414]">
+        <div class="max-w-md mx-auto w-full">
+            <a href="/" class="inline-flex items-center gap-2 mb-12 text-2xl font-bold text-white hover:text-primary-500 transition-colors">
+                <i class="fa-solid fa-check text-primary-500"></i>
+                Rapid Indexer
             </a>
             
-            <div class="mb-4">
-                <h2 class="fw-bold mb-2 text-slate-900">Create an account</h2>
-                <p class="text-muted">Start indexing your links in minutes.</p>
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">Create an account</h1>
+                <p class="text-gray-400">Start indexing your links in minutes.</p>
             </div>
             
             <?php if ($error): ?>
-                <div class="alert alert-danger border-0 bg-red-50 text-red-700 d-flex align-items-center">
-                    <i class="fas fa-exclamation-circle me-2"></i> <?php echo htmlspecialchars($error); ?>
+                <div class="mb-6 p-4 rounded-lg bg-red-900/20 border border-red-900/50 text-red-400 flex items-center gap-3">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <?php echo htmlspecialchars($error); ?>
                 </div>
             <?php endif; ?>
             
             <?php if ($success): ?>
-                <div class="alert alert-success border-0 bg-green-50 text-green-700 d-flex align-items-center">
-                    <i class="fas fa-check-circle me-2"></i> <?php echo htmlspecialchars($success); ?>
+                <div class="mb-6 p-4 rounded-lg bg-green-900/20 border border-green-900/50 text-green-400 flex items-center gap-3">
+                    <i class="fas fa-check-circle"></i>
+                    <?php echo htmlspecialchars($success); ?>
                 </div>
             <?php endif; ?>
             
-            <form method="POST">
-                <div class="mb-3">
-                    <label class="form-label fw-semibold text-secondary small">EMAIL ADDRESS</label>
-                    <input type="email" class="form-control" name="email" required 
+            <form method="POST" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Email Address</label>
+                    <input type="email" name="email" required 
+                           class="dark w-full px-4 py-3 rounded-lg border border-white/10 bg-dark-950 text-white focus:border-primary-600 focus:ring-1 focus:ring-primary-600 transition-colors"
                            placeholder="name@company.com"
                            value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
                 </div>
                 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold text-secondary small">PASSWORD</label>
-                    <input type="password" class="form-control" name="password" required minlength="6" placeholder="••••••••">
-                    <div class="form-text">Must be at least 6 characters</div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Password</label>
+                    <input type="password" name="password" required minlength="6" 
+                           class="dark w-full px-4 py-3 rounded-lg border border-white/10 bg-dark-950 text-white focus:border-primary-600 focus:ring-1 focus:ring-primary-600 transition-colors"
+                           placeholder="••••••••">
+                    <p class="mt-1 text-xs text-gray-500">Must be at least 6 characters</p>
                 </div>
                 
-                <div class="mb-4">
-                    <label class="form-label fw-semibold text-secondary small">CONFIRM PASSWORD</label>
-                    <input type="password" class="form-control" name="confirm_password" required placeholder="••••••••">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Confirm Password</label>
+                    <input type="password" name="confirm_password" required 
+                           class="dark w-full px-4 py-3 rounded-lg border border-white/10 bg-dark-950 text-white focus:border-primary-600 focus:ring-1 focus:ring-primary-600 transition-colors"
+                           placeholder="••••••••">
                 </div>
                 
-                <div class="d-grid mb-4">
-                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">Create Account</button>
-                </div>
+                <button type="submit" class="w-full py-3.5 px-4 bg-primary-700 hover:bg-primary-600 text-white font-bold rounded-lg shadow-lg shadow-primary-900/20 transition-all transform active:scale-[0.98]">
+                    Create Account
+                </button>
                 
-                <div class="text-center">
-                    <span class="text-muted">Already have an account?</span>
-                    <a href="/login.php" class="fw-bold text-primary text-decoration-none ms-1">Sign in</a>
+                <div class="text-center mt-6">
+                    <span class="text-gray-400">Already have an account?</span>
+                    <a href="/login.php" class="font-bold text-primary-500 hover:text-primary-400 ml-1">Sign in</a>
                 </div>
             </form>
             
-            <div class="mt-auto pt-5 text-center text-muted small">
-                By registering, you agree to our <a href="/terms.php" class="text-decoration-none">Terms</a> and <a href="/privacy.php" class="text-decoration-none">Privacy Policy</a>.
+            <div class="mt-12 text-center text-xs text-gray-500">
+                By registering, you agree to our <a href="/terms.php" class="underline hover:text-gray-300">Terms</a> and <a href="/privacy.php" class="underline hover:text-gray-300">Privacy Policy</a>.
             </div>
         </div>
+    </div>
+    
+    <!-- Right Side: Brand -->
+    <div class="hidden lg:flex w-1/2 bg-[#1a1a1a] relative overflow-hidden items-center justify-center p-12">
+        <!-- Abstract Pattern -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#be123c 1px, transparent 1px); background-size: 32px 32px;"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-black/50 to-transparent"></div>
         
-        <div class="brand-side">
-            <div class="brand-pattern"></div>
-            <div class="text-center position-relative p-5">
-                <h1 class="display-5 fw-bold mb-4">Join 10,000+ SEO Professionals</h1>
-                <div class="row g-4 text-start mt-4">
-                    <div class="col-12">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="rounded-circle bg-white bg-opacity-25 p-2 me-3">
-                                <i class="fas fa-bolt text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">Instant Indexing</h5>
-                                <small class="text-white-50">Get crawled in minutes</small>
-                            </div>
-                        </div>
+        <div class="relative z-10 max-w-lg text-center">
+            <h2 class="text-4xl font-bold text-white mb-6">Join 10,000+ SEO Professionals</h2>
+            <div class="space-y-6 text-left">
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
+                    <div class="w-10 h-10 rounded-full bg-primary-900/30 flex items-center justify-center flex-shrink-0 text-primary-500">
+                        <i class="fas fa-bolt"></i>
                     </div>
-                    <div class="col-12">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="rounded-circle bg-white bg-opacity-25 p-2 me-3">
-                                <i class="fas fa-chart-line text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">Detailed Reporting</h5>
-                                <small class="text-white-50">Track every link status</small>
-                            </div>
-                        </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-1">Instant Indexing</h3>
+                        <p class="text-sm text-gray-400">Get crawled in minutes, not weeks.</p>
                     </div>
-                    <div class="col-12">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-white bg-opacity-25 p-2 me-3">
-                                <i class="fas fa-shield-alt text-white"></i>
-                            </div>
-                            <div>
-                                <h5 class="mb-0">100% Safe</h5>
-                                <small class="text-white-50">Google-compliant methods</small>
-                            </div>
-                        </div>
+                </div>
+                
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
+                    <div class="w-10 h-10 rounded-full bg-primary-900/30 flex items-center justify-center flex-shrink-0 text-primary-500">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-1">Detailed Reporting</h3>
+                        <p class="text-sm text-gray-400">Track every link status in real-time.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
+                    <div class="w-10 h-10 rounded-full bg-primary-900/30 flex items-center justify-center flex-shrink-0 text-primary-500">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-1">100% Safe</h3>
+                        <p class="text-sm text-gray-400">Google-compliant methods only.</p>
                     </div>
                 </div>
             </div>
