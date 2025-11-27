@@ -21,35 +21,29 @@ if (!isset($_SESSION['uid'])) {
 
 require_once __DIR__ . '/src/Db.php';
 require_once __DIR__ . '/src/SettingsService.php';
+$pdo = Db::conn();
 
 $error = '';
 $success = '';
-$pdo = null;
-$enable_paypal = '0';
-$enable_cryptomus = '0';
+
+$enable_paypal = SettingsService::get('enable_paypal', '1');
+$enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
 $price_per_credit = (string)DEFAULT_PRICE_PER_CREDIT_USD;
 
 try {
-    $pdo = Db::conn();
-    $enable_paypal = SettingsService::get('enable_paypal', '1');
-    $enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
     $price_per_credit = SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
-} catch (Throwable $e) {
-    $error = "System initialization error: " . $e->getMessage();
-    error_log($e->getMessage());
+} catch (Exception $e) {
+    // Fallback to default
 }
 
 // Handle payment creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if (!$pdo) {
-        $error = "Database connection unavailable.";
-    } elseif ($_POST['action'] === 'create_payment') {
+    if ($_POST['action'] === 'create_payment') {
         if ($enable_paypal !== '1') {
             $error = 'PayPal payments are currently disabled.';
         } else {
             $amount = floatval($_POST['amount']);
-            $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
-            $credits = intval($amount / $price_per_credit);
+            $credits = intval($amount / (float)$price_per_credit);
         
             if ($amount < 10) {
                 $error = 'Minimum payment amount is $10.00';
@@ -97,99 +91,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $amount = floatval($_POST['amount']);
             
             if ($amount < 10) {
-            $error = 'Minimum payment amount is $10.00';
-        } else {
-            try {
-                require_once __DIR__ . '/src/CryptomusService.php';
-                
-                $crypto = new CryptomusService();
-                $result = $crypto->createPayment($_SESSION['uid'], $amount);
-                
-                if (isset($result['payment_url'])) {
-                    header('Location: ' . $result['payment_url']);
-                    exit;
-                } else {
-                    throw new Exception('Failed to get payment URL');
+                $error = 'Minimum payment amount is $10.00';
+            } else {
+                try {
+                    require_once __DIR__ . '/src/CryptomusService.php';
+                    
+                    $crypto = new CryptomusService();
+                    $result = $crypto->createPayment($_SESSION['uid'], $amount);
+                    
+                    if (isset($result['payment_url'])) {
+                        header('Location: ' . $result['payment_url']);
+                        exit;
+                    } else {
+                        throw new Exception('Failed to get payment URL');
+                    }
+                } catch (Exception $e) {
+                    $error = 'Crypto payment error: ' . $e->getMessage();
                 }
-            } catch (Exception $e) {
-                $error = 'Crypto payment error: ' . $e->getMessage();
             }
         }
     }
 }
 
 // Handle cancelled payments (when user returns without completing)
-if (isset($_GET['cancelled']) && $pdo) {
+if (isset($_GET['cancelled'])) {
     $success = 'Payment was cancelled. No charges were made to your account.';
     
     // Clean up any pending payments older than 1 hour that haven't been completed
-    // Using 'failed' instead of 'cancelled' to match ENUM('pending','paid','failed','refunded')
     try {
         $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE user_id = ? AND status = ? AND created_at < DATE_SUB(NOW(), INTERVAL 1 HOUR)');
         $stmt->execute(['failed', $_SESSION['uid'], 'pending']);
-    } catch (Throwable $e) {
-        // Ignore cleanup errors
-        error_log('Cleanup error: ' . $e->getMessage());
+    } catch (Exception $e) {
+        // Ignore
     }
 }
 
-// Initialize variables
-$user_credits = 0;
-$payments = [];
-$ledger_entries = [];
+// Get user's current credits
+$stmt = $pdo->prepare('SELECT credits_balance FROM users WHERE id = ?');
+$stmt->execute([$_SESSION['uid']]);
+$user_credits = $stmt->fetchColumn();
 
-try {
-    if (!$pdo) {
-        throw new Exception("Database connection not established");
-    }
+// Get payment history
+$stmt = $pdo->prepare('
+    SELECT p.*, 
+           CASE 
+               WHEN p.status = "paid" THEN p.credits_awarded 
+               ELSE 0 
+           END as credits_received
+    FROM payments p 
+    WHERE p.user_id = ? 
+    ORDER BY p.created_at DESC 
+    LIMIT 20
+');
+$stmt->execute([$_SESSION['uid']]);
+$payments = $stmt->fetchAll();
 
-    // Get user's current credits
-    $stmt = $pdo->prepare('SELECT credits_balance FROM users WHERE id = ?');
-    $stmt->execute([$_SESSION['uid']]);
-    $user_credits = $stmt->fetchColumn() ?: 0;
-
-    // Get payment history
-    // Adjusted status check: 'paid' instead of 'completed' to match DB schema
-    $stmt = $pdo->prepare('
-        SELECT p.*, 
-               CASE 
-                   WHEN p.status = "paid" THEN p.credits_awarded 
-                   ELSE 0 
-               END as credits_received
-        FROM payments p 
-        WHERE p.user_id = ? 
-        ORDER BY p.created_at DESC 
-        LIMIT 20
-    ');
-    $stmt->execute([$_SESSION['uid']]);
-    $payments = $stmt->fetchAll();
-
-    // Get credit ledger (recent transactions)
-    $stmt = $pdo->prepare('
-             SELECT cl.*, 
-                CASE 
-                    WHEN cl.reason = "payment" THEN "Payment"
-                    WHEN cl.reason = "task_deduction" THEN "Task Creation"
-                    WHEN cl.reason = "task_refund" THEN "Task Refund"
-                    WHEN cl.reason = "admin_adjustment" THEN "Admin Adjustment"
-                    ELSE cl.reason
-                END as transaction_label
-        FROM credit_ledger cl 
-        WHERE cl.user_id = ? 
-        ORDER BY cl.created_at DESC 
-        LIMIT 10
-    ');
-    $stmt->execute([$_SESSION['uid']]);
-    $ledger_entries = $stmt->fetchAll();
-} catch (Throwable $e) {
-    // Log error and show friendly message
-    error_log('Payments page error: ' . $e->getMessage());
-    if (empty($error)) { // Don't overwrite existing errors
-        $error = 'Unable to load payment history. Please try again later.';
-        // For debugging (remove in production if strict, but helpful now):
-        $error .= ' (' . $e->getMessage() . ')';
-    }
-}
+// Get credit ledger (recent transactions)
+$stmt = $pdo->prepare('
+         SELECT cl.*, 
+            CASE 
+                WHEN cl.reason = "payment" THEN "Payment"
+                WHEN cl.reason = "task_deduction" THEN "Task Creation"
+                WHEN cl.reason = "task_refund" THEN "Task Refund"
+                WHEN cl.reason = "admin_adjustment" THEN "Admin Adjustment"
+                ELSE cl.reason
+            END as transaction_label
+    FROM credit_ledger cl 
+    WHERE cl.user_id = ? 
+    ORDER BY cl.created_at DESC 
+    LIMIT 10
+');
+$stmt->execute([$_SESSION['uid']]);
+$ledger_entries = $stmt->fetchAll();
 
 include __DIR__ . '/includes/header_new.php';
 ?>

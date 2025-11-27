@@ -3,8 +3,8 @@
 
 // Set up production error handling
 // Temporarily enabling display_errors for debugging if requested
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1); // Log errors to file
 ini_set('error_log', __DIR__ . '/../storage/logs/php_errors.log');
