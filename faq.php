@@ -59,7 +59,7 @@ include __DIR__ . '/includes/header_new.php';
                     <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
                         <p class="mb-2">We use a credit-based system.</p>
                         <ul class="list-disc list-inside ml-2 space-y-1 mb-2">
-                            <li><strong class="text-gray-300">Indexing:</strong> 3 credits ($0.03) per URL</li>
+                            <li><strong class="text-gray-300">Indexing:</strong> 2 credits ($0.02) per URL</li>
                             <li><strong class="text-gray-300">Checking:</strong> 1 credit ($0.01) per URL</li>
                         </ul>
                         <p>Credits can be purchased via PayPal or Cryptocurrency starting at $1.00.</p>

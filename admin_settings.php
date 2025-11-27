@@ -60,6 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             SettingsService::set('enable_vip_queue', $_POST['enable_vip_queue']);
         }
 
+        if (isset($_POST['free_credits_on_signup'])) {
+            SettingsService::set('free_credits_on_signup', intval($_POST['free_credits_on_signup']));
+        }
+
         $success = 'Settings saved successfully.';
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -81,6 +85,7 @@ $cryptomus_api_key_display = $cryptomus_api_key_decrypted ? substr($cryptomus_ap
 
 $enable_paypal = SettingsService::get('enable_paypal', '1');
 $enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
+$free_credits_on_signup = SettingsService::get('free_credits_on_signup', '30');
 
 // Check Ralfy Status if key is present
 if ($ralfy_api_key_decrypted) {
@@ -235,6 +240,11 @@ include __DIR__ . '/includes/header_new.php';
                         <label for="enableVip" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
                     </div>
                     <input type="hidden" name="enable_vip_queue" value="0" id="hiddenVip">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Free Credits on Signup</label>
+                    <input type="number" name="free_credits_on_signup" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($free_credits_on_signup); ?>" min="0">
                 </div>
                 
                 <script>

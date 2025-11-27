@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/src/SettingsService.php';
 session_start();
+
+$free_credits = SettingsService::get('free_credits_on_signup', '30');
 
 // Redirect logged-in users to dashboard
 if (isset($_SESSION['uid'])) {
@@ -205,7 +208,7 @@ if (isset($_SESSION['uid'])) {
                 </div>
                 
                 <p class="text-sm text-gray-500">
-                    No credit card required • 30 Free Credits on Signup
+                    No credit card required • <?php echo $free_credits; ?> Free Credits on Signup
                 </p>
             </div>
 
@@ -261,7 +264,7 @@ if (isset($_SESSION['uid'])) {
                                 <i class="fa-solid fa-user-plus text-xl"></i>
                             </div>
                             <h3 class="text-2xl font-bold text-white mb-2">Create Free Account</h3>
-                            <p class="text-gray-400">Sign up to submit your URLs. You'll get <span class="text-primary-400 font-bold">30 free credits</span> instantly.</p>
+                            <p class="text-gray-400">Sign up to submit your URLs. You'll get <span class="text-primary-400 font-bold"><?php echo $free_credits; ?> free credits</span> instantly.</p>
                         </div>
                         <div class="space-y-3">
                             <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-colors">Sign Up Free</a>
@@ -455,8 +458,8 @@ if (isset($_SESSION['uid'])) {
     <footer class="border-t border-white/5 bg-black/20 py-12 mt-auto">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-primary-700 rounded flex items-center justify-center text-white font-bold">
-                    R
+                <div class="flex flex-col items-center text-primary-500">
+                    <i class="fas fa-rocket text-xl"></i>
                 </div>
                 <span class="text-white font-bold text-lg">Rapid Indexer</span>
             </div>

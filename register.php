@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/src/SettingsService.php';
 session_start();
+
+$free_credits = SettingsService::get('free_credits_on_signup', '30');
 
 // Redirect if already logged in
 if (isset($_SESSION['uid'])) {
@@ -14,10 +17,13 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         require_once __DIR__ . '/src/Db.php';
+        require_once __DIR__ . '/src/SettingsService.php';
         
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         $confirm_password = $_POST['confirm_password'] ?? '';
+        
+        $free_credits = SettingsService::get('free_credits_on_signup', '30');
         
         if (empty($email) || empty($password)) {
             $error = 'Please fill in all fields.';
@@ -35,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Email address already registered.';
             } else {
                 $hash = password_hash($password, PASSWORD_BCRYPT);
-                // Give 30 free credits on signup
-                $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 30)');
-                $stmt->execute([$email, $hash]);
+                // Give free credits on signup
+                $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, ?)');
+                $stmt->execute([$email, $hash, $free_credits]);
                 
                 $success = 'Account created successfully! You can now sign in.';
             }
@@ -53,13 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account - Rapid Indexer</title>
-    <meta name="description" content="Join Rapid Indexer today. Get 30 free credits to start indexing your backlinks immediately.">
+    <meta name="description" content="Join Rapid Indexer today. Get <?php echo $free_credits; ?> free credits to start indexing your backlinks immediately.">
     <link rel="canonical" href="https://rapid-indexer.com/register.php">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Create Account - Rapid Indexer">
-    <meta property="og:description" content="Join Rapid Indexer today. Get 30 free credits to start indexing your backlinks immediately.">
+    <meta property="og:description" content="Join Rapid Indexer today. Get <?php echo $free_credits; ?> free credits to start indexing your backlinks immediately.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rapid-indexer.com/register.php">
     <meta property="og:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
@@ -132,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-white mb-2">Create an account</h1>
-                <p class="text-gray-400">Start indexing your links in minutes.</p>
+                <p class="text-gray-400">Start indexing your links in minutes. Get <span class="text-primary-500 font-bold"><?php echo $free_credits; ?> free credits</span> instantly.</p>
             </div>
             
             <?php if ($error): ?>

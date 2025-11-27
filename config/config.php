@@ -68,7 +68,7 @@ const ENCRYPTION_KEY = 'D6XcXFGWrDiByIpRyuNZap1d+OlBsHjwk/IaXCzq5wI=';
 const PRICE_PER_CREDIT_USD = 0.01; 
 
 // Task Costs (in Credits/Cents)
-const COST_INDEXING = 3; // $0.03 per URL
+const COST_INDEXING = 2; // $0.02 per URL
 const COST_CHECKING = 1;  // $0.01 per URL
 const COST_VIP_EXTRA = 5; // +$0.05 for VIP
 
