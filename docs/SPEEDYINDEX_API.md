@@ -15,6 +15,8 @@ $headers = @{ Authorization = "<API KEY>" }
 Invoke-RestMethod -Headers $headers -Method GET -Uri "https://api.speedyindex.com/v2/account"
 ```
 
+
+
 Create Task
 - POST `/v2/task/<SEARCH ENGINE>/<TASK TYPE>/create`
 - SEARCH ENGINE: `google|yandex`
