@@ -7,7 +7,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['uid'])) {
-    header('Location: /login');
+    header('Location: /login.php');
     exit;
 }
 
@@ -17,11 +17,8 @@ $pdo = Db::conn();
 
 // Get task details
 $task_id = intval($_GET['id'] ?? 0);
-
-// If no ID provided, redirect to tasks list instead of showing error
 if (!$task_id) {
-    header('Location: /tasks');
-    exit;
+    die('Invalid task ID');
 }
 
 // Fetch task
@@ -30,11 +27,7 @@ $stmt->execute([$task_id, $_SESSION['uid']]);
 $task = $stmt->fetch();
 
 if (!$task) {
-    // User might have clicked a valid link but lacks permission or task deleted
-    // Redirecting to tasks with an error message is better UX than dying
-    $_SESSION['flash_error'] = 'Task not found or access denied.';
-    header('Location: /tasks');
-    exit;
+    die('Task not found or access denied');
 }
 
 // Get task links
@@ -78,7 +71,7 @@ $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
             <div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-1">
-                        <li class="breadcrumb-item"><a href="/tasks">Tasks</a></li>
+                        <li class="breadcrumb-item"><a href="/tasks.php">Tasks</a></li>
                         <li class="breadcrumb-item active" aria-current="page">#<?php echo $task_id; ?></li>
                     </ol>
                 </nav>
@@ -130,22 +123,11 @@ $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Links</h5>
                 <?php if ($task['status'] === 'completed'): ?>
-                    <div class="btn-group">
-                        <?php if ($task['type'] === 'indexer'): ?>
-                            <form method="POST" action="/tasks">
-                                <input type="hidden" name="action" value="check_indexing">
-                                <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
-                                <button type="submit" class="btn btn-sm btn-info text-white">
-                                    <i class="fas fa-search me-1"></i>Check Indexing
-                                </button>
-                            </form>
-                        <?php endif; ?>
-                        <form method="POST" action="/tasks" class="ms-2">
-                            <input type="hidden" name="action" value="export_csv">
-                            <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
-                            <button type="submit" class="btn btn-sm btn-outline-success">Export CSV</button>
-                        </form>
-                    </div>
+                    <form method="POST" action="/tasks.php">
+                        <input type="hidden" name="action" value="export_csv">
+                        <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
+                        <button type="submit" class="btn btn-sm btn-outline-success">Export CSV</button>
+                    </form>
                 <?php endif; ?>
             </div>
             <div class="card-body p-0">

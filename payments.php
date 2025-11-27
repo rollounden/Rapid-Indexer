@@ -38,49 +38,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $error = 'PayPal payments are currently disabled.';
         } else {
             $amount = floatval($_POST['amount']);
-            // ... rest of PayPal logic ...
-
-        $credits = intval($amount / PRICE_PER_CREDIT_USD);
+            $credits = intval($amount / PRICE_PER_CREDIT_USD);
         
-        if ($amount < 10) {
-            $error = 'Minimum payment amount is $10.00';
-        } else {
-            try {
-                require_once __DIR__ . '/src/PayPalService.php';
-                require_once __DIR__ . '/src/PaymentService.php';
-                
-                // Create PayPal order
-                $paypal = new PayPalService();
-                $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "Rapid Indexer Credits - $credits credits");
-                
-                // Record pending payment
-                $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
-                
-                // Update payment with PayPal order ID
-                $stmt = $pdo->prepare('UPDATE payments SET paypal_order_id = ? WHERE id = ?');
-                $stmt->execute([$order['id'], $payment_id]);
-                
-                // Redirect to PayPal
-                $approval_url = null;
-                foreach ($order['links'] as $link) {
-                    if ($link['rel'] === 'approve') {
-                        $approval_url = $link['href'];
-                        break;
+            if ($amount < 10) {
+                $error = 'Minimum payment amount is $10.00';
+            } else {
+                try {
+                    require_once __DIR__ . '/src/PayPalService.php';
+                    require_once __DIR__ . '/src/PaymentService.php';
+                    
+                    // Create PayPal order
+                    $paypal = new PayPalService();
+                    $order = $paypal->createOrder($amount, 'USD', $_SESSION['uid'], "Rapid Indexer Credits - $credits credits");
+                    
+                    // Record pending payment
+                    $payment_id = PaymentService::recordPending($_SESSION['uid'], $amount, 'USD');
+                    
+                    // Update payment with PayPal order ID
+                    $stmt = $pdo->prepare('UPDATE payments SET paypal_order_id = ? WHERE id = ?');
+                    $stmt->execute([$order['id'], $payment_id]);
+                    
+                    // Redirect to PayPal
+                    $approval_url = null;
+                    foreach ($order['links'] as $link) {
+                        if ($link['rel'] === 'approve') {
+                            $approval_url = $link['href'];
+                            break;
+                        }
                     }
+                    
+                    if ($approval_url) {
+                        header('Location: ' . $approval_url);
+                        exit;
+                    } else {
+                        throw new Exception('PayPal approval URL not found');
+                    }
+                    
+                } catch (Exception $e) {
+                    $error = 'Failed to create payment: ' . $e->getMessage();
                 }
-                
-                if ($approval_url) {
-                    header('Location: ' . $approval_url);
-                    exit;
-                } else {
-                    throw new Exception('PayPal approval URL not found');
-                }
-                
-            } catch (Exception $e) {
-                $error = 'Failed to create payment: ' . $e->getMessage();
             }
         }
-    }
     } elseif ($_POST['action'] === 'create_crypto_payment') {
         $amount = floatval($_POST['amount']);
         
@@ -271,7 +269,7 @@ $ledger_entries = $stmt->fetchAll();
                                                     <tr>
                                                         <td><?php echo date('M j, Y g:i A', strtotime($payment['created_at'])); ?></td>
                                                         <td>$<?php echo number_format($payment['amount'], 2); ?></td>
-                                                                                                                 <td><?php echo number_format($payment['credits_awarded']); ?></td>
+                                                        <td><?php echo number_format($payment['credits_awarded']); ?></td>
                                                         <td>
                                                             <?php
                                                             $status_class = 'secondary';
@@ -285,7 +283,7 @@ $ledger_entries = $stmt->fetchAll();
                                                                 <?php echo htmlspecialchars(ucfirst($payment['status'])); ?>
                                                             </span>
                                                         </td>
-                                                                                                                 <td>
+                                                        <td>
                                                              <small class="text-muted">
                                                                  <?php echo htmlspecialchars($payment['paypal_capture_id'] ?: 'N/A'); ?>
                                                              </small>
@@ -322,7 +320,7 @@ $ledger_entries = $stmt->fetchAll();
                                                         <?php echo date('M j, g:i A', strtotime($entry['created_at'])); ?>
                                                     </small>
                                                 </div>
-                                                                                                 <span class="<?php echo $entry['delta'] >= 0 ? 'text-success' : 'text-danger'; ?>">
+                                                <span class="<?php echo $entry['delta'] >= 0 ? 'text-success' : 'text-danger'; ?>">
                                                      <?php echo ($entry['delta'] >= 0 ? '+' : '') . number_format($entry['delta']); ?>
                                                  </span>
                                             </div>

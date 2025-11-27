@@ -124,8 +124,8 @@ $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
         /* Mobile Navigation Enhancements */
         @media (max-width: 991px) {
             .navbar-collapse {
-                background-color: #fff;
-                border-top: 1px solid #dee2e6;
+                background-color: var(--bg-card);
+                border-top: 1px solid var(--border-color);
                 margin-top: 0.5rem;
                 padding-top: 1rem;
             }
@@ -133,17 +133,21 @@ $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
                 padding: 0.75rem 1rem;
                 border-radius: 0.375rem;
                 margin: 0.25rem 0;
+                color: var(--text-secondary);
             }
             .navbar-nav .nav-link:hover {
-                background-color: #f8f9fa;
+                background-color: rgba(255,255,255,0.05);
+                color: var(--text-primary);
             }
             .navbar-nav .nav-link.active {
-                background-color: #667eea;
+                background-color: var(--primary-color);
                 color: white !important;
             }
             .dropdown-menu {
+                background-color: rgba(255,255,255,0.02);
                 border: none;
-                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+                box-shadow: none;
+                padding-left: 1rem;
             }
         }
         

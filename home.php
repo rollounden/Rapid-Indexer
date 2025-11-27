@@ -175,7 +175,7 @@ if (isset($_SESSION['uid'])) {
                 </h1>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    "What can't be measured doesn't exist". Rapid Indexer uses a multi-pronged system to guarantee indexation and power up pages with positive metrics.
+                    "What can't be measured doesn't exist". Rapid Indexer uses a multi-pronged system to speed up and help indexation to power up pages with positive metrics.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
