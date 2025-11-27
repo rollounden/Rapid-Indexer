@@ -4,6 +4,9 @@ Base URL: `https://api.speedyindex.com`
 Version: v2
 Auth header: `Authorization: <API KEY>`
 
+
+
+
 Balance
 - GET `/v2/account`
 - Response: `{ code, balance: { indexer, checker } }`
