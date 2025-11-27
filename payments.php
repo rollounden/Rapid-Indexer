@@ -21,17 +21,27 @@ if (!isset($_SESSION['uid'])) {
 
 require_once __DIR__ . '/src/Db.php';
 require_once __DIR__ . '/src/SettingsService.php';
-$pdo = Db::conn();
 
 $error = '';
 $success = '';
+$pdo = null;
+$enable_paypal = '0';
+$enable_cryptomus = '0';
 
-$enable_paypal = SettingsService::get('enable_paypal', '1');
-$enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
+try {
+    $pdo = Db::conn();
+    $enable_paypal = SettingsService::get('enable_paypal', '1');
+    $enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
+} catch (Throwable $e) {
+    $error = "System initialization error: " . $e->getMessage();
+    error_log($e->getMessage());
+}
 
 // Handle payment creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'create_payment') {
+    if (!$pdo) {
+        $error = "Database connection unavailable.";
+    } elseif ($_POST['action'] === 'create_payment') {
         if ($enable_paypal !== '1') {
             $error = 'PayPal payments are currently disabled.';
         } else {
@@ -111,47 +121,73 @@ if (isset($_GET['cancelled'])) {
     $success = 'Payment was cancelled. No charges were made to your account.';
     
     // Clean up any pending payments older than 1 hour that haven't been completed
-    $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE user_id = ? AND status = ? AND created_at < DATE_SUB(NOW(), INTERVAL 1 HOUR)');
-    $stmt->execute(['cancelled', $_SESSION['uid'], 'pending']);
+    // Using 'failed' instead of 'cancelled' to match ENUM('pending','paid','failed','refunded')
+    try {
+        $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE user_id = ? AND status = ? AND created_at < DATE_SUB(NOW(), INTERVAL 1 HOUR)');
+        $stmt->execute(['failed', $_SESSION['uid'], 'pending']);
+    } catch (Exception $e) {
+        // Ignore cleanup errors
+        error_log('Cleanup error: ' . $e->getMessage());
+    }
 }
 
-// Get user's current credits
-$stmt = $pdo->prepare('SELECT credits_balance FROM users WHERE id = ?');
-$stmt->execute([$_SESSION['uid']]);
-$user_credits = $stmt->fetchColumn();
+// Initialize variables
+$user_credits = 0;
+$payments = [];
+$ledger_entries = [];
 
-// Get payment history
-$stmt = $pdo->prepare('
-    SELECT p.*, 
-           CASE 
-               WHEN p.status = "completed" THEN p.credits_awarded 
-               ELSE 0 
-           END as credits_received
-    FROM payments p 
-    WHERE p.user_id = ? 
-    ORDER BY p.created_at DESC 
-    LIMIT 20
-');
-$stmt->execute([$_SESSION['uid']]);
-$payments = $stmt->fetchAll();
+try {
+    if (!$pdo) {
+        throw new Exception("Database connection not established");
+    }
 
-// Get credit ledger (recent transactions)
-$stmt = $pdo->prepare('
-         SELECT cl.*, 
-            CASE 
-                WHEN cl.reason = "payment" THEN "Payment"
-                WHEN cl.reason = "task_deduction" THEN "Task Creation"
-                WHEN cl.reason = "task_refund" THEN "Task Refund"
-                WHEN cl.reason = "admin_adjustment" THEN "Admin Adjustment"
-                ELSE cl.reason
-            END as transaction_label
-    FROM credit_ledger cl 
-    WHERE cl.user_id = ? 
-    ORDER BY cl.created_at DESC 
-    LIMIT 10
-');
-$stmt->execute([$_SESSION['uid']]);
-$ledger_entries = $stmt->fetchAll();
+    // Get user's current credits
+    $stmt = $pdo->prepare('SELECT credits_balance FROM users WHERE id = ?');
+    $stmt->execute([$_SESSION['uid']]);
+    $user_credits = $stmt->fetchColumn() ?: 0;
+
+    // Get payment history
+    // Adjusted status check: 'paid' instead of 'completed' to match DB schema
+    $stmt = $pdo->prepare('
+        SELECT p.*, 
+               CASE 
+                   WHEN p.status = "paid" THEN p.credits_awarded 
+                   ELSE 0 
+               END as credits_received
+        FROM payments p 
+        WHERE p.user_id = ? 
+        ORDER BY p.created_at DESC 
+        LIMIT 20
+    ');
+    $stmt->execute([$_SESSION['uid']]);
+    $payments = $stmt->fetchAll();
+
+    // Get credit ledger (recent transactions)
+    $stmt = $pdo->prepare('
+             SELECT cl.*, 
+                CASE 
+                    WHEN cl.reason = "payment" THEN "Payment"
+                    WHEN cl.reason = "task_deduction" THEN "Task Creation"
+                    WHEN cl.reason = "task_refund" THEN "Task Refund"
+                    WHEN cl.reason = "admin_adjustment" THEN "Admin Adjustment"
+                    ELSE cl.reason
+                END as transaction_label
+        FROM credit_ledger cl 
+        WHERE cl.user_id = ? 
+        ORDER BY cl.created_at DESC 
+        LIMIT 10
+    ');
+    $stmt->execute([$_SESSION['uid']]);
+    $ledger_entries = $stmt->fetchAll();
+} catch (Throwable $e) {
+    // Log error and show friendly message
+    error_log('Payments page error: ' . $e->getMessage());
+    if (empty($error)) { // Don't overwrite existing errors
+        $error = 'Unable to load payment history. Please try again later.';
+        // For debugging (remove in production if strict, but helpful now):
+        $error .= ' (' . $e->getMessage() . ')';
+    }
+}
 
 include __DIR__ . '/includes/header_new.php';
 ?>
@@ -295,9 +331,11 @@ include __DIR__ . '/includes/header_new.php';
                                         <td class="px-6 py-4">
                                             <?php
                                             $statusClasses = [
-                                                'completed' => 'text-green-400 bg-green-400/10',
+                                                'paid' => 'text-green-400 bg-green-400/10',
+                                                'completed' => 'text-green-400 bg-green-400/10', // Legacy support
                                                 'pending' => 'text-yellow-400 bg-yellow-400/10',
                                                 'failed' => 'text-red-400 bg-red-400/10',
+                                                'refunded' => 'text-purple-400 bg-purple-400/10',
                                                 'cancelled' => 'text-gray-400 bg-gray-400/10',
                                             ];
                                             $statusClass = $statusClasses[$payment['status']] ?? 'text-gray-400 bg-gray-400/10';
