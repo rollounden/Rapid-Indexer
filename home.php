@@ -15,9 +15,9 @@ if (isset($_SESSION['uid'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Rapid Indexer - Fast Google Indexing Service</title>
+    <title>Rapid Indexer - Premium SEO Link Indexing & Checking Service</title>
     <meta name="description"
-        content="Check if your URLs are indexed by Google and submit URLs to speed up indexing. Fast, accurate batch processing with real-time results. Perfect for SEO professionals and website owners.">
+        content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -115,6 +115,11 @@ if (isset($_SESSION['uid'])) {
             background: rgba(20, 20, 20, 0.9);
             backdrop-filter: blur(12px);
         }
+        
+        .feature-icon-box {
+            background: linear-gradient(135deg, #be123c 0%, #881337 100%);
+            box-shadow: 0 4px 20px -2px rgba(190, 18, 60, 0.4);
+        }
     </style>
 </head>
 
@@ -137,10 +142,9 @@ if (isset($_SESSION['uid'])) {
 
                 <!-- Styled logo -->
                 <div class="flex items-center gap-3">
-                    <span class="font-bold text-2xl tracking-tight text-white flex items-center gap-2">
-                        <i class="fa-solid fa-check text-primary-500"></i>
-                        Rapid Indexer
-                    </span>
+                    <a href="/" class="mb-0.5 truncate leading-tight font-bold text-2xl bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 bg-clip-text text-transparent tracking-wide uppercase flex items-center gap-2">
+                        <span class="border-2 rounded-full px-1 border-primary-500 text-primary-500">&#10003;</span> Rapid Indexer
+                    </a>
                 </div>
 
                 <!-- Navigation Links -->
@@ -165,12 +169,12 @@ if (isset($_SESSION['uid'])) {
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-4xl mx-auto">
                 <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
-                    Force Google to Index <br>
-                    <span class="text-primary-500">Your Links Instantly</span>
+                    Backlinks have zero value <br>
+                    <span class="text-primary-500">until they're indexed.</span>
                 </h1>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Stop waiting weeks for search engines. Our premium indexing system ensures your backlinks and pages get discovered within hours, not days.
+                    "What can't be measured doesn't exist". Rapid Indexer uses a multi-pronged system to guarantee indexation and power up pages with positive metrics.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -252,8 +256,63 @@ if (isset($_SESSION['uid'])) {
         </div>
     </section>
 
+    <!-- Why Rapid Indexer Section (SEO Content) -->
+    <section id="why-us" class="py-24 bg-black/20 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Why Most Indexing Services Fail</h2>
+                    <div class="space-y-6 text-lg text-gray-400">
+                        <p>
+                            Many link-indexing services have died off or become irrelevant because they can't adapt. 
+                            <strong class="text-primary-400">Submitting directly to Google API alone doesn't cut it anymore</strong> and has strict cap limits.
+                        </p>
+                        <p>
+                            You need indexing services that go the extra mile to ensure you aren't just asking Google for a handout.
+                        </p>
+                        <p>
+                            Your pages need to be powered up with positive metrics like <span class="text-white font-semibold">tiered-links</span> and <span class="text-white font-semibold">browser traffic</span>. This is where Rapid Indexer shines.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-primary-900/20 rounded-full blur-3xl opacity-50"></div>
+                    <div class="card p-8 rounded-xl relative border-primary-900/50">
+                        <h3 class="text-xl font-bold text-white mb-4">Our Multi-Pronged Approach</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </div>
+                                <span class="text-gray-300">Direct submission signals to search engines</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </div>
+                                <span class="text-gray-300">Tiered linking structure for authority</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </div>
+                                <span class="text-gray-300">Real browser traffic simulation</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </div>
+                                <span class="text-gray-300">Detailed index status verification</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Strip -->
-    <div class="border-y border-white/5 bg-black/20 backdrop-blur-sm">
+    <div class="border-b border-white/5 bg-black/20 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
@@ -320,7 +379,7 @@ if (isset($_SESSION['uid'])) {
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Simple Pay-As-You-Go</h2>
-                <p class="text-lg text-gray-400">No monthly subscriptions. Your credits never expire.</p>
+                <p class="text-lg text-gray-400">Get started with our premium indexing service today, for as little as $0.02 per indexed page!</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -344,12 +403,12 @@ if (isset($_SESSION['uid'])) {
                     <div class="absolute top-0 right-0 bg-primary-700 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">RECOMMENDED</div>
                     <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Premium Indexing</h3>
                     <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-primary-500">$0.03</span>
+                        <span class="text-4xl font-extrabold text-primary-500">$0.02</span>
                         <span class="text-gray-500">/ URL</span>
                     </div>
                     <ul class="space-y-4 mb-8 text-gray-300 flex-1">
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Force Google Crawl</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Includes Verification</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Tiered Links & Traffic</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> 98% Success Rate</li>
                     </ul>
                     <a href="/register.php" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
@@ -358,20 +417,19 @@ if (isset($_SESSION['uid'])) {
 
             <!-- Payment Methods -->
             <div class="mt-16 text-center">
-                <p class="text-sm text-gray-500 mb-6 uppercase tracking-wider font-semibold">Secure Payments Via</p>
-                <div class="flex flex-wrap justify-center items-center gap-6 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500">
-                    <i class="fab fa-cc-paypal fa-2x text-white"></i>
-                    <i class="fab fa-cc-visa fa-2x text-white"></i>
-                    <i class="fab fa-cc-mastercard fa-2x text-white"></i>
-                    
+                <p class="text-sm text-gray-500 mb-6 uppercase tracking-wider font-semibold">Secure Crypto Payments</p>
+                <div class="flex flex-wrap justify-center items-center gap-6">
                     <!-- Crypto Images -->
-                    <img src="/assets/img/bitcoin-btc-logo.png" alt="Bitcoin" class="h-6 w-auto object-contain">
-                    <img src="/assets/img/ethereum-eth-logo.png" alt="Ethereum" class="h-6 w-auto object-contain">
-                    
-                    <span class="text-white font-bold flex items-center gap-2 border border-white/10 px-3 py-1 rounded-full text-xs bg-white/5">
-                        <i class="fa-solid fa-coins text-primary-500"></i>
-                        Crypto Accepted
-                    </span>
+                    <div class="flex items-center gap-6 opacity-80 hover:opacity-100 transition-opacity">
+                        <img src="/assets/img/bitcoin-btc-logo.png" alt="Bitcoin" class="h-8 w-auto object-contain">
+                        <img src="/assets/img/ethereum-eth-logo.png" alt="Ethereum" class="h-8 w-auto object-contain">
+                        <img src="/assets/img/Zcash-Yellow.png" alt="Zcash" class="h-8 w-auto object-contain">
+                        
+                        <span class="text-white font-bold flex items-center gap-2 border border-white/10 px-4 py-2 rounded-full text-sm bg-white/5">
+                            <i class="fa-solid fa-coins text-primary-500"></i>
+                            Crypto Only
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
