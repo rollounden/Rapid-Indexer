@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/SettingsService.php';
 require_once __DIR__ . '/src/PayPalService.php';
 
 // Check if user is logged in
@@ -69,7 +70,8 @@ try {
         $currency = $capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
         
         // Calculate credits
-        $credits_amount = intval($amount / PRICE_PER_CREDIT_USD);
+        $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
+        $credits_amount = intval($amount / $price_per_credit);
         
         // Connect to database
         $pdo = Db::conn();

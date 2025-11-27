@@ -65,12 +65,18 @@ const ENCRYPTION_KEY = 'D6XcXFGWrDiByIpRyuNZap1d+OlBsHjwk/IaXCzq5wI=';
 // But integers are easier.
 
 // Let's stick to 1 Credit = $0.10 (current default)
-const PRICE_PER_CREDIT_USD = 0.01; 
+const DEFAULT_PRICE_PER_CREDIT_USD = 0.01; 
 
 // Task Costs (in Credits/Cents)
-const COST_INDEXING = 2; // $0.02 per URL
-const COST_CHECKING = 1;  // $0.01 per URL
-const COST_VIP_EXTRA = 5; // +$0.05 for VIP
+const DEFAULT_COST_INDEXING = 2; // $0.02 per URL
+const DEFAULT_COST_CHECKING = 1;  // $0.01 per URL
+const DEFAULT_COST_VIP_EXTRA = 5; // +$0.05 for VIP
+
+// Backward compatibility constants - TO BE REMOVED AFTER REFACTOR
+const PRICE_PER_CREDIT_USD = DEFAULT_PRICE_PER_CREDIT_USD;
+const COST_INDEXING = DEFAULT_COST_INDEXING;
+const COST_CHECKING = DEFAULT_COST_CHECKING;
+const COST_VIP_EXTRA = DEFAULT_COST_VIP_EXTRA;
 
 // This requires migrating existing user balances (multiply by 10 if old price was 0.10).
 // I will assume this is acceptable or I will provide a migration script.

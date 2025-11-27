@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/Db.php';
 require_once __DIR__ . '/CreditsService.php';
+require_once __DIR__ . '/SettingsService.php';
 
 class PaymentService
 {
@@ -15,7 +16,8 @@ class PaymentService
 
     public static function markPaid(int $paymentId, int $userId, string $paypalCaptureId, float $amount, string $currency): void
     {
-        $credits = (int) floor(($amount / (float) PRICE_PER_CREDIT_USD));
+        $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
+        $credits = (int) floor(($amount / $price_per_credit));
         $pdo = Db::conn();
         $pdo->beginTransaction();
         try {

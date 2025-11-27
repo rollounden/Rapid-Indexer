@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/SettingsService.php';
 require_once __DIR__ . '/src/PayPalService.php';
 
 // This script can be run automatically via cron job
@@ -40,7 +41,8 @@ try {
                     foreach ($captures as $capture) {
                         if ($capture['status'] === 'COMPLETED') {
                             // Calculate credits
-                            $credits = intval($payment['amount'] / PRICE_PER_CREDIT_USD);
+                            $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
+                            $credits = intval($payment['amount'] / $price_per_credit);
                             
                             // Update payment status
                             $stmt = $pdo->prepare('UPDATE payments SET status = ?, paypal_capture_id = ?, credits_awarded = ?, updated_at = NOW() WHERE id = ?');

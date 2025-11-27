@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/SettingsService.php';
 
 // Set content type to JSON
 header('Content-Type: application/json');
@@ -213,7 +214,8 @@ function handlePaymentCompleted($pdo, $data) {
     }
     
     // Calculate credits based on amount
-    $credits_amount = intval($amount / PRICE_PER_CREDIT_USD);
+    $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
+    $credits_amount = intval($amount / $price_per_credit);
     
     // Log processing details
     error_log("PayPal Webhook Processing: User ID=$user_id, Amount=$amount, Credits=$credits_amount, Payment ID=$payment_id");
@@ -290,7 +292,8 @@ function handlePaymentRefunded($pdo, $data) {
         
         if ($payment) {
             // Calculate credits to deduct based on refund amount
-            $credits_to_deduct = intval($refund_amount / PRICE_PER_CREDIT_USD);
+            $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
+            $credits_to_deduct = intval($refund_amount / $price_per_credit);
             
             // Deduct credits from user account
             $stmt = $pdo->prepare('UPDATE users SET credits_balance = GREATEST(0, credits_balance - ?) WHERE id = ?');

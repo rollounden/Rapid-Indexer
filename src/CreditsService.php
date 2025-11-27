@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/Db.php';
+require_once __DIR__ . '/SettingsService.php';
 
 class CreditsService
 {
@@ -34,8 +35,12 @@ class CreditsService
     public static function reserveForTask(int $userId, int $numUrls, bool $vip, string $type = 'indexer'): void
     {
         // Determine cost based on type
-        $baseCost = ($type === 'checker') ? COST_CHECKING : COST_INDEXING;
-        $vipCost = $vip ? COST_VIP_EXTRA : 0;
+        $cost_indexing = (int)SettingsService::get('cost_indexing', (string)DEFAULT_COST_INDEXING);
+        $cost_checking = (int)SettingsService::get('cost_checking', (string)DEFAULT_COST_CHECKING);
+        $cost_vip_extra = (int)SettingsService::get('cost_vip', (string)DEFAULT_COST_VIP_EXTRA);
+
+        $baseCost = ($type === 'checker') ? $cost_checking : $cost_indexing;
+        $vipCost = $vip ? $cost_vip_extra : 0;
         
         $totalPerUrl = $baseCost + $vipCost;
         $required = $totalPerUrl * $numUrls;

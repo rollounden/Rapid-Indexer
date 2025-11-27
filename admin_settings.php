@@ -56,12 +56,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             SettingsService::set('enable_paypal', $_POST['enable_paypal']);
         }
 
+        if (isset($_POST['enable_cryptomus'])) {
+            SettingsService::set('enable_cryptomus', $_POST['enable_cryptomus']);
+        }
+
         if (isset($_POST['enable_vip_queue'])) {
             SettingsService::set('enable_vip_queue', $_POST['enable_vip_queue']);
         }
 
         if (isset($_POST['free_credits_on_signup'])) {
             SettingsService::set('free_credits_on_signup', intval($_POST['free_credits_on_signup']));
+        }
+
+        if (isset($_POST['price_per_credit'])) {
+            SettingsService::set('price_per_credit', $_POST['price_per_credit']);
+        }
+        if (isset($_POST['cost_indexing'])) {
+            SettingsService::set('cost_indexing', $_POST['cost_indexing']);
+        }
+        if (isset($_POST['cost_checking'])) {
+            SettingsService::set('cost_checking', $_POST['cost_checking']);
+        }
+        if (isset($_POST['cost_vip'])) {
+            SettingsService::set('cost_vip', $_POST['cost_vip']);
         }
 
         $success = 'Settings saved successfully.';
@@ -84,8 +101,15 @@ $cryptomus_api_key_decrypted = SettingsService::getDecrypted('cryptomus_api_key'
 $cryptomus_api_key_display = $cryptomus_api_key_decrypted ? substr($cryptomus_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($cryptomus_api_key_decrypted, -4) : '';
 
 $enable_paypal = SettingsService::get('enable_paypal', '1');
+$enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
 $enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
 $free_credits_on_signup = SettingsService::get('free_credits_on_signup', '30');
+
+// Pricing Settings
+$price_per_credit = SettingsService::get('price_per_credit', (string)PRICE_PER_CREDIT_USD);
+$cost_indexing = SettingsService::get('cost_indexing', (string)COST_INDEXING);
+$cost_checking = SettingsService::get('cost_checking', (string)COST_CHECKING);
+$cost_vip = SettingsService::get('cost_vip', (string)COST_VIP_EXTRA);
 
 // Check Ralfy Status if key is present
 if ($ralfy_api_key_decrypted) {
@@ -191,28 +215,37 @@ include __DIR__ . '/includes/header_new.php';
                     <input type="hidden" name="enable_paypal" value="0" id="hiddenPaypal"> 
                 </div>
                 
-                <div class="mb-6 flex items-center justify-between opacity-50 cursor-not-allowed">
+                <div class="mb-6 flex items-center justify-between">
                     <div>
                         <label class="text-white font-bold block">Enable Cryptomus</label>
-                        <p class="text-xs text-gray-400">Always enabled if keys are provided</p>
+                        <p class="text-xs text-gray-400">Allow users to pay with Cryptocurrency</p>
                     </div>
-                    <div class="relative inline-block w-12 mr-2 align-middle select-none">
-                        <input type="checkbox" checked disabled class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none"/>
-                        <label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary-600"></label>
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="enable_cryptomus" id="enableCryptomus" value="1" <?php echo $enable_cryptomus === '1' ? 'checked' : ''; ?> class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="enableCryptomus" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
                     </div>
+                    <input type="hidden" name="enable_cryptomus" value="0" id="hiddenCryptomus">
                 </div>
                 
                 <script>
                     // Ensure checkbox behavior works for hidden field fallback logic
                     const toggle = document.getElementById('enablePaypal');
                     const hidden = document.getElementById('hiddenPaypal');
+                    const toggleCrypto = document.getElementById('enableCryptomus');
+                    const hiddenCrypto = document.getElementById('hiddenCryptomus');
                     
                     function updateHidden() {
                         hidden.disabled = toggle.checked;
                     }
+
+                    function updateHiddenCrypto() {
+                        hiddenCrypto.disabled = toggleCrypto.checked;
+                    }
                     
                     toggle.addEventListener('change', updateHidden);
+                    toggleCrypto.addEventListener('change', updateHiddenCrypto);
                     updateHidden(); // Init
+                    updateHiddenCrypto(); // Init
                 </script>
                 <style>
                     .toggle-checkbox:checked { right: 0; border-color: #be123c; }
@@ -260,6 +293,34 @@ include __DIR__ . '/includes/header_new.php';
                 </script>
 
                 <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Feature Settings</button>
+            </form>
+        </div>
+
+        <!-- Pricing Settings -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Pricing Settings</h3>
+            <form method="POST">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Price Per Credit (USD)</label>
+                        <input type="number" step="0.0001" name="price_per_credit" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($price_per_credit); ?>" required>
+                        <p class="text-xs text-gray-500 mt-2">Amount to charge per 1 credit</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Cost per Indexing Task (Credits)</label>
+                        <input type="number" step="1" name="cost_indexing" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($cost_indexing); ?>" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Cost per Checking Task (Credits)</label>
+                        <input type="number" step="1" name="cost_checking" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($cost_checking); ?>" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">VIP Extra Cost (Credits)</label>
+                        <input type="number" step="1" name="cost_vip" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($cost_vip); ?>" required>
+                        <p class="text-xs text-gray-500 mt-2">Additional credits for VIP processing</p>
+                    </div>
+                </div>
+                <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Pricing Settings</button>
             </form>
         </div>
 

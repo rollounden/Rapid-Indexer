@@ -27,6 +27,7 @@ $error = '';
 $success = '';
 
 $enable_paypal = SettingsService::get('enable_paypal', '1');
+$enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
 
 // Handle payment creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -35,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $error = 'PayPal payments are currently disabled.';
         } else {
             $amount = floatval($_POST['amount']);
-            $credits = intval($amount / PRICE_PER_CREDIT_USD);
+            $price_per_credit = (float)SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
+            $credits = intval($amount / $price_per_credit);
         
             if ($amount < 10) {
                 $error = 'Minimum payment amount is $10.00';
@@ -77,9 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }
         }
     } elseif ($_POST['action'] === 'create_crypto_payment') {
-        $amount = floatval($_POST['amount']);
-        
-        if ($amount < 10) {
+        if ($enable_cryptomus !== '1') {
+            $error = 'Crypto payments are currently disabled.';
+        } else {
+            $amount = floatval($_POST['amount']);
+            
+            if ($amount < 10) {
             $error = 'Minimum payment amount is $10.00';
         } else {
             try {
@@ -180,12 +185,12 @@ include __DIR__ . '/includes/header_new.php';
                 <span class="text-xl text-primary-500 font-bold">credits</span>
             </div>
             <div class="mt-4 text-sm text-gray-500">
-                1 credit = $<?php echo PRICE_PER_CREDIT_USD; ?> USD
+                1 credit = $<?php echo SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD); ?> USD
             </div>
         </div>
         
         <!-- Add Credits -->
-        <div class="card rounded-xl p-8" x-data="{ activeTab: '<?php echo $enable_paypal === '1' ? 'paypal' : 'crypto'; ?>' }">
+        <div class="card rounded-xl p-8" x-data="{ activeTab: '<?php echo $enable_paypal === '1' ? 'paypal' : ($enable_cryptomus === '1' ? 'crypto' : ''); ?>' }">
             <h2 class="text-lg font-bold text-white mb-6">Add Credits</h2>
             
             <div class="flex space-x-2 mb-6 bg-black/20 p-1 rounded-lg border border-white/5">
@@ -196,11 +201,13 @@ include __DIR__ . '/includes/header_new.php';
                     <i class="fab fa-paypal mr-2"></i> PayPal
                 </button>
                 <?php endif; ?>
+                <?php if ($enable_cryptomus === '1'): ?>
                 <button @click="activeTab = 'crypto'" 
                         :class="{ 'bg-primary-600 text-white': activeTab === 'crypto', 'text-gray-400 hover:text-white hover:bg-white/5': activeTab !== 'crypto' }"
                         class="flex-1 py-2 px-4 rounded-md text-sm font-bold transition-all">
                     <i class="fas fa-coins mr-2"></i> Crypto
                 </button>
+                <?php endif; ?>
             </div>
             
             <?php if ($enable_paypal === '1'): ?>
@@ -224,6 +231,7 @@ include __DIR__ . '/includes/header_new.php';
             </div>
             <?php endif; ?>
             
+            <?php if ($enable_cryptomus === '1'): ?>
             <div x-show="activeTab === 'crypto'" x-cloak>
                 <form method="POST">
                     <input type="hidden" name="action" value="create_crypto_payment">
@@ -242,6 +250,7 @@ include __DIR__ . '/includes/header_new.php';
                     <p class="text-center text-xs text-gray-500 mt-3">Powered by Cryptomus • Minimum $10.00</p>
                 </form>
             </div>
+            <?php endif; ?>
         </div>
     </div>
     

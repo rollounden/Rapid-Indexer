@@ -68,6 +68,11 @@ class CryptomusService
         unset($data['sign']);
         
         $apiKey = SettingsService::getDecrypted('cryptomus_api_key');
+        
+        if (!$apiKey && defined('CRYPTOMUS_PAYMENT_KEY')) {
+            $apiKey = CRYPTOMUS_PAYMENT_KEY;
+        }
+
         $hash = md5(base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE)) . $apiKey);
 
         if ($hash !== $sign) {

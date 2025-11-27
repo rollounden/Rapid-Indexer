@@ -15,6 +15,9 @@ require_once __DIR__ . '/src/SettingsService.php';
 
 $userId = $_SESSION['uid'];
 $enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
+$cost_indexing = (int)SettingsService::get('cost_indexing', (string)DEFAULT_COST_INDEXING);
+$cost_checking = (int)SettingsService::get('cost_checking', (string)DEFAULT_COST_CHECKING);
+$cost_vip = (int)SettingsService::get('cost_vip', (string)DEFAULT_COST_VIP_EXTRA);
 $error = '';
 $success = '';
 
@@ -189,7 +192,7 @@ include __DIR__ . '/includes/header_new.php';
                                 </div>
                                 <div>
                                     <label for="vipQueue" class="font-bold text-white cursor-pointer">VIP Queue Priority</label>
-                                    <p class="text-xs text-yellow-500 font-bold">+<?php echo COST_VIP_EXTRA; ?> credits/link for faster processing</p>
+                                    <p class="text-xs text-yellow-500 font-bold">+<?php echo $cost_vip; ?> credits/link for faster processing</p>
                                 </div>
                             </div>
                             <style>
@@ -205,8 +208,8 @@ include __DIR__ . '/includes/header_new.php';
                             <div>
                                 <span class="text-gray-400 text-sm block">Estimated Cost</span>
                                 <div class="text-xs text-gray-500 mt-1">
-                                    Index: <span class="text-gray-300"><?php echo COST_INDEXING; ?></span> | 
-                                    Check: <span class="text-gray-300"><?php echo COST_CHECKING; ?></span>
+                                    Index: <span class="text-gray-300"><?php echo $cost_indexing; ?></span> | 
+                                    Check: <span class="text-gray-300"><?php echo $cost_checking; ?></span>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -280,9 +283,9 @@ include __DIR__ . '/includes/header_new.php';
         const vipCheckbox = document.getElementById('vipQueue');
         const costDisplay = document.getElementById('estimatedCost');
         
-        const COST_INDEXING = <?php echo COST_INDEXING; ?>;
-        const COST_CHECKING = <?php echo COST_CHECKING; ?>;
-        const COST_VIP = <?php echo COST_VIP_EXTRA; ?>;
+        const COST_INDEXING = <?php echo $cost_indexing; ?>;
+        const COST_CHECKING = <?php echo $cost_checking; ?>;
+        const COST_VIP = <?php echo $cost_vip; ?>;
         const ENABLE_VIP = <?php echo $enable_vip_queue === '1' ? 'true' : 'false'; ?>;
         
         function updateCost() {
