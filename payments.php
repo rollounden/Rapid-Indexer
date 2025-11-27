@@ -27,11 +27,13 @@ $success = '';
 $pdo = null;
 $enable_paypal = '0';
 $enable_cryptomus = '0';
+$price_per_credit = (string)DEFAULT_PRICE_PER_CREDIT_USD;
 
 try {
     $pdo = Db::conn();
     $enable_paypal = SettingsService::get('enable_paypal', '1');
     $enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
+    $price_per_credit = SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD);
 } catch (Throwable $e) {
     $error = "System initialization error: " . $e->getMessage();
     error_log($e->getMessage());
@@ -221,7 +223,7 @@ include __DIR__ . '/includes/header_new.php';
                 <span class="text-xl text-primary-500 font-bold">credits</span>
             </div>
             <div class="mt-4 text-sm text-gray-500">
-                1 credit = $<?php echo SettingsService::get('price_per_credit', (string)DEFAULT_PRICE_PER_CREDIT_USD); ?> USD
+                1 credit = $<?php echo htmlspecialchars($price_per_credit); ?> USD
             </div>
         </div>
         
