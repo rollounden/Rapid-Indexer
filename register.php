@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Email address already registered.';
             } else {
                 $hash = password_hash($password, PASSWORD_BCRYPT);
-                $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 0)');
+                // Give 150 free credits on signup
+                $stmt = $pdo->prepare('INSERT INTO users (email, password_hash, credits_balance) VALUES (?, ?, 150)');
                 $stmt->execute([$email, $hash]);
                 
                 $success = 'Account created successfully! You can now sign in.';
