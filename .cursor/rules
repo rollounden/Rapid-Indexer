@@ -1,5 +1,6 @@
 Project: SpeedyIndex SaaS Layer
 
+
 Assistant ground rules
 - Use Windows PowerShell commands only. Do not suggest macOS/Linux commands.
 - Prefer concise outputs with copy-pastable snippets. Use Markdown headings, bullets, and fenced code blocks only for code/commands.
