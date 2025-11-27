@@ -58,7 +58,7 @@ $stats = [];
 $stmt = $pdo->query('SELECT COUNT(*) FROM users');
 $stats['total_users'] = $stmt->fetchColumn();
 
-// Active users (last 30 days) - using created_at as fallback since last_login doesn't exist
+// Active users (last 30 days)
 $stmt = $pdo->query('SELECT COUNT(*) FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)');
 $stats['active_users'] = $stmt->fetchColumn();
 
@@ -105,295 +105,218 @@ $stmt = $pdo->query('
     LIMIT 10
 ');
 $recent_errors = $stmt->fetchAll();
+
+include __DIR__ . '/includes/header_new.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Rapid Indexer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
+
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10" x-data="{ showModal: false, userId: '', userEmail: '' }">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <h1 class="text-3xl font-bold text-white">Admin Dashboard</h1>
+        <div class="flex flex-wrap gap-2">
+            <a href="/admin_users.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a href="/admin_payments.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+                <i class="fas fa-credit-card"></i> Payments
+            </a>
+            <a href="/admin_messages.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+                <i class="fas fa-envelope"></i> Messages
+            </a>
+            <a href="/admin_settings.php" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-all flex items-center gap-2">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+    </div>
+
+    <?php if ($error): ?>
+        <div class="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-exclamation-circle"></i>
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
     
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="h3">Admin Dashboard</h1>
-                    <div>
-                        <a href="/admin_users.php" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-users me-2"></i>Users
-                        </a>
-                        <a href="/admin_payments.php" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-credit-card me-2"></i>Payments
-                        </a>
-                        <a href="/admin_messages.php" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-envelope me-2"></i>Messages
-                        </a>
-                        <a href="/admin_settings.php" class="btn btn-primary">
-                            <i class="fas fa-cog me-2"></i>Settings
-                        </a>
-                    </div>
-                </div>
-                
-                <?php if ($error): ?>
-                    <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-                <?php endif; ?>
-                
-                <?php if ($success): ?>
-                    <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-                <?php endif; ?>
-                
-                <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary"><?php echo number_format($stats['total_users']); ?></h5>
-                                <small class="text-muted">Total Users</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-success"><?php echo number_format($stats['active_users']); ?></h5>
-                                <small class="text-muted">Active Users</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-info"><?php echo number_format($stats['total_tasks']); ?></h5>
-                                <small class="text-muted">Total Tasks</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-warning"><?php echo number_format($stats['completed_tasks']); ?></h5>
-                                <small class="text-muted">Completed</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary"><?php echo number_format($stats['total_payments']); ?></h5>
-                                <small class="text-muted">Payments</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-success">$<?php echo number_format($stats['total_revenue'], 2); ?></h5>
-                                <small class="text-muted">Revenue</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Main Content -->
-                <div class="row">
-                    <!-- Recent Users -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0">Recent Users</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Email</th>
-                                                <th>Credits</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($recent_users as $user): ?>
-                                                <tr>
-                                                    <td>#<?php echo $user['id']; ?></td>
-                                                    <td>
-                                                        <?php echo htmlspecialchars($user['email']); ?>
-                                                        <?php if ($user['role'] === 'admin'): ?>
-                                                            <span class="badge bg-danger">Admin</span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td><?php echo number_format($user['credits_balance']); ?></td>
-                                                    <td>
-                                                        <span class="badge bg-<?php echo $user['status'] === 'active' ? 'success' : 'danger'; ?>">
-                                                            <?php echo htmlspecialchars(ucfirst($user['status'])); ?>
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#adjustCreditsModal"
-                                                                data-user-id="<?php echo $user['id']; ?>"
-                                                                data-user-email="<?php echo htmlspecialchars($user['email']); ?>">
-                                                            Adjust
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Payments -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0">Recent Payments</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>User</th>
-                                                <th>Amount</th>
-                                                <th>Credits</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($recent_payments as $payment): ?>
-                                                <tr>
-                                                    <td><?php echo htmlspecialchars($payment['email']); ?></td>
-                                                    <td>$<?php echo number_format($payment['amount'], 2); ?></td>
-                                                                                                             <td><?php echo number_format($payment['credits_awarded']); ?></td>
-                                                    <td>
-                                                        <span class="badge bg-<?php echo $payment['status'] === 'completed' ? 'success' : 'warning'; ?>">
-                                                            <?php echo htmlspecialchars(ucfirst($payment['status'])); ?>
-                                                        </span>
-                                                    </td>
-                                                    <td><?php echo date('M j', strtotime($payment['created_at'])); ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- API Errors -->
-                <?php if (!empty($recent_errors)): ?>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0">Recent API Errors</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Time</th>
-                                                <th>Endpoint</th>
-                                                <th>Status</th>
-                                                <th>Error</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($recent_errors as $error): ?>
-                                                <tr>
-                                                    <td><?php echo date('M j g:i A', strtotime($error['created_at'])); ?></td>
-                                                    <td><?php echo htmlspecialchars($error['endpoint']); ?></td>
-                                                    <td>
-                                                        <span class="badge bg-danger"><?php echo $error['status_code']; ?></span>
-                                                    </td>
-                                                    <td>
-                                                        <small class="text-muted">
-                                                            <?php echo htmlspecialchars(substr($error['error_message'] ?? '', 0, 50)); ?>...
-                                                        </small>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
+    <?php if ($success): ?>
+        <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-check-circle"></i>
+            <?php echo htmlspecialchars($success); ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div class="card rounded-xl p-4 text-center">
+            <h5 class="text-2xl font-bold text-primary-500"><?php echo number_format($stats['total_users']); ?></h5>
+            <p class="text-xs text-gray-500 uppercase font-bold mt-1">Users</p>
+        </div>
+        <div class="card rounded-xl p-4 text-center">
+            <h5 class="text-2xl font-bold text-green-400"><?php echo number_format($stats['active_users']); ?></h5>
+            <p class="text-xs text-gray-500 uppercase font-bold mt-1">Active</p>
+        </div>
+        <div class="card rounded-xl p-4 text-center">
+            <h5 class="text-2xl font-bold text-blue-400"><?php echo number_format($stats['total_tasks']); ?></h5>
+            <p class="text-xs text-gray-500 uppercase font-bold mt-1">Tasks</p>
+        </div>
+        <div class="card rounded-xl p-4 text-center">
+            <h5 class="text-2xl font-bold text-yellow-400"><?php echo number_format($stats['completed_tasks']); ?></h5>
+            <p class="text-xs text-gray-500 uppercase font-bold mt-1">Completed</p>
+        </div>
+        <div class="card rounded-xl p-4 text-center">
+            <h5 class="text-2xl font-bold text-purple-400"><?php echo number_format($stats['total_payments']); ?></h5>
+            <p class="text-xs text-gray-500 uppercase font-bold mt-1">Payments</p>
+        </div>
+        <div class="card rounded-xl p-4 text-center">
+            <h5 class="text-2xl font-bold text-green-500">$<?php echo number_format($stats['total_revenue'], 2); ?></h5>
+            <p class="text-xs text-gray-500 uppercase font-bold mt-1">Revenue</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Recent Users -->
+        <div class="card rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-white/5 bg-white/5">
+                <h3 class="text-lg font-bold text-white">Recent Users</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-white/5 border-b border-white/5">
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">User</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Credits</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Status</th>
+                            <th class="px-4 py-3 text-right text-xs font-bold text-gray-400 uppercase">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <?php foreach ($recent_users as $user): ?>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3">
+                                    <div class="text-sm text-white font-medium"><?php echo htmlspecialchars($user['email']); ?></div>
+                                    <div class="text-xs text-gray-500">#<?php echo $user['id']; ?> • <?php echo $user['role']; ?></div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-300 font-mono"><?php echo number_format($user['credits_balance']); ?></td>
+                                <td class="px-4 py-3">
+                                    <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $user['status'] === 'active' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'; ?>">
+                                        <?php echo htmlspecialchars($user['status']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    <button @click="showModal = true; userId = '<?php echo $user['id']; ?>'; userEmail = '<?php echo htmlspecialchars($user['email']); ?>'" 
+                                            class="text-xs px-2 py-1 rounded border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-colors">
+                                        Adjust
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Payments -->
+        <div class="card rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-white/5 bg-white/5">
+                <h3 class="text-lg font-bold text-white">Recent Payments</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-white/5 border-b border-white/5">
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">User</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Amount</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <?php foreach ($recent_payments as $payment): ?>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3 text-sm text-gray-300 truncate max-w-[150px]" title="<?php echo htmlspecialchars($payment['email']); ?>">
+                                    <?php echo htmlspecialchars($payment['email']); ?>
+                                </td>
+                                <td class="px-4 py-3 text-sm font-bold text-white">$<?php echo number_format($payment['amount'], 2); ?></td>
+                                <td class="px-4 py-3">
+                                    <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $payment['status'] === 'completed' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'; ?>">
+                                        <?php echo htmlspecialchars($payment['status']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-xs text-gray-500"><?php echo date('M j', strtotime($payment['created_at'])); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+
+    <!-- API Errors -->
+    <?php if (!empty($recent_errors)): ?>
+    <div class="card rounded-xl overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-white/5 bg-white/5">
+            <h3 class="text-lg font-bold text-white">Recent API Errors</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-white/5 border-b border-white/5">
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Time</th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Endpoint</th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Error</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    <?php foreach ($recent_errors as $error): ?>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-4 py-3 text-xs text-gray-400"><?php echo date('M j g:i A', strtotime($error['created_at'])); ?></td>
+                            <td class="px-4 py-3 text-sm text-gray-300 font-mono"><?php echo htmlspecialchars($error['endpoint']); ?></td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                                    <?php echo $error['status_code']; ?>
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-red-300 truncate max-w-md">
+                                <?php echo htmlspecialchars(substr($error['error_message'] ?? '', 0, 100)); ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php endif; ?>
     
     <!-- Adjust Credits Modal -->
-    <div class="modal fade" id="adjustCreditsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Adjust User Credits</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div x-show="showModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-0">
+        <div x-show="showModal" x-transition.opacity @click="showModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div x-show="showModal" x-transition.scale.origin.center class="relative card rounded-xl p-6 max-w-md w-full shadow-2xl border border-white/10">
+            <h3 class="text-xl font-bold text-white mb-4">Adjust User Credits</h3>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="adjust_credits">
+                <input type="hidden" name="user_id" :value="userId">
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">User Email</label>
+                    <input type="text" :value="userEmail" readonly class="w-full bg-black/20 border border-[#333] rounded-lg p-3 text-gray-400 cursor-not-allowed">
                 </div>
-                <form method="POST">
-                    <div class="modal-body">
-                        <input type="hidden" name="action" value="adjust_credits">
-                        <input type="hidden" name="user_id" id="adjustUserId">
-                        
-                        <div class="mb-3">
-                            <label class="form-label">User Email</label>
-                            <input type="text" class="form-control" id="adjustUserEmail" readonly>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Credit Adjustment</label>
-                            <input type="number" class="form-control" name="amount" required 
-                                   placeholder="Positive for credit, negative for debit">
-                            <small class="text-muted">Use positive numbers to add credits, negative to remove</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Reason</label>
-                            <textarea class="form-control" name="reason" required 
-                                      placeholder="Reason for adjustment"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Adjust Credits</button>
-                    </div>
-                </form>
-            </div>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Credit Adjustment</label>
+                    <input type="number" name="amount" required placeholder="Positive (add) or negative (remove)" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Reason</label>
+                    <textarea name="reason" required placeholder="Why are you adjusting credits?" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500" rows="3"></textarea>
+                </div>
+                
+                <div class="flex justify-end gap-3">
+                    <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white transition-colors">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Confirm</button>
+                </div>
+            </form>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Handle modal data
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('adjustCreditsModal');
-            modal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const userId = button.getAttribute('data-user-id');
-                const userEmail = button.getAttribute('data-user-email');
-                
-                document.getElementById('adjustUserId').value = userId;
-                document.getElementById('adjustUserEmail').value = userEmail;
-            });
-        });
-    </script>
-</body>
-</html>
+</div>
+
+<?php include __DIR__ . '/includes/footer_new.php'; ?>

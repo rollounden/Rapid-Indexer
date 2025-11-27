@@ -59,326 +59,260 @@ $stmt->execute([$userId]);
 $paymentStats = $stmt->fetch();
 
 $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
+
+include __DIR__ . '/includes/header_new.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard - Rapid Indexer</title>
-    <meta name="theme-color" content="#667eea">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-    <style>
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
-            .btn-lg {
-                padding: 0.75rem 1.5rem;
-                font-size: 1rem;
-            }
-            .form-control-lg {
-                padding: 0.75rem 1rem;
-                font-size: 1rem;
-            }
-            .table-responsive {
-                font-size: 0.9rem;
-            }
-            .card-body {
-                padding: 1rem;
-            }
-            .btn-group-mobile {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            .btn-group-mobile .btn {
-                width: 100%;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-            .btn-lg {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.95rem;
-            }
-            .display-4 {
-                font-size: 2rem !important;
-            }
-        }
-        
-        /* Touch-friendly buttons */
-        .btn {
-            min-height: 44px;
-            min-width: 44px;
-        }
-        
-        /* Prevent zoom on input focus */
-        input, textarea, select {
-            font-size: 16px;
-        }
-        
-        /* Mobile Navigation Enhancements */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background-color: var(--bg-card);
-                border-top: 1px solid var(--border-color);
-                margin-top: 0.5rem;
-                padding-top: 1rem;
-            }
-            .navbar-nav .nav-link {
-                padding: 0.75rem 1rem;
-                border-radius: 0.375rem;
-                margin: 0.25rem 0;
-                color: var(--text-secondary);
-            }
-            .navbar-nav .nav-link:hover {
-                background-color: rgba(255,255,255,0.05);
-                color: var(--text-primary);
-            }
-            .navbar-nav .nav-link.active {
-                background-color: var(--primary-color);
-                color: white !important;
-            }
-            .dropdown-menu {
-                background-color: rgba(255,255,255,0.02);
-                border: none;
-                box-shadow: none;
-                padding-left: 1rem;
-            }
-        }
-        
-        /* Touch-friendly navbar toggler */
-        .navbar-toggler {
-            padding: 0.5rem;
-            border: none;
-            background: transparent;
-        }
-        
-        .navbar-toggler:focus {
-            box-shadow: none;
-        }
-        
-        /* Brand icon animation */
-        .navbar-brand i {
-            transition: transform 0.3s ease;
-        }
-        
-        .navbar-brand:hover i {
-            transform: rotate(15deg);
-        }
-    </style>
-</head>
-<body>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
 
-    <div class="container py-4">
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-        
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
-
-        <!-- Statistics Cards -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card stats-card">
-                    <div class="card-body text-center">
-                        <div class="stats-number"><?php echo number_format($credits); ?></div>
-                        <div class="stats-label">Available Credits</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stats-card">
-                    <div class="card-body text-center">
-                        <div class="stats-number"><?php echo number_format($taskStats['total'] ?? 0); ?></div>
-                        <div class="stats-label">Total Tasks</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stats-card">
-                    <div class="card-body text-center">
-                        <div class="stats-number"><?php echo number_format($taskStats['completed'] ?? 0); ?></div>
-                        <div class="stats-label">Completed Tasks</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stats-card">
-                    <div class="card-body text-center">
-                        <div class="stats-number">$<?php echo number_format($paymentStats['total_spent'] ?? 0, 2); ?></div>
-                        <div class="stats-label">Total Spent</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Create Task Form -->
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Create New Task</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <input type="hidden" name="action" value="create_task" />
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Search Engine</label>
-                                        <select name="engine" class="form-select">
-                                            <option value="google">Google</option>
-                                            <?php if ($currentProvider !== 'ralfy'): ?>
-                                            <option value="yandex">Yandex</option>
-                                            <?php endif; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Task Type</label>
-                                        <select name="type" class="form-select">
-                                            <option value="indexer">Indexer</option>
-                                            <option value="checker">Checker</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Task Title (Optional)</label>
-                                <input type="text" class="form-control" name="title" placeholder="Enter task title">
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">URLs (One per line, max 10,000)</label>
-                                <textarea class="form-control" rows="6" name="urls" placeholder="https://example.com/page1&#10;https://example.com/page2" required></textarea>
-                            </div>
-                            
-                            <div class="mb-3" id="vipSection" style="display: none;">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="vipQueue" name="vip" value="1">
-                                    <label class="form-check-label" for="vipQueue">
-                                        VIP Queue 
-                                        <span class="badge bg-warning text-dark">
-                                            +<?php echo COST_VIP_EXTRA; ?> credits/link
-                                        </span>
-                                    </label>
-                                </div>
-                                <div class="form-text">Faster processing time</div>
-                            </div>
-                            
-                            <div class="card bg-light mb-3">
-                                <div class="card-body p-2">
-                                    <div class="d-flex justify-content-between">
-                                        <span>Estimated Cost:</span>
-                                        <strong><span id="estimatedCost">0</span> credits</strong>
-                                    </div>
-                                    <small class="text-muted d-block mt-1">
-                                        Indexing: <?php echo COST_INDEXING; ?> credits/link | 
-                                        Checking: <?php echo COST_CHECKING; ?> credits/link
-                                    </small>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-rocket me-2"></i>Submit Task
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Recent Tasks -->
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Recent Tasks</h5>
-                        <a href="/tasks.php" class="btn btn-sm btn-outline-primary">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <?php if (empty($recentTasks)): ?>
-                            <div class="p-3 text-center text-muted">
-                                <p class="mb-0">No tasks yet</p>
-                            </div>
-                        <?php else: ?>
-                            <div class="list-group list-group-flush">
-                                <?php foreach ($recentTasks as $task): ?>
-                                    <div class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <h6 class="mb-1"><?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?></h6>
-                                                <small class="text-muted">
-                                                    <?php echo htmlspecialchars(ucfirst($task['search_engine'])); ?> • 
-                                                    <?php echo htmlspecialchars(ucfirst($task['type'])); ?>
-                                                </small>
-                                            </div>
-                                            <span class="badge badge-<?php echo $task['status'] === 'completed' ? 'success' : ($task['status'] === 'processing' ? 'warning' : 'secondary'); ?>">
-                                                <?php echo htmlspecialchars(ucfirst($task['status'])); ?>
-                                            </span>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlsInput = document.querySelector('textarea[name="urls"]');
-            const typeSelect = document.querySelector('select[name="type"]');
-            const vipSection = document.getElementById('vipSection');
-            const vipCheckbox = document.getElementById('vipQueue');
-            const costDisplay = document.getElementById('estimatedCost');
-            const engineSelect = document.getElementById('engineSelect'); // Might be null if Yandex hidden
-            
-            const COST_INDEXING = <?php echo COST_INDEXING; ?>;
-            const COST_CHECKING = <?php echo COST_CHECKING; ?>;
-            const COST_VIP = <?php echo COST_VIP_EXTRA; ?>;
-            const ENABLE_VIP = <?php echo $enable_vip_queue === '1' ? 'true' : 'false'; ?>;
-            
-            function updateCost() {
-                const urls = urlsInput.value.trim().split('\n').filter(line => line.trim() !== '');
-                const count = urls.length;
-                const type = typeSelect.value;
-                const isVip = vipCheckbox && vipCheckbox.checked;
-                
-                let baseCost = (type === 'checker') ? COST_CHECKING : COST_INDEXING;
-                let extra = (isVip && type === 'indexer') ? COST_VIP : 0;
-                
-                let total = count * (baseCost + extra);
-                costDisplay.textContent = new Intl.NumberFormat().format(total);
-                
-                // VIP logic
-                if (type === 'indexer' && ENABLE_VIP) {
-                    vipSection.style.display = 'block';
-                } else {
-                    vipSection.style.display = 'none';
-                    if (vipCheckbox) vipCheckbox.checked = false;
-                }
-            }
-            
-            urlsInput.addEventListener('input', updateCost);
-            typeSelect.addEventListener('change', updateCost);
-            if (vipCheckbox) vipCheckbox.addEventListener('change', updateCost);
-            
-            // Initial check
-            updateCost();
-        });
-    </script>
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-</body>
-</html>
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Dashboard</h1>
+        <p class="text-gray-400 mt-2">Welcome back to your indexing command center.</p>
+    </div>
+
+    <?php if ($error): ?>
+        <div class="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-exclamation-circle"></i>
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
+    
+    <?php if ($success): ?>
+        <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-check-circle"></i>
+            <?php echo htmlspecialchars($success); ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Credits -->
+        <div class="card rounded-xl p-6 border-l-4 border-l-primary-600">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Credits</p>
+                    <h3 class="text-3xl font-bold text-white mt-1"><?php echo number_format($credits); ?></h3>
+                </div>
+                <div class="p-3 bg-primary-900/20 rounded-lg text-primary-500">
+                    <i class="fas fa-coins text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Tasks -->
+        <div class="card rounded-xl p-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Total Tasks</p>
+                    <h3 class="text-3xl font-bold text-white mt-1"><?php echo number_format($taskStats['total'] ?? 0); ?></h3>
+                </div>
+                <div class="p-3 bg-blue-900/20 rounded-lg text-blue-500">
+                    <i class="fas fa-list text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed -->
+        <div class="card rounded-xl p-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Completed</p>
+                    <h3 class="text-3xl font-bold text-white mt-1"><?php echo number_format($taskStats['completed'] ?? 0); ?></h3>
+                </div>
+                <div class="p-3 bg-green-900/20 rounded-lg text-green-500">
+                    <i class="fas fa-check-double text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Spent -->
+        <div class="card rounded-xl p-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm text-gray-400 uppercase font-bold tracking-wider">Total Spent</p>
+                    <h3 class="text-3xl font-bold text-white mt-1">$<?php echo number_format($paymentStats['total_spent'] ?? 0, 2); ?></h3>
+                </div>
+                <div class="p-3 bg-purple-900/20 rounded-lg text-purple-500">
+                    <i class="fas fa-dollar-sign text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Create Task Form -->
+        <div class="lg:col-span-2">
+            <div class="card rounded-xl overflow-hidden">
+                <div class="px-6 py-4 border-b border-white/5 bg-white/5">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-primary-500"></i> Create New Task
+                    </h3>
+                </div>
+                <div class="p-6">
+                    <form method="POST">
+                        <input type="hidden" name="action" value="create_task" />
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Search Engine</label>
+                                <select name="engine" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                                    <option value="google">Google</option>
+                                    <?php if ($currentProvider !== 'ralfy'): ?>
+                                    <option value="yandex">Yandex</option>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Task Type</label>
+                                <select name="type" id="typeSelect" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                                    <option value="indexer">Indexer</option>
+                                    <option value="checker">Checker</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Task Title (Optional)</label>
+                            <input type="text" name="title" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" placeholder="e.g., My New Blog Posts">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">URLs (One per line, max 10,000)</label>
+                            <textarea name="urls" id="urlsInput" rows="6" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white font-mono text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" placeholder="https://example.com/page1&#10;https://example.com/page2" required></textarea>
+                        </div>
+                        
+                        <div class="mb-6" id="vipSection" style="display: none;">
+                            <div class="flex items-center gap-3 p-4 bg-yellow-900/10 border border-yellow-900/20 rounded-lg">
+                                <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                    <input type="checkbox" name="vip" id="vipQueue" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                    <label for="vipQueue" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                                </div>
+                                <div>
+                                    <label for="vipQueue" class="font-bold text-white cursor-pointer">VIP Queue Priority</label>
+                                    <p class="text-xs text-yellow-500 font-bold">+<?php echo COST_VIP_EXTRA; ?> credits/link for faster processing</p>
+                                </div>
+                            </div>
+                            <style>
+                                .toggle-checkbox:checked { right: 0; border-color: #be123c; }
+                                .toggle-checkbox:checked + .toggle-label { background-color: #be123c; }
+                                .toggle-checkbox { right: auto; left: 0; border-color: #4b5563; transition: all 0.3s; top: 0; }
+                                .toggle-label { width: 3rem; }
+                                .relative { position: relative; height: 1.5rem; width: 3rem; }
+                            </style>
+                        </div>
+                        
+                        <div class="bg-black/20 rounded-lg p-4 mb-6 border border-white/5 flex justify-between items-center">
+                            <div>
+                                <span class="text-gray-400 text-sm block">Estimated Cost</span>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    Index: <span class="text-gray-300"><?php echo COST_INDEXING; ?></span> | 
+                                    Check: <span class="text-gray-300"><?php echo COST_CHECKING; ?></span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span id="estimatedCost" class="text-2xl font-bold text-white">0</span>
+                                <span class="text-gray-400 text-sm ml-1">credits</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg shadow-primary-900/20 flex items-center justify-center gap-2">
+                            <i class="fas fa-rocket"></i> Submit Task
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Tasks -->
+        <div class="lg:col-span-1">
+            <div class="card rounded-xl overflow-hidden h-full">
+                <div class="px-6 py-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-white">Recent Tasks</h3>
+                    <a href="/tasks.php" class="text-xs font-bold text-primary-400 hover:text-primary-300 uppercase">View All</a>
+                </div>
+                <div class="divide-y divide-white/5">
+                    <?php if (empty($recentTasks)): ?>
+                        <div class="p-8 text-center text-gray-500">
+                            <i class="fas fa-clipboard-list text-3xl mb-3 opacity-20"></i>
+                            <p>No tasks yet</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($recentTasks as $task): ?>
+                            <div class="p-4 hover:bg-white/5 transition-colors">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="text-sm font-bold text-white truncate pr-2" title="<?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?>">
+                                        <?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?>
+                                    </h4>
+                                    <?php
+                                    $statusColors = [
+                                        'completed' => 'text-green-400 bg-green-400/10',
+                                        'processing' => 'text-yellow-400 bg-yellow-400/10',
+                                        'pending' => 'text-gray-400 bg-gray-400/10',
+                                        'error' => 'text-red-400 bg-red-400/10',
+                                    ];
+                                    $statusColor = $statusColors[$task['status']] ?? 'text-gray-400 bg-gray-400/10';
+                                    ?>
+                                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded <?php echo $statusColor; ?>">
+                                        <?php echo htmlspecialchars($task['status']); ?>
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs text-gray-500">
+                                    <span>
+                                        <i class="<?php echo $task['search_engine'] === 'google' ? 'fab fa-google' : 'fab fa-yandex'; ?> mr-1"></i>
+                                        <?php echo ucfirst($task['type']); ?>
+                                    </span>
+                                    <span><?php echo date('M j', strtotime($task['created_at'])); ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlsInput = document.getElementById('urlsInput');
+        const typeSelect = document.getElementById('typeSelect');
+        const vipSection = document.getElementById('vipSection');
+        const vipCheckbox = document.getElementById('vipQueue');
+        const costDisplay = document.getElementById('estimatedCost');
+        
+        const COST_INDEXING = <?php echo COST_INDEXING; ?>;
+        const COST_CHECKING = <?php echo COST_CHECKING; ?>;
+        const COST_VIP = <?php echo COST_VIP_EXTRA; ?>;
+        const ENABLE_VIP = <?php echo $enable_vip_queue === '1' ? 'true' : 'false'; ?>;
+        
+        function updateCost() {
+            const urls = urlsInput.value.trim().split('\n').filter(line => line.trim() !== '');
+            const count = urls.length;
+            const type = typeSelect.value;
+            const isVip = vipCheckbox && vipCheckbox.checked;
+            
+            let baseCost = (type === 'checker') ? COST_CHECKING : COST_INDEXING;
+            let extra = (isVip && type === 'indexer') ? COST_VIP : 0;
+            
+            let total = count * (baseCost + extra);
+            costDisplay.textContent = new Intl.NumberFormat().format(total);
+            
+            // VIP logic
+            if (type === 'indexer' && ENABLE_VIP) {
+                vipSection.style.display = 'block';
+            } else {
+                vipSection.style.display = 'none';
+                if (vipCheckbox) vipCheckbox.checked = false;
+            }
+        }
+        
+        urlsInput.addEventListener('input', updateCost);
+        typeSelect.addEventListener('change', updateCost);
+        if (vipCheckbox) vipCheckbox.addEventListener('change', updateCost);
+        
+        // Initial check
+        updateCost();
+    });
+</script>
+
+<?php include __DIR__ . '/includes/footer_new.php'; ?>

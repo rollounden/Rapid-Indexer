@@ -1,134 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Rapid Indexer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
+<?php
+require_once __DIR__ . '/config/config.php';
+session_start();
+include __DIR__ . '/includes/header_new.php';
+?>
+
+<div class="max-w-4xl mx-auto px-6 lg:px-8 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold text-white mb-4">Frequently Asked Questions</h1>
+        <p class="text-lg text-gray-400">Find answers to common questions about Rapid Indexer.</p>
+    </div>
     
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <h1 class="fw-bold display-5 mb-3">Frequently Asked Questions</h1>
-            <p class="lead text-muted">Find answers to common questions about Rapid Indexer.</p>
-        </div>
-        
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="accordion" id="faqAccordion">
-                    <!-- Group 1: General -->
-                    <div class="mb-4">
-                        <h4 class="mb-3 text-primary">General</h4>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    What is Rapid Indexer?
-                                </button>
-                            </h2>
-                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    Rapid Indexer is a tool that helps SEO professionals and website owners get their URLs indexed by search engines like Google faster. We use approved methods to notify search engines about your new or updated content.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                    How long does indexing take?
-                                </button>
-                            </h2>
-                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    While we submit your URLs immediately, Google typically crawls them within 24-48 hours. Actual indexing depends on Google's algorithms and the quality of your content, but our users often see results in as little as a few hours.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Group 2: Pricing & Credits -->
-                    <div class="mb-4">
-                        <h4 class="mb-3 text-primary">Pricing & Credits</h4>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                    How much does it cost?
-                                </button>
-                            </h2>
-                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    We use a credit-based system.
-                                    <ul>
-                                        <li><strong>Indexing:</strong> 3 credits ($0.03) per URL</li>
-                                        <li><strong>Checking:</strong> 1 credit ($0.01) per URL</li>
-                                    </ul>
-                                    Credits can be purchased via PayPal or Cryptocurrency starting at $1.00.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                                    Do credits expire?
-                                </button>
-                            </h2>
-                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    No, your purchased credits never expire. You can use them whenever you need.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Group 3: Technical -->
-                    <div class="mb-4">
-                        <h4 class="mb-3 text-primary">Technical</h4>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
-                                    Do you guarantee 100% indexing?
-                                </button>
-                            </h2>
-                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    No service can guarantee 100% indexing as it ultimately depends on Google's quality standards. However, we guarantee that we will successfully submit your URLs to Google's indexing API and force a crawl. If your content is indexable, it will likely get indexed.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
-                                    What is the VIP Queue?
-                                </button>
-                            </h2>
-                            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    The VIP Queue allows you to prioritize your tasks for faster processing. This is available for indexing tasks with up to 100 URLs and costs an additional 5 credits per link.
-                                </div>
-                            </div>
-                        </div>
+    <div class="space-y-8">
+        <!-- Group 1: General -->
+        <div>
+            <h4 class="text-xl font-bold text-primary-500 mb-4">General</h4>
+            
+            <div class="space-y-4">
+                <!-- Item 1 -->
+                <div class="card rounded-lg overflow-hidden" x-data="{ open: true }">
+                    <button @click="open = !open" class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white/5 hover:bg-white/10 transition-colors">
+                        <span class="font-bold text-white">What is Rapid Indexer?</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
+                        Rapid Indexer is a tool that helps SEO professionals and website owners get their URLs indexed by search engines like Google faster. We use approved methods to notify search engines about your new or updated content.
                     </div>
                 </div>
                 
-                <div class="text-center mt-5">
-                    <p class="lead">Still have questions?</p>
-                    <a href="/contact.php" class="btn btn-primary btn-lg">Contact Support</a>
+                <!-- Item 2 -->
+                <div class="card rounded-lg overflow-hidden" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white/5 hover:bg-white/10 transition-colors">
+                        <span class="font-bold text-white">How long does indexing take?</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
+                        While we submit your URLs immediately, Google typically crawls them within 24-48 hours. Actual indexing depends on Google's algorithms and the quality of your content, but our users often see results in as little as a few hours.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 2: Pricing & Credits -->
+        <div>
+            <h4 class="text-xl font-bold text-primary-500 mb-4">Pricing & Credits</h4>
+            
+            <div class="space-y-4">
+                <!-- Item 3 -->
+                <div class="card rounded-lg overflow-hidden" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white/5 hover:bg-white/10 transition-colors">
+                        <span class="font-bold text-white">How much does it cost?</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
+                        <p class="mb-2">We use a credit-based system.</p>
+                        <ul class="list-disc list-inside ml-2 space-y-1 mb-2">
+                            <li><strong class="text-gray-300">Indexing:</strong> 3 credits ($0.03) per URL</li>
+                            <li><strong class="text-gray-300">Checking:</strong> 1 credit ($0.01) per URL</li>
+                        </ul>
+                        <p>Credits can be purchased via PayPal or Cryptocurrency starting at $1.00.</p>
+                    </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="card rounded-lg overflow-hidden" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white/5 hover:bg-white/10 transition-colors">
+                        <span class="font-bold text-white">Do credits expire?</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
+                        No, your purchased credits never expire. You can use them whenever you need.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 3: Technical -->
+        <div>
+            <h4 class="text-xl font-bold text-primary-500 mb-4">Technical</h4>
+            
+            <div class="space-y-4">
+                <!-- Item 5 -->
+                <div class="card rounded-lg overflow-hidden" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white/5 hover:bg-white/10 transition-colors">
+                        <span class="font-bold text-white">Do you guarantee 100% indexing?</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
+                        No service can guarantee 100% indexing as it ultimately depends on Google's quality standards. However, we guarantee that we will successfully submit your URLs to Google's indexing API and force a crawl. If your content is indexable, it will likely get indexed.
+                    </div>
+                </div>
+                
+                <!-- Item 6 -->
+                <div class="card rounded-lg overflow-hidden" x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white/5 hover:bg-white/10 transition-colors">
+                        <span class="font-bold text-white">What is the VIP Queue?</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
+                    </button>
+                    <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
+                        The VIP Queue allows you to prioritize your tasks for faster processing. This is available for indexing tasks with up to 100 URLs and costs an additional 5 credits per link.
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <div class="text-center mt-12">
+        <p class="text-lg text-gray-400 mb-6">Still have questions?</p>
+        <a href="/contact.php" class="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg transition-all shadow-lg shadow-primary-900/20">
+            Contact Support
+        </a>
+    </div>
+</div>
+
+<?php include __DIR__ . '/includes/footer_new.php'; ?>

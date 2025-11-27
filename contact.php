@@ -46,96 +46,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+include __DIR__ . '/includes/header_new.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Support - Rapid Indexer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
-    
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow-sm">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-5">
-                            <h1 class="h2 fw-bold mb-3">Contact Support</h1>
-                            <p class="text-muted">Have questions or need assistance? We're here to help.</p>
-                        </div>
-                        
-                        <?php if ($success): ?>
-                            <div class="alert alert-success d-flex align-items-center">
-                                <i class="fas fa-check-circle me-2"></i>
-                                <?php echo htmlspecialchars($success); ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <?php if ($error): ?>
-                            <div class="alert alert-danger d-flex align-items-center">
-                                <i class="fas fa-exclamation-circle me-2"></i>
-                                <?php echo htmlspecialchars($error); ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <form method="POST">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Your Name</label>
-                                    <input type="text" class="form-control" name="name" required 
-                                           value="<?php echo htmlspecialchars($user['email'] ?? $_POST['name'] ?? ''); ?>"
-                                           <?php echo $user ? 'readonly' : ''; ?>>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Email Address</label>
-                                    <input type="email" class="form-control" name="email" required 
-                                           value="<?php echo htmlspecialchars($user['email'] ?? $_POST['email'] ?? ''); ?>"
-                                           <?php echo $user ? 'readonly' : ''; ?>>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Subject</label>
-                                <select class="form-select" name="subject" required>
-                                    <option value="">Select a topic...</option>
-                                    <option value="General Inquiry">General Inquiry</option>
-                                    <option value="Technical Support">Technical Support</option>
-                                    <option value="Billing & Payments">Billing & Payments</option>
-                                    <option value="Feature Request">Feature Request</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">Message</label>
-                                <textarea class="form-control" name="message" rows="6" required placeholder="How can we help you?"><?php echo htmlspecialchars($_POST['message'] ?? ''); ?></textarea>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-paper-plane me-2"></i>Send Message
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <div class="text-center mt-4">
-                            <p class="text-muted small">
-                                Alternatively, email us at <a href="mailto:support@rapid-indexer.com">support@rapid-indexer.com</a>
-                            </p>
-                        </div>
-                    </div>
+
+<div class="max-w-3xl mx-auto px-6 lg:px-8 py-12">
+    <div class="card rounded-xl p-8 md:p-10">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Contact Support</h1>
+            <p class="text-gray-400">Have questions or need assistance? We're here to help.</p>
+        </div>
+        
+        <?php if ($success): ?>
+            <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-lg flex items-center gap-3">
+                <i class="fas fa-check-circle"></i>
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if ($error): ?>
+            <div class="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-3">
+                <i class="fas fa-exclamation-circle"></i>
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+        
+        <form method="POST" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Your Name</label>
+                    <input type="text" name="name" required 
+                           value="<?php echo htmlspecialchars($user['email'] ?? $_POST['name'] ?? ''); ?>"
+                           <?php echo $user ? 'readonly' : ''; ?>
+                           class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Email Address</label>
+                    <input type="email" name="email" required 
+                           value="<?php echo htmlspecialchars($user['email'] ?? $_POST['email'] ?? ''); ?>"
+                           <?php echo $user ? 'readonly' : ''; ?>
+                           class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
                 </div>
             </div>
+            
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Subject</label>
+                <select name="subject" required class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                    <option value="">Select a topic...</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Billing & Payments">Billing & Payments</option>
+                    <option value="Feature Request">Feature Request</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Message</label>
+                <textarea name="message" rows="6" required placeholder="How can we help you?" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"><?php echo htmlspecialchars($_POST['message'] ?? ''); ?></textarea>
+            </div>
+            
+            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg shadow-primary-900/20 flex items-center justify-center gap-2">
+                <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+        </form>
+        
+        <div class="text-center mt-8 border-t border-white/5 pt-6">
+            <p class="text-gray-500 text-sm">
+                Alternatively, email us at <a href="mailto:support@rapid-indexer.com" class="text-primary-400 hover:text-primary-300">support@rapid-indexer.com</a>
+            </p>
         </div>
     </div>
-    
-    <?php include __DIR__ . '/includes/footer.php'; ?>
-</body>
-</html>
+</div>
+
+<?php include __DIR__ . '/includes/footer_new.php'; ?>

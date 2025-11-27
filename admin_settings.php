@@ -96,171 +96,195 @@ if ($ralfy_api_key_decrypted) {
     }
 }
 
+include __DIR__ . '/includes/header_new.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Settings - Rapid Indexer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
-    
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="h3">System Settings</h1>
-                    <a href="/admin.php" class="btn btn-outline-secondary">Back to Dashboard</a>
-                </div>
-                
-                <?php if ($error): ?>
-                    <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-                <?php endif; ?>
-                
-                <?php if ($success): ?>
-                    <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-                <?php endif; ?>
-                
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Indexing Provider</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <div class="mb-3">
-                                <label class="form-label">Default Provider for Indexing Tasks</label>
-                                <select name="indexing_provider" class="form-select">
-                                    <option value="speedyindex" <?php echo $current_provider === 'speedyindex' ? 'selected' : ''; ?>>SpeedyIndex (Default)</option>
-                                    <option value="ralfy" <?php echo $current_provider === 'ralfy' ? 'selected' : ''; ?>>RalfyIndex</option>
-                                </select>
-                                <div class="form-text">
-                                    Note: Checking tasks (Checkers) will always use SpeedyIndex regardless of this setting.
-                                </div>
-                            </div>
 
-                            <hr>
-
-                            <h6 class="mb-3">RalfyIndex Configuration</h6>
-                            <div class="mb-3">
-                                <label class="form-label">API Key</label>
-                                <input type="text" name="ralfy_api_key" class="form-control" value="<?php echo htmlspecialchars($ralfy_api_key_display); ?>" placeholder="Enter new key to update">
-                            </div>
-
-                            <?php if ($ralfy_api_key_decrypted): ?>
-                                <div class="alert alert-info">
-                                    <strong>RalfyIndex Status:</strong>
-                                    <?php 
-                                    if ($ralfy_status && isset($ralfy_status['status']) && $ralfy_status['status'] === 'ok') {
-                                        echo '<span class="badge bg-success">Connected</span>';
-                                    } else {
-                                        echo '<span class="badge bg-danger">Error</span>';
-                                    }
-                                    ?>
-                                    <br>
-                                    <strong>Balance:</strong> 
-                                    <?php echo isset($ralfy_balance['balance']) ? number_format($ralfy_balance['balance']) . ' credits' : 'N/A'; ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <button type="submit" class="btn btn-primary">Save Settings</button>
-                        </form>
-                    </div>
-                </div>
-                
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Payment Providers</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <div class="mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="enable_paypal" value="1" id="enablePaypal" <?php echo $enable_paypal === '1' ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="enablePaypal">Enable PayPal</label>
-                                <input type="hidden" name="enable_paypal" value="0"> <!-- Fallback if unchecked -->
-                            </div>
-                            <div class="mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" checked disabled>
-                                <label class="form-check-label">Enable Cryptomus (Always enabled if keys provided)</label>
-                            </div>
-                            <script>
-                                // Ensure the fallback hidden input doesn't override if checked
-                                document.getElementById('enablePaypal').addEventListener('change', function() {
-                                    this.nextElementSibling.nextElementSibling.disabled = this.checked;
-                                });
-                                // Initial state
-                                document.querySelector('input[type="hidden"][name="enable_paypal"]').disabled = document.getElementById('enablePaypal').checked;
-                            </script>
-                            <button type="submit" class="btn btn-primary">Save Payment Settings</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Feature Settings</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <div class="mb-3 form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="enable_vip_queue" value="1" id="enableVip" <?php echo $enable_vip_queue === '1' ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="enableVip">Enable VIP Queue</label>
-                                <input type="hidden" name="enable_vip_queue" value="0">
-                            </div>
-                            <script>
-                                document.getElementById('enableVip').addEventListener('change', function() {
-                                    this.nextElementSibling.nextElementSibling.disabled = this.checked;
-                                });
-                                document.querySelector('input[type="hidden"][name="enable_vip_queue"]').disabled = document.getElementById('enableVip').checked;
-                            </script>
-                            <button type="submit" class="btn btn-primary">Save Feature Settings</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">SpeedyIndex Configuration</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>SpeedyIndex is configured via <code>config/config.php</code> and environment variables.</p>
-                        <div class="mb-3">
-                            <label class="form-label">API URL</label>
-                            <input type="text" class="form-control" value="<?php echo htmlspecialchars(SPEEDYINDEX_BASE_URL); ?>" readonly disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">API Key</label>
-                            <input type="password" class="form-control" value="************************" readonly disabled>
-                            <div class="form-text">To change this, update the .env file on the server.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Cryptomus Settings</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <div class="mb-3">
-                                <label class="form-label">Merchant ID</label>
-                                <input type="text" name="cryptomus_merchant_id" class="form-control" value="<?php echo htmlspecialchars($cryptomus_merchant_id_display); ?>" placeholder="Enter new Merchant ID to update">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Payment Key</label>
-                                <input type="text" name="cryptomus_api_key" class="form-control" value="<?php echo htmlspecialchars($cryptomus_api_key_display); ?>" placeholder="Enter new Payment Key to update">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save Crypto Settings</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<div class="max-w-3xl mx-auto px-6 lg:px-8 py-10">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-white">System Settings</h1>
+            <nav class="flex items-center text-sm text-gray-400 mt-1">
+                <a href="/admin.php" class="hover:text-white transition-colors">Dashboard</a>
+                <span class="mx-2">/</span>
+                <span class="text-white">Settings</span>
+            </nav>
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <?php if ($error): ?>
+        <div class="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-exclamation-circle"></i>
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
+    
+    <?php if ($success): ?>
+        <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-check-circle"></i>
+            <?php echo htmlspecialchars($success); ?>
+        </div>
+    <?php endif; ?>
+    
+    <div class="space-y-8">
+        <!-- Indexing Provider -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Indexing Provider</h3>
+            <form method="POST">
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Default Provider for Indexing Tasks</label>
+                    <select name="indexing_provider" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                        <option value="speedyindex" <?php echo $current_provider === 'speedyindex' ? 'selected' : ''; ?>>SpeedyIndex (Default)</option>
+                        <option value="ralfy" <?php echo $current_provider === 'ralfy' ? 'selected' : ''; ?>>RalfyIndex</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-2">Note: Checking tasks (Checkers) will always use SpeedyIndex regardless of this setting.</p>
+                </div>
+
+                <div class="border-t border-white/5 pt-6 mb-6">
+                    <h4 class="text-lg font-bold text-white mb-4">RalfyIndex Configuration</h4>
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">API Key</label>
+                        <input type="text" name="ralfy_api_key" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($ralfy_api_key_display); ?>" placeholder="Enter new key to update">
+                    </div>
+                    
+                    <?php if ($ralfy_api_key_decrypted): ?>
+                        <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 text-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-blue-400">RalfyIndex Status:</strong>
+                                <?php 
+                                if ($ralfy_status && isset($ralfy_status['status']) && $ralfy_status['status'] === 'ok') {
+                                    echo '<span class="text-xs font-bold px-2 py-0.5 rounded bg-green-500/20 text-green-400 border border-green-500/20">Connected</span>';
+                                } else {
+                                    echo '<span class="text-xs font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/20">Error</span>';
+                                }
+                                ?>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <strong class="text-blue-400">Balance:</strong> 
+                                <span class="text-white"><?php echo isset($ralfy_balance['balance']) ? number_format($ralfy_balance['balance']) . ' credits' : 'N/A'; ?></span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Settings</button>
+            </form>
+        </div>
+        
+        <!-- Payment Providers -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Payment Providers</h3>
+            <form method="POST">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <label class="text-white font-bold block">Enable PayPal</label>
+                        <p class="text-xs text-gray-400">Allow users to pay with PayPal</p>
+                    </div>
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="enable_paypal" id="enablePaypal" value="1" <?php echo $enable_paypal === '1' ? 'checked' : ''; ?> class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="enablePaypal" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                    <input type="hidden" name="enable_paypal" value="0" id="hiddenPaypal"> 
+                </div>
+                
+                <div class="mb-6 flex items-center justify-between opacity-50 cursor-not-allowed">
+                    <div>
+                        <label class="text-white font-bold block">Enable Cryptomus</label>
+                        <p class="text-xs text-gray-400">Always enabled if keys are provided</p>
+                    </div>
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                        <input type="checkbox" checked disabled class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none"/>
+                        <label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary-600"></label>
+                    </div>
+                </div>
+                
+                <script>
+                    // Ensure checkbox behavior works for hidden field fallback logic
+                    const toggle = document.getElementById('enablePaypal');
+                    const hidden = document.getElementById('hiddenPaypal');
+                    
+                    function updateHidden() {
+                        hidden.disabled = toggle.checked;
+                    }
+                    
+                    toggle.addEventListener('change', updateHidden);
+                    updateHidden(); // Init
+                </script>
+                <style>
+                    .toggle-checkbox:checked { right: 0; border-color: #be123c; }
+                    .toggle-checkbox:checked + .toggle-label { background-color: #be123c; }
+                    .toggle-checkbox { right: auto; left: 0; border-color: #4b5563; transition: all 0.3s; top: 0; }
+                    .toggle-label { width: 3rem; }
+                    .relative { position: relative; height: 1.5rem; width: 3rem; }
+                </style>
+
+                <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Payment Settings</button>
+            </form>
+        </div>
+
+        <!-- Feature Settings -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Feature Settings</h3>
+            <form method="POST">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <label class="text-white font-bold block">Enable VIP Queue</label>
+                        <p class="text-xs text-gray-400">Allow users to pay extra for priority processing</p>
+                    </div>
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="enable_vip_queue" id="enableVip" value="1" <?php echo $enable_vip_queue === '1' ? 'checked' : ''; ?> class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="enableVip" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                    <input type="hidden" name="enable_vip_queue" value="0" id="hiddenVip">
+                </div>
+                
+                <script>
+                    const vipToggle = document.getElementById('enableVip');
+                    const vipHidden = document.getElementById('hiddenVip');
+                    
+                    function updateVipHidden() {
+                        vipHidden.disabled = vipToggle.checked;
+                    }
+                    
+                    vipToggle.addEventListener('change', updateVipHidden);
+                    updateVipHidden();
+                </script>
+
+                <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Feature Settings</button>
+            </form>
+        </div>
+
+        <!-- SpeedyIndex Config -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">SpeedyIndex Configuration</h3>
+            <p class="text-sm text-gray-400 mb-4">SpeedyIndex is configured via <code>config/config.php</code> and environment variables.</p>
+            
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">API URL</label>
+                <input type="text" class="w-full bg-black/20 border border-[#333] rounded-lg p-3 text-gray-400 cursor-not-allowed" value="<?php echo htmlspecialchars(SPEEDYINDEX_BASE_URL); ?>" readonly disabled>
+            </div>
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">API Key</label>
+                <input type="password" class="w-full bg-black/20 border border-[#333] rounded-lg p-3 text-gray-400 cursor-not-allowed" value="************************" readonly disabled>
+                <p class="text-xs text-gray-500 mt-2">To change this, update the .env file on the server.</p>
+            </div>
+        </div>
+
+        <!-- Cryptomus Settings -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Cryptomus Settings</h3>
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Merchant ID</label>
+                    <input type="text" name="cryptomus_merchant_id" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($cryptomus_merchant_id_display); ?>" placeholder="Enter new Merchant ID to update">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Payment Key</label>
+                    <input type="text" name="cryptomus_api_key" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($cryptomus_api_key_display); ?>" placeholder="Enter new Payment Key to update">
+                </div>
+                <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Crypto Settings</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php include __DIR__ . '/includes/footer_new.php'; ?>

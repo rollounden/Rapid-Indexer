@@ -59,139 +59,121 @@ $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $users = $stmt->fetchAll();
 
+include __DIR__ . '/includes/header_new.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users - Rapid Indexer Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
+
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10" x-data="{ deleteModal: false, deleteUserId: '', deleteUserEmail: '' }">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-white">Manage Users</h1>
+            <nav class="flex items-center text-sm text-gray-400 mt-1">
+                <a href="/admin.php" class="hover:text-white transition-colors">Dashboard</a>
+                <span class="mx-2">/</span>
+                <span class="text-white">Users</span>
+            </nav>
+        </div>
+    </div>
     
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="h3 mb-0">Manage Users</h1>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/admin.php">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Users</li>
-                    </ol>
+    <?php if ($error): ?>
+        <div class="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-exclamation-circle"></i>
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
+    
+    <?php if ($success): ?>
+        <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-lg flex items-center gap-3">
+            <i class="fas fa-check-circle"></i>
+            <?php echo htmlspecialchars($success); ?>
+        </div>
+    <?php endif; ?>
+    
+    <div class="card rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-white/5 border-b border-white/5">
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">User Details</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Credits</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Joined</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    <?php foreach ($users as $user): ?>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-bold text-white"><?php echo htmlspecialchars($user['email']); ?></div>
+                                <div class="text-xs text-gray-500">ID: #<?php echo $user['id']; ?></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $user['role'] === 'admin' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-gray-500/10 text-gray-400 border border-gray-500/20'; ?>">
+                                    <?php echo ucfirst($user['role']); ?>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-300 font-mono">
+                                <?php echo number_format($user['credits_balance']); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $user['status'] === 'active' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'; ?>">
+                                    <?php echo ucfirst($user['status']); ?>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500">
+                                <?php echo date('M j, Y', strtotime($user['created_at'])); ?>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <?php if ($user['id'] != $_SESSION['uid']): ?>
+                                    <button @click="deleteModal = true; deleteUserId = '<?php echo $user['id']; ?>'; deleteUserEmail = '<?php echo htmlspecialchars($user['email']); ?>'" 
+                                            class="p-2 rounded-lg bg-white/5 text-red-400 hover:bg-red-500 hover:text-white transition-all" title="Delete User">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        
+        <?php if ($total_pages > 1): ?>
+            <div class="px-6 py-4 border-t border-white/5 bg-white/5 flex justify-center">
+                <nav class="flex items-center gap-2">
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <a href="?page=<?php echo $i; ?>" 
+                           class="w-10 h-10 flex items-center justify-center rounded-lg text-sm font-bold transition-colors <?php echo $i === $page ? 'bg-primary-600 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                    <?php endfor; ?>
                 </nav>
             </div>
-        </div>
-        
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-        
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
-        
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Credits</th>
-                                <th>Status</th>
-                                <th>Joined</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($users as $user): ?>
-                                <tr>
-                                    <td>#<?php echo $user['id']; ?></td>
-                                    <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                    <td>
-                                        <span class="badge bg-<?php echo $user['role'] === 'admin' ? 'danger' : 'secondary'; ?>">
-                                            <?php echo ucfirst($user['role']); ?>
-                                        </span>
-                                    </td>
-                                    <td><?php echo number_format($user['credits_balance']); ?></td>
-                                    <td>
-                                        <span class="badge bg-<?php echo $user['status'] === 'active' ? 'success' : 'warning'; ?>">
-                                            <?php echo ucfirst($user['status']); ?>
-                                        </span>
-                                    </td>
-                                    <td><?php echo date('M j, Y', strtotime($user['created_at'])); ?></td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <!-- Adjust Credits Button (Could reuse logic from admin.php via JS or separate page) -->
-                                            <!-- Delete Button -->
-                                            <?php if ($user['id'] != $_SESSION['uid']): ?>
-                                                <button type="button" class="btn btn-outline-danger" 
-                                                        onclick="confirmDelete(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['email']); ?>')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            <?php endif; ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <?php if ($total_pages > 1): ?>
-                <div class="card-footer">
-                    <nav aria-label="User pagination">
-                        <ul class="pagination justify-content-center mb-0">
-                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
-                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                                </li>
-                            <?php endfor; ?>
-                        </ul>
-                    </nav>
-                </div>
-            <?php endif; ?>
-        </div>
     </div>
     
     <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div x-show="deleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-0">
+        <div x-show="deleteModal" x-transition.opacity @click="deleteModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div x-show="deleteModal" x-transition.scale.origin.center class="relative card rounded-xl p-6 max-w-md w-full shadow-2xl border border-white/10">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
                 </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete user <strong id="deleteUserEmail"></strong>?</p>
-                    <p class="text-danger small">This action cannot be undone. All user data including tasks and payments will be permanently deleted.</p>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST">
-                        <input type="hidden" name="action" value="delete_user">
-                        <input type="hidden" name="user_id" id="deleteUserId">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete User</button>
-                    </form>
-                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Confirm Deletion</h3>
+                <p class="text-gray-400">Are you sure you want to delete user <strong class="text-white" x-text="deleteUserEmail"></strong>?</p>
+                <p class="text-red-400 text-sm mt-2">This action cannot be undone. All data will be lost.</p>
             </div>
+            
+            <form method="POST" class="flex gap-3 justify-center">
+                <input type="hidden" name="action" value="delete_user">
+                <input type="hidden" name="user_id" :value="deleteUserId">
+                
+                <button type="button" @click="deleteModal = false" class="px-6 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white transition-colors">Cancel</button>
+                <button type="submit" class="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors font-bold">Delete User</button>
+            </form>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function confirmDelete(id, email) {
-            document.getElementById('deleteUserId').value = id;
-            document.getElementById('deleteUserEmail').textContent = email;
-            new bootstrap.Modal(document.getElementById('deleteUserModal')).show();
-        }
-    </script>
-</body>
-</html>
+<?php include __DIR__ . '/includes/footer_new.php'; ?>
