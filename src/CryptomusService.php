@@ -259,9 +259,13 @@ class CryptomusService
                         
                         if (in_array($remoteStatus, ['paid', 'paid_over', 'confirm_check'])) {
                              // It's paid!
-                             $this->processSuccess($remoteOrderId, $item['amount'], $item['currency'], $item['uuid']);
-                             $updatedCount++;
-                             file_put_contents($logFile, "  -> Matched & Updated PAID: $remoteOrderId\n", FILE_APPEND);
+                             try {
+                                $this->processSuccess($remoteOrderId, $item['amount'], $item['currency'], $item['uuid']);
+                                $updatedCount++;
+                                file_put_contents($logFile, "  -> Matched & Updated PAID: $remoteOrderId\n", FILE_APPEND);
+                             } catch (Exception $e) {
+                                file_put_contents($logFile, "  ! FAILED updating PAID: $remoteOrderId. Error: " . $e->getMessage() . "\n", FILE_APPEND);
+                             }
                         } elseif (in_array($remoteStatus, ['cancel', 'fail', 'system_fail'])) {
                              // It's failed/cancelled - UPDATE even if currently 'pending'
                              // But only if it's NOT already marked as paid locally (safety)
