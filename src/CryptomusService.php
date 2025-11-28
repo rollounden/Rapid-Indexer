@@ -146,30 +146,41 @@ class CryptomusService
             $identifier = ['order_id' => $orderId];
         }
 
-        $response = $this->client->getPaymentStatus($identifier);
-        
-        // Log this check for debugging
-        $logFile = __DIR__ . '/../storage/logs/manual_check_debug.log';
-        file_put_contents($logFile, date('Y-m-d H:i:s') . " Checking ID: " . json_encode($identifier) . " Response: " . json_encode($response) . "\n", FILE_APPEND);
-        
-        if (isset($response['result']['status'])) {
-            $status = $response['result']['status'];
-            $uuid = $response['result']['uuid'] ?? $payment['paypal_capture_id'] ?? '';
+        // Add try-catch to handle API errors gracefully
+        try {
+            $response = $this->client->getPaymentStatus($identifier);
             
-            if ($status === 'paid' || $status === 'paid_over') {
-                $amount = $response['result']['amount'] ?? $payment['amount'];
-                $currency = $response['result']['currency'] ?? $payment['currency'];
-                $this->processSuccess($orderId, $amount, $currency, $uuid);
-                return 'paid';
-            } elseif ($status === 'cancel' || $status === 'fail') {
-                $this->processFailure($orderId, $status);
-                return 'failed';
-            } elseif ($status === 'check' || $status === 'process') {
-                 // 'check' means waiting for blockchain confirmations
-                 return 'processing';
-            } else {
-                return $status; // pending, etc.
+            // Log this check for debugging
+            $logFile = __DIR__ . '/../storage/logs/manual_check_debug.log';
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " Checking ID: " . json_encode($identifier) . " Response: " . json_encode($response) . "\n", FILE_APPEND);
+            
+            if (isset($response['result']['status'])) {
+                $status = $response['result']['status'];
+                $uuid = $response['result']['uuid'] ?? $payment['paypal_capture_id'] ?? '';
+                
+                if ($status === 'paid' || $status === 'paid_over') {
+                    $amount = $response['result']['amount'] ?? $payment['amount'];
+                    $currency = $response['result']['currency'] ?? $payment['currency'];
+                    $this->processSuccess($orderId, $amount, $currency, $uuid);
+                    return 'paid';
+                } elseif ($status === 'cancel' || $status === 'fail') {
+                    $this->processFailure($orderId, $status);
+                    return 'failed';
+                } elseif ($status === 'check' || $status === 'process') {
+                     // 'check' means waiting for blockchain confirmations
+                     return 'processing';
+                } else {
+                    return $status; // pending, etc.
+                }
             }
+        } catch (Exception $e) {
+            // If error is "active transaction" or similar, assume it's still processing
+            // This prevents "Failed to check status" error on UI
+            $msg = $e->getMessage();
+            if (strpos(strtolower($msg), 'active transaction') !== false) {
+                return 'processing';
+            }
+            throw $e;
         }
         
         return $payment['status'];
