@@ -177,7 +177,7 @@ class CryptomusService
                 // process, check -> Waiting
                 // wrong_amount -> Underpaid (might need manual handling, or credit partial?)
                 
-                if ($status === 'paid' || $status === 'paid_over' || $status === 'confirm_check') {
+                if ($status === 'paid' || $status === 'paid_over' || $status === 'confirm_check' || $status === 'check' || $status === 'process') {
                     $amount = $response['result']['amount'] ?? $payment['amount'];
                     $currency = $response['result']['currency'] ?? $payment['currency'];
                     $this->processSuccess($orderId, $amount, $currency, $uuid);
@@ -185,7 +185,7 @@ class CryptomusService
                 } elseif ($status === 'cancel' || $status === 'fail' || $status === 'system_fail') {
                     $this->processFailure($orderId, $status);
                     return 'failed';
-                } elseif ($status === 'check' || $status === 'process' || $status === 'wrong_amount_waiting') {
+                } elseif ($status === 'wrong_amount_waiting') {
                      return 'processing';
                 } elseif ($status === 'wrong_amount') {
                      // Special case: underpaid. Maybe mark as failed or specialized status?
