@@ -738,6 +738,22 @@ if (isset($_SESSION['uid'])) {
                     <a href="/register.php" class="block w-full py-3 px-6 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold text-center transition-colors">Get Started</a>
                 </div>
 
+                <!-- Premium -->
+                <div class="rounded-xl p-8 card border-primary-700 relative overflow-hidden flex flex-col">
+                    <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Premium Indexing</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-extrabold text-primary-500">$0.02</span>
+                        <span class="text-gray-500">/ URL</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-gray-300 flex-1">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Force Google Crawl</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Tiered Links & Traffic</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> 98% Success Rate</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-500 text-sm"></i> 2 Credits per Link</li>
+                    </ul>
+                    <a href="/register.php" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
+                </div>
+
                 <!-- Traffic Blast -->
                 <div class="rounded-xl p-8 card flex flex-col border border-red-500/30 relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Viral</div>
@@ -754,23 +770,6 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-red-500 text-sm"></i> 60 Credits / 1k</li>
                     </ul>
                     <a href="/viral-blast.php" class="block w-full py-3 px-6 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-center transition-colors shadow-lg shadow-red-900/20">Launch Blast</a>
-                </div>
-
-                <!-- Premium -->
-                <div class="rounded-xl p-8 card border-primary-700 relative overflow-hidden flex flex-col">
-                    <div class="absolute top-0 right-0 bg-primary-700 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">RECOMMENDED</div>
-                    <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Premium Indexing</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-primary-500">$0.02</span>
-                        <span class="text-gray-500">/ URL</span>
-                    </div>
-                    <ul class="space-y-4 mb-8 text-gray-300 flex-1">
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Force Google Crawl</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Tiered Links & Traffic</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> 98% Success Rate</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-500 text-sm"></i> 2 Credits per Link</li>
-                    </ul>
-                    <a href="/register.php" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
                 </div>
             </div>
 
