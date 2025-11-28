@@ -171,6 +171,25 @@ if (isset($_SESSION['uid'])) {
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center gap-8">
                     <a href="/viral-blast.php" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fas fa-fire"></i> Viral Blast</a>
+                    <div class="relative group" x-data="{ open: false }">
+                        <button @click="open = !open" @click.outside="open = false" class="text-sm font-medium text-gray-300 hover:text-white transition-colors flex items-center gap-1">
+                            How it Works <i class="fas fa-chevron-down text-xs ml-1 transition-transform" :class="{ 'rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" x-transition.opacity.duration.200ms class="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-xl py-2 z-50" style="display: none;">
+                            <a href="#submit-links" class="block px-4 py-3 hover:bg-white/5 transition-colors">
+                                <div class="text-white font-bold text-sm">Submitting Links</div>
+                                <div class="text-xs text-gray-500">How to start an indexing campaign</div>
+                            </a>
+                            <a href="#check-links" class="block px-4 py-3 hover:bg-white/5 transition-colors">
+                                <div class="text-white font-bold text-sm">Checking Links</div>
+                                <div class="text-xs text-gray-500">Verify indexing status</div>
+                            </a>
+                            <a href="#buy-credits" class="block px-4 py-3 hover:bg-white/5 transition-colors">
+                                <div class="text-white font-bold text-sm">Buying Credits</div>
+                                <div class="text-xs text-gray-500">Purchase via Cryptomus</div>
+                            </a>
+                        </div>
+                    </div>
                     <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Features</a>
                     <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Pricing</a>
                     <a href="/faq.php" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</a>
@@ -340,6 +359,171 @@ if (isset($_SESSION['uid'])) {
                             <div class="space-y-3">
                                 <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold transition-all shadow-lg shadow-primary-900/20">Create Account</a>
                                 <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 bg-[#111111] border-t border-white/5 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How It Works</h2>
+                <p class="text-lg text-gray-400">Simple steps to boost your SEO performance.</p>
+            </div>
+
+            <div class="space-y-24">
+                <!-- 1. Submit Links -->
+                <div id="submit-links" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
+                    <div class="order-2 md:order-1">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-900/30 text-primary-500 font-bold text-xl border border-primary-900/50 mb-6">1</div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Submit Your Links</h3>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Paste your URLs into our dashboard. We accept bulk submissions up to 10,000 links at once.
+                        </p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-primary-500"></i>
+                                <span>Instant submission to Google & Yandex</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-primary-500"></i>
+                                <span>Select <strong>Drip Feed</strong> to spread submissions over days</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-primary-500"></i>
+                                <span>Optional <strong>VIP Queue</strong> for priority processing</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="order-1 md:order-2 relative group">
+                        <div class="absolute -inset-2 bg-primary-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl">
+                            <!-- Mock UI -->
+                            <div class="flex gap-4 mb-4">
+                                <div class="w-1/2 h-10 bg-white/5 rounded-lg border border-white/5"></div>
+                                <div class="w-1/2 h-10 bg-white/5 rounded-lg border border-white/5"></div>
+                            </div>
+                            <div class="space-y-2 mb-4">
+                                <div class="h-4 bg-white/5 rounded w-3/4"></div>
+                                <div class="h-32 bg-white/5 rounded-lg border border-white/5 p-3 font-mono text-xs text-gray-500">
+                                    https://example.com/page-1<br>
+                                    https://example.com/page-2<br>
+                                    https://example.com/page-3
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="h-4 w-20 bg-white/5 rounded"></div>
+                                <div class="h-10 w-32 bg-primary-600 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Check Links -->
+                <div id="check-links" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
+                    <div class="relative group">
+                        <div class="absolute -inset-2 bg-blue-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl">
+                            <div class="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+                                <div class="h-6 w-32 bg-white/5 rounded"></div>
+                                <div class="h-6 w-20 bg-green-500/20 rounded-full"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mb-6">
+                                <div class="bg-white/5 rounded-lg p-3 text-center">
+                                    <div class="h-6 w-8 mx-auto bg-primary-500/20 rounded mb-2"></div>
+                                    <div class="h-3 w-12 mx-auto bg-white/10 rounded"></div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 text-center border border-green-500/30">
+                                    <div class="h-6 w-8 mx-auto bg-green-500 rounded mb-2"></div>
+                                    <div class="h-3 w-12 mx-auto bg-white/10 rounded"></div>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-3 text-center">
+                                    <div class="h-6 w-8 mx-auto bg-yellow-500/20 rounded mb-2"></div>
+                                    <div class="h-3 w-12 mx-auto bg-white/10 rounded"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-2 bg-white/5 rounded border border-green-500/20">
+                                    <div class="h-3 w-48 bg-white/10 rounded"></div>
+                                    <div class="h-4 w-16 bg-green-500/20 rounded"></div>
+                                </div>
+                                <div class="flex justify-between items-center p-2 bg-white/5 rounded">
+                                    <div class="h-3 w-40 bg-white/10 rounded"></div>
+                                    <div class="h-4 w-16 bg-yellow-500/20 rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/30 text-blue-500 font-bold text-xl border border-blue-900/50 mb-6">2</div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Verify Indexing Status</h3>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Don't guess. Know. Our checker tool verifies if your URLs are actually indexed in Google's database.
+                        </p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-blue-500"></i>
+                                <span>Real-time verification against live SERPs</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-blue-500"></i>
+                                <span>Detailed reports: Indexed, Unindexed, or Error</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-blue-500"></i>
+                                <span>Export results to CSV for client reporting</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3. Buy Credits -->
+                <div id="buy-credits" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
+                    <div class="order-2 md:order-1">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-900/30 text-purple-500 font-bold text-xl border border-purple-900/50 mb-6">3</div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Secure Crypto Payments</h3>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Top up your account instantly using Cryptomus. We support major cryptocurrencies for privacy and speed.
+                        </p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-purple-500"></i>
+                                <span>Pay with Bitcoin, Ethereum, USDT, LTC, and more</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-purple-500"></i>
+                                <span>Credits added automatically after 1 confirmation</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-purple-500"></i>
+                                <span>No recurring subscriptions - pay as you go</span>
+                            </li>
+                        </ul>
+                        <div class="mt-8 flex gap-4 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                            <img src="/assets/img/bitcoin-btc-logo.png" class="h-8 object-contain">
+                            <img src="/assets/img/ethereum-eth-logo.png" class="h-8 object-contain">
+                            <img src="/assets/img/Zcash-Yellow.png" class="h-8 object-contain">
+                        </div>
+                    </div>
+                    <div class="order-1 md:order-2 relative group">
+                        <div class="absolute -inset-2 bg-purple-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl text-center">
+                            <h4 class="text-gray-400 uppercase text-xs font-bold mb-4">Payment Gateway</h4>
+                            <div class="bg-black/40 rounded-lg p-6 border border-white/5 mb-6">
+                                <div class="text-3xl font-bold text-white mb-1">$50.00</div>
+                                <div class="text-sm text-gray-500">2,500 Credits</div>
+                            </div>
+                            <button class="w-full py-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20">
+                                <i class="fas fa-lock"></i> Pay with Cryptomus
+                            </button>
+                            <div class="mt-4 text-xs text-gray-500 flex justify-center gap-4">
+                                <span class="flex items-center gap-1"><i class="fab fa-bitcoin"></i> BTC</span>
+                                <span class="flex items-center gap-1"><i class="fab fa-ethereum"></i> ETH</span>
+                                <span class="flex items-center gap-1"><i class="fas fa-dollar-sign"></i> USDT</span>
                             </div>
                         </div>
                     </div>
