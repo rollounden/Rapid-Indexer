@@ -188,19 +188,19 @@ if (isset($_SESSION['uid'])) {
     <section class="relative pt-20 lg:pt-28 pb-20">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-4xl mx-auto">
-                <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">Website Indexing Service</h1>
+                <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">SEO Signals Platform</h1>
                 <h2 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
-                    Backlinks have zero value <br>
-                    <span class="text-primary-500">until they're indexed.</span>
+                    Get Indexed. <span class="text-primary-500">Go Viral.</span><br>
+                    Rank Higher.
                 </h2>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    "What can't be measured doesn't exist". Rapid Indexer uses a multi-pronged system to speed up and help indexation to power up pages with positive metrics.
+                    Don't just build links. Power them up. Rapid Indexer forces Google to crawl your backlinks and simulates viral social traffic to boost your rankings.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                     <a href="/register.php" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
-                        Start Indexing Free
+                        Start Boosting Free
                         <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
                     </a>
                     <a href="#how-it-works" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 border border-white/10 text-white font-medium rounded-lg hover:bg-white/5 transition-colors text-lg">
@@ -351,17 +351,17 @@ if (isset($_SESSION['uid'])) {
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Why Most Indexing Services Fail</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">The Ranking Formula Has Changed</h2>
                     <div class="space-y-6 text-lg text-gray-400">
                         <p>
-                            Many link-indexing services have died off or become irrelevant because they can't adapt. 
-                            <strong class="text-primary-400">Submitting directly to Google API alone doesn't cut it anymore</strong> and has strict cap limits.
+                            <strong class="text-primary-400">Indexing is step one. Virality is step two.</strong> 
+                            Google's modern algorithm prioritizes "User Signals" (CTR, Dwell Time, Traffic Sources) alongside backlinks.
                         </p>
                         <p>
-                            You need indexing services that go the extra mile to ensure you aren't just asking Google for a handout.
+                            If you build 100 backlinks to a page but it gets 0 visitors, it looks suspicious (unnatural).
                         </p>
                         <p>
-                            Your pages need to be powered up with positive metrics like <span class="text-white font-semibold">tiered-links</span> and <span class="text-white font-semibold">browser traffic</span>. This is where Rapid Indexer shines.
+                            Rapid Indexer solves this by combining <span class="text-white font-semibold">Premium Indexing</span> with <span class="text-white font-semibold">Viral Traffic Simulation</span>. We prove to Google that your content is not only real but trending.
                         </p>
                     </div>
                 </div>
