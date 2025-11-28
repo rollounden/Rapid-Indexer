@@ -182,9 +182,9 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Visitors</label>
                                     <select class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10 appearance-none cursor-pointer hover:border-primary-500 transition-colors" x-model="trafficQty">
-                                        <option value="1000">1,000</option>
-                                        <option value="4000" selected>4,000</option>
-                                        <option value="10000">10,000</option>
+                                        <option value="1000" class="bg-dark-900 text-gray-300">1,000</option>
+                                        <option value="4000" selected class="bg-dark-900 text-gray-300">4,000</option>
+                                        <option value="10000" class="bg-dark-900 text-gray-300">10,000</option>
                                     </select>
                                 </div>
                                 <div>
