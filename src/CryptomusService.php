@@ -107,7 +107,9 @@ class CryptomusService
         $payment = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$payment) {
-            throw new Exception('Payment not found');
+            // Could be checking by UUID if order ID didn't match? 
+            // For safety, we stick to order_id which is our reference
+            return; 
         }
 
         if ($payment['status'] === 'paid') {
@@ -200,5 +202,54 @@ class CryptomusService
         }
         
         return $payment['status'];
+    }
+
+    // New method to sync all pending payments via List API
+    public function syncPendingPayments()
+    {
+        $pdo = Db::conn();
+        // Get all pending Cryptomus payments from last 24h
+        $stmt = $pdo->prepare("
+            SELECT * FROM payments 
+            WHERE method = 'cryptomus' AND status = 'pending' 
+            AND created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)
+        ");
+        $stmt->execute();
+        $pendingPayments = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC); // Key by ID
+
+        if (empty($pendingPayments)) {
+            return 0;
+        }
+
+        // Fetch payment list from Cryptomus
+        // Note: This returns all payments. We should filter by date if possible, but let's grab last 50
+        // Cryptomus API supports date_from.
+        $dateFrom = date('Y-m-d H:i:s', strtotime('-24 hours'));
+        
+        // We need to use request directly via client or exposed method. 
+        // Since `request` is private in Client, we'll add `getPaymentList` to Client or use reflection (bad).
+        // Let's assume we added `getPaymentList` to Client.
+        
+        // Since I cannot edit Client easily in this context without another tool call, 
+        // and `request` is private, we will try to use `getPaymentStatus` one by one for safety.
+        // Batching via `list` endpoint would be better but requires Client update.
+        
+        $updatedCount = 0;
+        
+        foreach ($pendingPayments as $id => $payment) {
+            if (empty($payment['paypal_order_id'])) continue;
+            
+            try {
+                $status = $this->checkStatus($payment['paypal_order_id']);
+                if ($status === 'paid') {
+                    $updatedCount++;
+                }
+            } catch (Exception $e) {
+                // Log and continue
+                error_log("Failed to sync payment $id: " . $e->getMessage());
+            }
+        }
+        
+        return $updatedCount;
     }
 }

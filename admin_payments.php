@@ -34,13 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $success = "Payment #$paymentId confirmed as PAID.";
                 } elseif ($newStatus === 'processing') {
                     $success = "Payment #$paymentId is currently processing on blockchain.";
-                } elseif ($newStatus === 'failed') {
-                    $error = "Payment #$paymentId failed or was cancelled.";
                 } else {
                     $error = "Payment #$paymentId status is '$newStatus'.";
                 }
             } catch (Exception $e) {
                 $error = "Failed to check status: " . $e->getMessage();
+            }
+        }
+        // Handle Sync All Pending
+        elseif ($_POST['action'] === 'sync_all') {
+            try {
+                $cryptoService = new CryptomusService();
+                $count = $cryptoService->syncPendingPayments();
+                
+                if ($count > 0) {
+                    $success = "Successfully synced and updated $count payments.";
+                } else {
+                    $success = "Sync complete. No pending payments required updates.";
+                }
+            } catch (Exception $e) {
+                $error = "Failed to sync payments: " . $e->getMessage();
             }
         }
         elseif ($_POST['action'] === 'delete_payment') {
@@ -101,6 +114,14 @@ include __DIR__ . '/includes/header_new.php';
                 <span class="text-white">Payments</span>
             </nav>
         </div>
+        
+        <!-- Sync All Button -->
+        <form method="POST">
+            <input type="hidden" name="action" value="sync_all">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-900/20">
+                <i class="fas fa-sync"></i> Sync All Pending
+            </button>
+        </form>
     </div>
     
     <?php if ($error): ?>
