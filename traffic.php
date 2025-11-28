@@ -104,15 +104,70 @@ include __DIR__ . '/includes/header_new.php';
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Country</label>
                     <select name="country" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
-                        <option value="WW">Worldwide</option>
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="DE">Germany</option>
-                        <option value="FR">France</option>
-                        <option value="BR">Brazil</option>
-                        <option value="IN">India</option>
-                        <!-- Add more countries as needed -->
+                        <optgroup label="Continents">
+                            <option value="WW">Worldwide</option>
+                            <option value="NAM">North America (US, CA, MX)</option>
+                            <option value="EUR">Europe (DE, UK, FR, IT)</option>
+                            <option value="ASI">Asia (CN, IN, ID, JP)</option>
+                            <option value="AFR">Africa (NG, EG, ZA)</option>
+                            <option value="SAM">South America (BR, AR, VE)</option>
+                            <option value="MEA">Middle East (TR, SA, AE)</option>
+                        </optgroup>
+                        
+                        <optgroup label="North America">
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                        </optgroup>
+
+                        <optgroup label="Europe">
+                            <option value="GB">United Kingdom</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="ES">Spain</option>
+                            <option value="IT">Italy</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="SE">Sweden</option>
+                            <option value="CH">Switzerland</option>
+                            <option value="PL">Poland</option>
+                            <option value="BE">Belgium</option>
+                            <option value="AT">Austria</option>
+                            <option value="CZ">Czech Republic</option>
+                            <option value="DK">Denmark</option>
+                            <option value="HU">Hungary</option>
+                            <option value="LT">Lithuania</option>
+                            <option value="RO">Romania</option>
+                            <option value="RU">Russia</option>
+                            <option value="RS">Serbia</option>
+                            <option value="UA">Ukraine</option>
+                        </optgroup>
+
+                        <optgroup label="South America">
+                            <option value="BR">Brazil</option>
+                            <option value="AR">Argentina</option>
+                            <option value="CL">Chile</option>
+                        </optgroup>
+                        
+                        <optgroup label="Asia">
+                            <option value="IN">India</option>
+                            <option value="ID">Indonesia</option>
+                            <option value="JP">Japan</option>
+                            <option value="KR">South Korea</option>
+                            <option value="HK">Hong Kong</option>
+                            <option value="SG">Singapore</option>
+                            <option value="TW">Taiwan</option>
+                            <option value="TH">Thailand</option>
+                            <option value="VN">Vietnam</option>
+                            <option value="PK">Pakistan</option>
+                            <option value="AE">United Arab Emirates</option>
+                        </optgroup>
+
+                        <optgroup label="Oceania">
+                            <option value="AU">Australia</option>
+                        </optgroup>
+
+                        <optgroup label="Africa">
+                            <option value="ZA">South Africa</option>
+                        </optgroup>
                     </select>
                 </div>
 
