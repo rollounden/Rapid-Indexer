@@ -184,6 +184,10 @@ if (isset($_SESSION['uid'])) {
                                 <div class="text-white font-bold text-sm">Checking Links</div>
                                 <div class="text-xs text-gray-500">Verify indexing status</div>
                             </a>
+                            <a href="#viral-traffic" class="block px-4 py-3 hover:bg-white/5 transition-colors">
+                                <div class="text-white font-bold text-sm">Viral Traffic</div>
+                                <div class="text-xs text-gray-500">Simulate social engagement</div>
+                            </a>
                             <a href="#buy-credits" class="block px-4 py-3 hover:bg-white/5 transition-colors">
                                 <div class="text-white font-bold text-sm">Buying Credits</div>
                                 <div class="text-xs text-gray-500">Purchase via Cryptomus</div>
