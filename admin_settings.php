@@ -91,6 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        if (isset($_POST['traffic_service_id'])) {
+            SettingsService::set('traffic_service_id', trim($_POST['traffic_service_id']));
+        }
+
         $success = 'Settings saved successfully.';
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -124,6 +128,7 @@ $traffic_price_per_1000 = SettingsService::get('traffic_price_per_1000', '30');
 
 $jap_api_key_decrypted = SettingsService::getDecrypted('jap_api_key', '');
 $jap_api_key_display = $jap_api_key_decrypted ? substr($jap_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($jap_api_key_decrypted, -4) : '';
+$traffic_service_id = SettingsService::get('traffic_service_id', '9184');
 
 // Check Ralfy Status if key is present
 if ($ralfy_api_key_decrypted) {
