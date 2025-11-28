@@ -136,10 +136,54 @@ include __DIR__ . '/includes/header_new.php';
         </div>
     </div>
     
-    <?php if ($task['type'] === 'traffic_campaign'): ?>
+    <?php if ($task['type'] === 'traffic_campaign'): 
+        $meta = json_decode($task['meta_data'] ?? '{}', true);
+    ?>
+        <!-- Campaign Info -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+             <div class="card rounded-xl p-4 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
+                    <i class="fas fa-globe text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-gray-500 uppercase font-bold">Target Geo</div>
+                    <div class="text-white font-bold text-lg"><?php echo htmlspecialchars($meta['country'] ?? 'Worldwide'); ?></div>
+                </div>
+             </div>
+             <div class="card rounded-xl p-4 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
+                    <i class="fas fa-link text-xl"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="text-xs text-gray-500 uppercase font-bold">Traffic Source</div>
+                    <div class="text-white font-bold truncate" title="<?php echo htmlspecialchars($meta['referring_url'] ?? 'Direct'); ?>">
+                        <?php 
+                        if (($meta['type_of_traffic'] ?? '') == '1') echo 'Google: ' . ($meta['google_keyword'] ?? '-');
+                        elseif (($meta['type_of_traffic'] ?? '') == '2') echo 'Ref: ' . ($meta['referring_url'] ?? '-');
+                        else echo 'Direct / None';
+                        ?>
+                    </div>
+                </div>
+             </div>
+             <div class="card rounded-xl p-4 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-pink-500/10 flex items-center justify-center text-pink-400">
+                    <i class="fas fa-clock text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-gray-500 uppercase font-bold">Duration</div>
+                    <div class="text-white font-bold text-lg"><?php echo htmlspecialchars($meta['days'] ?? '1'); ?> Days</div>
+                </div>
+             </div>
+        </div>
+
         <div class="card rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
                 <h5 class="font-bold text-white">Traffic Delivery (Viral Wave)</h5>
+                <div class="flex gap-3 text-xs">
+                    <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-green-500"></div> Delivered</div>
+                    <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-blue-500"></div> Processing</div>
+                    <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-primary-600"></div> Pending</div>
+                </div>
             </div>
             <div class="p-6">
                 <!-- Chart Visualization -->
@@ -153,24 +197,28 @@ include __DIR__ . '/includes/header_new.php';
                     
                     foreach ($schedule as $run): 
                         $heightPercent = ($run['quantity'] / $maxQty) * 100;
+                        // Ensure minimum visible height
+                        if ($heightPercent < 5) $heightPercent = 5;
+                        
                         $barColor = 'bg-primary-600'; // Default (pending)
-                        if ($run['status'] === 'completed') $barColor = 'bg-green-500';
-                        if ($run['status'] === 'processing') $barColor = 'bg-blue-500';
+                        if ($run['status'] === 'completed') $barColor = 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]';
+                        if ($run['status'] === 'processing') $barColor = 'bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]';
                         if ($run['status'] === 'failed') $barColor = 'bg-red-500';
                     ?>
-                        <div class="flex-1 flex flex-col items-center group relative">
+                        <div class="flex-1 flex flex-col items-center group relative h-full justify-end">
                             <!-- Tooltip -->
-                            <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/90 text-white text-xs p-2 rounded whitespace-nowrap z-10 border border-white/10">
-                                <?php echo $run['quantity']; ?> visitors<br>
-                                <?php echo date('M j, H:i', strtotime($run['scheduled_at'])); ?>
+                            <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs p-2 rounded whitespace-nowrap z-20 border border-white/10 shadow-xl pointer-events-none">
+                                <div class="font-bold text-primary-400"><?php echo $run['quantity']; ?> visitors</div>
+                                <div class="text-gray-400"><?php echo date('M j, H:i', strtotime($run['scheduled_at'])); ?></div>
+                                <div class="uppercase text-[10px] mt-1 font-bold"><?php echo $run['status']; ?></div>
                             </div>
                             
-                            <div class="<?php echo $barColor; ?> w-full rounded-t opacity-80 hover:opacity-100 transition-opacity relative" style="height: <?php echo $heightPercent; ?>%"></div>
+                            <div class="<?php echo $barColor; ?> w-full rounded-t opacity-90 hover:opacity-100 transition-all duration-300 relative group-hover:scale-y-105 origin-bottom" style="height: <?php echo $heightPercent; ?>%"></div>
                         </div>
                     <?php endforeach; ?>
                 </div>
                 
-                <div class="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+                <div class="flex justify-between text-xs text-gray-500 mt-4 font-mono border-t border-white/5 pt-2">
                     <span>Start: <?php echo !empty($schedule) ? date('M j', strtotime($schedule[0]['scheduled_at'])) : '-'; ?></span>
                     <span>End: <?php echo !empty($schedule) ? date('M j', strtotime(end($schedule)['scheduled_at'])) : '-'; ?></span>
                 </div>
