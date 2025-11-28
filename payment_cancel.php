@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/src/Db.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['uid'])) {
@@ -10,6 +11,17 @@ if (!isset($_SESSION['uid'])) {
 
 $user_id = $_SESSION['uid'];
 $token = $_GET['token'] ?? null;
+
+// Update payment status to failed if token is present
+if ($token) {
+    try {
+        $pdo = Db::conn();
+        $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE paypal_order_id = ? AND user_id = ? AND status = ?');
+        $stmt->execute(['failed', $token, $user_id, 'pending']);
+    } catch (Exception $e) {
+        error_log('Failed to update cancelled payment status: ' . $e->getMessage());
+    }
+}
 ?>
 
 <!DOCTYPE html>

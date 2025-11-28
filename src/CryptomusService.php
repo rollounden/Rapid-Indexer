@@ -31,12 +31,12 @@ class CryptomusService
     }
 
 
-    public function createPayment(int $userId, float $amount)
+    public function createPayment(int $userId, float $amount, ?int $discountCodeId = null, ?float $originalAmount = null, ?float $discountAmount = 0)
     {
         $currency = 'USD';
         
         // Record pending payment first to get an ID
-        $paymentId = PaymentService::recordPending($userId, $amount, $currency);
+        $paymentId = PaymentService::recordPending($userId, $amount, $currency, null, $discountCodeId, $originalAmount, $discountAmount);
         $orderId = 'ORD-' . $paymentId . '-' . time();
 
         // Update payment with generated order ID (using paypal_order_id column for now, or we can add external_id)
@@ -96,7 +96,7 @@ class CryptomusService
         // Find payment by order ID
         $stmt = $pdo->prepare('SELECT * FROM payments WHERE paypal_order_id = ? LIMIT 1');
         $stmt->execute([$orderId]);
-        $payment = $stmt->fetch();
+        $payment = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$payment) {
             throw new Exception('Payment not found');
@@ -109,4 +109,3 @@ class CryptomusService
         PaymentService::markPaid($payment['id'], $payment['user_id'], $uuid, $amount, $currency);
     }
 }
-
