@@ -34,6 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (Exception $e) {
                 $error = "Failed to delete user: " . $e->getMessage();
             }
+        } elseif ($_POST['action'] === 'adjust_credits') {
+            $userId = intval($_POST['user_id']);
+            $amount = intval($_POST['amount']);
+            $reason = $_POST['reason'];
+            
+            try {
+                require_once __DIR__ . '/src/CreditsService.php';
+                CreditsService::adjust($userId, $amount, 'admin_adjustment', 'admin_actions', null);
+                $success = "Credits adjusted successfully for user #$userId";
+            } catch (Exception $e) {
+                $error = 'Failed to adjust credits: ' . $e->getMessage();
+            }
         }
     }
 }
@@ -62,7 +74,14 @@ $users = $stmt->fetchAll();
 include __DIR__ . '/includes/header_new.php';
 ?>
 
-<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10" x-data="{ deleteModal: false, deleteUserId: '', deleteUserEmail: '' }">
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10" x-data="{ 
+    deleteModal: false, 
+    deleteUserId: '', 
+    deleteUserEmail: '',
+    creditModal: false,
+    creditUserId: '',
+    creditUserEmail: '' 
+}">
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div>
             <h1 class="text-3xl font-bold text-white">Manage Users</h1>
@@ -125,6 +144,10 @@ include __DIR__ . '/includes/header_new.php';
                                 <?php echo date('M j, Y', strtotime($user['created_at'])); ?>
                             </td>
                             <td class="px-6 py-4 text-right">
+                                <button @click="creditModal = true; creditUserId = '<?php echo $user['id']; ?>'; creditUserEmail = '<?php echo htmlspecialchars($user['email']); ?>'" 
+                                        class="p-2 rounded-lg bg-white/5 text-primary-400 hover:bg-primary-600 hover:text-white transition-all mr-2" title="Adjust Credits">
+                                    <i class="fas fa-coins"></i>
+                                </button>
                                 <?php if ($user['id'] != $_SESSION['uid']): ?>
                                     <button @click="deleteModal = true; deleteUserId = '<?php echo $user['id']; ?>'; deleteUserEmail = '<?php echo htmlspecialchars($user['email']); ?>'" 
                                             class="p-2 rounded-lg bg-white/5 text-red-400 hover:bg-red-500 hover:text-white transition-all" title="Delete User">
@@ -171,6 +194,39 @@ include __DIR__ . '/includes/header_new.php';
                 
                 <button type="button" @click="deleteModal = false" class="px-6 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white transition-colors">Cancel</button>
                 <button type="submit" class="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors font-bold">Delete User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Adjust Credits Modal -->
+    <div x-show="creditModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-0">
+        <div x-show="creditModal" x-transition.opacity @click="creditModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div x-show="creditModal" x-transition.scale.origin.center class="relative card rounded-xl p-6 max-w-md w-full shadow-2xl border border-white/10">
+            <h3 class="text-xl font-bold text-white mb-4">Adjust User Credits</h3>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="adjust_credits">
+                <input type="hidden" name="user_id" :value="creditUserId">
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">User Email</label>
+                    <input type="text" :value="creditUserEmail" readonly class="w-full bg-black/20 border border-[#333] rounded-lg p-3 text-gray-400 cursor-not-allowed">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Credit Adjustment</label>
+                    <input type="number" name="amount" required placeholder="Positive (add) or negative (remove)" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Reason</label>
+                    <textarea name="reason" required placeholder="Why are you adjusting credits?" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500" rows="3"></textarea>
+                </div>
+                
+                <div class="flex justify-end gap-3">
+                    <button type="button" @click="creditModal = false" class="px-4 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white transition-colors">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Confirm</button>
+                </div>
             </form>
         </div>
     </div>
