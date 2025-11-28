@@ -108,7 +108,14 @@ include __DIR__ . '/includes/header_new.php';
                 <span class="mx-2">/</span>
                 <span class="text-white">#<?php echo $task_id; ?></span>
             </nav>
-            <h1 class="text-3xl font-bold text-white"><?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?></h1>
+            <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+                <?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?>
+                <?php if (!empty($task['is_drip_feed'])): ?>
+                    <span class="px-3 py-1 rounded-lg text-sm bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold flex items-center gap-2">
+                        <i class="fas fa-tint"></i> Drip Feed
+                    </span>
+                <?php endif; ?>
+            </h1>
         </div>
         <div>
             <span class="px-3 py-1 rounded-full text-sm font-bold uppercase <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'); ?>">
@@ -124,7 +131,7 @@ include __DIR__ . '/includes/header_new.php';
         </div>
         <div class="card rounded-xl p-4 text-center">
             <h3 class="text-3xl font-bold text-green-400"><?php echo $box2_val; ?></h3>
-            <div class="text-xs text-gray-500 uppercase font-bold mt-1"><?php echo $box2_label; ?></div>
+            <div class="text-xs text-gray-500 uppercase font-bold mt-1"><?php echo !empty($task['is_drip_feed']) ? 'Submitted' : $box2_label; ?></div>
         </div>
         <div class="card rounded-xl p-4 text-center">
             <h3 class="text-3xl font-bold text-yellow-400"><?php echo $box3_val; ?></h3>
@@ -135,6 +142,23 @@ include __DIR__ . '/includes/header_new.php';
             <div class="text-xs text-gray-500 uppercase font-bold mt-1"><?php echo $box4_label; ?></div>
         </div>
     </div>
+    
+    <?php if (!empty($task['is_drip_feed'])): ?>
+        <div class="mb-8 card rounded-xl p-6 border-blue-500/20 bg-blue-500/5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
+                <i class="fas fa-info-circle text-xl"></i>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-1">Drip Feed Active</h4>
+                <p class="text-sm text-gray-400">
+                    This task is being drip-fed over time. 
+                    <?php if ($task['next_run_at']): ?>
+                        Next batch scheduled for: <span class="text-white font-mono"><?php echo date('M j, H:i', strtotime($task['next_run_at'])); ?></span>
+                    <?php endif; ?>
+                </p>
+            </div>
+        </div>
+    <?php endif; ?>
     
     <?php if ($task['type'] === 'traffic_campaign'): 
         $meta = json_decode($task['meta_data'] ?? '{}', true);

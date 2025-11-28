@@ -259,6 +259,11 @@ include __DIR__ . '/includes/header_new.php';
                                                 <?php if ($task['vip']): ?>
                                                     <span class="px-2 py-0.5 rounded text-[10px] bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-bold">VIP</span>
                                                 <?php endif; ?>
+                                                <?php if (!empty($task['is_drip_feed'])): ?>
+                                                    <span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold" title="Drip Feed Active">
+                                                        <i class="fas fa-tint mr-1"></i> DRIP
+                                                    </span>
+                                                <?php endif; ?>
                                             </div>
                                             <div class="text-sm text-gray-500">
                                                 <?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?>
@@ -315,15 +320,21 @@ include __DIR__ . '/includes/header_new.php';
                                     <?php elseif ($task['total_links'] > 0): ?>
                                         <?php 
                                         $completed = $task['indexed_links'] + $task['unindexed_links'];
+                                        // For Drip Feed, 'indexed' means submitted.
                                         $percentage = ($completed / $task['total_links']) * 100;
                                         ?>
                                         <div class="w-full bg-white/10 rounded-full h-2 mb-2">
                                             <div class="bg-primary-600 h-2 rounded-full transition-all duration-500" style="width: <?php echo $percentage; ?>%"></div>
                                         </div>
                                         <div class="flex justify-between text-xs text-gray-500">
-                                            <span><?php echo round($percentage); ?>% Complete</span>
+                                            <span><?php echo round($percentage); ?>% <?php echo !empty($task['is_drip_feed']) ? 'Submitted' : 'Complete'; ?></span>
                                             <span><?php echo $completed; ?>/<?php echo $task['total_links']; ?> Links</span>
                                         </div>
+                                        <?php if (!empty($task['is_drip_feed']) && $task['status'] === 'processing'): ?>
+                                            <div class="text-[10px] text-blue-400 mt-1 flex items-center gap-1">
+                                                <i class="fas fa-clock"></i> Drip Active
+                                            </div>
+                                        <?php endif; ?>
                                     <?php else: ?>
                                         <span class="text-gray-500 text-sm">No links</span>
                                     <?php endif; ?>
