@@ -69,7 +69,6 @@ class CryptomusService
     public function handleWebhook(array $data)
     {
         // Verify signature
-        // Note: Cryptomus sends the sign in the post body usually
         $sign = $data['sign'] ?? '';
         unset($data['sign']);
         
@@ -82,9 +81,6 @@ class CryptomusService
         $hash = md5(base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE)) . $apiKey);
 
         if ($hash !== $sign) {
-            // Fallback check: sometimes json_encode behaves differently
-            // Try without unescaped unicode if failed? 
-            // But docs say unicode.
             throw new Exception('Invalid signature');
         }
 
@@ -94,10 +90,10 @@ class CryptomusService
         $currency = $data['currency'] ?? 'USD';
         $uuid = $data['uuid'] ?? '';
 
-        // Allow crediting on 'check' (unconfirmed) and 'process' status as requested
-        if ($status === 'paid' || $status === 'paid_over' || $status === 'check' || $status === 'process') {
+        // Updated status list based on docs
+        if ($status === 'paid' || $status === 'paid_over' || $status === 'confirm_check') {
             $this->processSuccess($orderId, $amount, $currency, $uuid);
-        } elseif ($status === 'cancel' || $status === 'fail') {
+        } elseif ($status === 'cancel' || $status === 'fail' || $status === 'system_fail') {
             $this->processFailure($orderId, $status);
         }
     }
@@ -124,8 +120,9 @@ class CryptomusService
     private function processFailure($orderId, $status)
     {
         $pdo = Db::conn();
+        // Only fail if it's currently pending
         $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE paypal_order_id = ? AND status = "pending"');
-        $stmt->execute([$status === 'cancel' ? 'failed' : 'failed', $orderId]);
+        $stmt->execute(['failed', $orderId]);
     }
     
     public function checkStatus($orderId)
@@ -147,7 +144,6 @@ class CryptomusService
             $identifier = ['order_id' => $orderId];
         }
 
-        // Add try-catch to handle API errors gracefully
         try {
             $response = $this->client->getPaymentStatus($identifier);
             
@@ -159,22 +155,31 @@ class CryptomusService
                 $status = $response['result']['status'];
                 $uuid = $response['result']['uuid'] ?? $payment['paypal_capture_id'] ?? '';
                 
-                // Allow crediting on 'check' (unconfirmed) and 'process' status as requested
-                if ($status === 'paid' || $status === 'paid_over' || $status === 'check' || $status === 'process') {
+                // Status mapping based on Cryptomus Docs
+                // paid, paid_over -> Completed
+                // confirm_check -> Confirmed on blockchain (safe to credit usually)
+                // process, check -> Waiting
+                // wrong_amount -> Underpaid (might need manual handling, or credit partial?)
+                
+                if ($status === 'paid' || $status === 'paid_over' || $status === 'confirm_check') {
                     $amount = $response['result']['amount'] ?? $payment['amount'];
                     $currency = $response['result']['currency'] ?? $payment['currency'];
                     $this->processSuccess($orderId, $amount, $currency, $uuid);
-                    return 'paid'; // Treat as paid for UI
-                } elseif ($status === 'cancel' || $status === 'fail') {
+                    return 'paid';
+                } elseif ($status === 'cancel' || $status === 'fail' || $status === 'system_fail') {
                     $this->processFailure($orderId, $status);
                     return 'failed';
+                } elseif ($status === 'check' || $status === 'process' || $status === 'wrong_amount_waiting') {
+                     return 'processing';
+                } elseif ($status === 'wrong_amount') {
+                     // Special case: underpaid. Maybe mark as failed or specialized status?
+                     // For now, treat as failed/attention needed
+                     return 'failed'; 
                 } else {
-                    return $status; // pending, etc.
+                    return $status;
                 }
             }
         } catch (Exception $e) {
-            // If error is "active transaction" or similar, assume it's still processing
-            // This prevents "Failed to check status" error on UI
             $msg = $e->getMessage();
             if (strpos(strtolower($msg), 'active transaction') !== false) {
                 return 'processing';
