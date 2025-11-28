@@ -477,7 +477,8 @@ function paymentForm() {
             formData.append('code', this.discountCode);
             formData.append('amount', this.inputAmount);
             
-            fetch('payments.php', {
+            // Use current path to avoid 301 redirects stripping POST data
+            fetch(window.location.pathname, {
                 method: 'POST',
                 body: formData
             })
