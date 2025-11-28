@@ -364,7 +364,7 @@ include __DIR__ . '/includes/header_new.php';
                                             </form>
                                         <?php endif; ?>
 
-                                        <?php if (in_array($task['status'], ['pending', 'processing'])): ?>
+                                        <?php if (in_array($task['status'], ['pending', 'processing']) && $task['type'] !== 'traffic' && $task['type'] !== 'traffic_campaign'): ?>
                                             <form method="POST" class="inline-block">
                                                 <input type="hidden" name="action" value="sync_status">
                                                 <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
