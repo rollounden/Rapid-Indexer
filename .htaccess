@@ -1,18 +1,21 @@
-Launch Viral Campaign
-Sign up to access our Viral Blast technology. Drip-feed traffic from social sources.
+RewriteEngine On
 
-Create Account
-Log In
+# 1. Redirect direct requests for .php files to the extensionless version
+#    (e.g. /about.php -> /about)
+#    This prevents users from seeing the .php extension in the address bar.
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
 
-
-
- RewriteEngine On
-
-# Remove .php extension
+# 2. Handle extensionless requests
+#    (e.g. /about -> serves about.php)
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php [NC,L]
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
 
-# Force HTTPS (optional but recommended)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# 3. Optional: Force trailing slash removal (for consistency)
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# 4. Error Handling
+ErrorDocument 404 /404.php
+ErrorDocument 500 /500.php

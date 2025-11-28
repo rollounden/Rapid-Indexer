@@ -71,11 +71,11 @@ $stmt = $pdo->query('SELECT COUNT(*) FROM tasks WHERE status = "completed"');
 $stats['completed_tasks'] = $stmt->fetchColumn();
 
 // Total payments
-$stmt = $pdo->query('SELECT COUNT(*) FROM payments WHERE status = "completed"');
+$stmt = $pdo->query("SELECT COUNT(*) FROM payments WHERE status IN ('completed', 'paid')");
 $stats['total_payments'] = $stmt->fetchColumn();
 
 // Total revenue
-$stmt = $pdo->query('SELECT SUM(amount) FROM payments WHERE status = "completed"');
+$stmt = $pdo->query("SELECT SUM(amount) FROM payments WHERE status IN ('completed', 'paid')");
 $stats['total_revenue'] = $stmt->fetchColumn() ?: 0;
 
 // Get recent users
@@ -243,11 +243,19 @@ include __DIR__ . '/includes/header_new.php';
                                     <?php echo htmlspecialchars($payment['email']); ?>
                                 </td>
                                 <td class="px-4 py-3 text-sm font-bold text-white">$<?php echo number_format($payment['amount'], 2); ?></td>
-                                <td class="px-4 py-3">
-                                    <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $payment['status'] === 'completed' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'; ?>">
-                                        <?php echo htmlspecialchars($payment['status']); ?>
-                                    </span>
-                                </td>
+                            <td class="px-4 py-3">
+                                <?php
+                                $statusColor = 'bg-yellow-500/10 text-yellow-400'; // Default pending/processing
+                                if (in_array($payment['status'], ['completed', 'paid'])) {
+                                    $statusColor = 'bg-green-500/10 text-green-400';
+                                } elseif (in_array($payment['status'], ['failed', 'cancelled'])) {
+                                    $statusColor = 'bg-red-500/10 text-red-400';
+                                }
+                                ?>
+                                <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $statusColor; ?>">
+                                    <?php echo htmlspecialchars($payment['status']); ?>
+                                </span>
+                            </td>
                                 <td class="px-4 py-3 text-xs text-gray-500"><?php echo date('M j', strtotime($payment['created_at'])); ?></td>
                             </tr>
                         <?php endforeach; ?>
