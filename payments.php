@@ -37,39 +37,47 @@ try {
 }
 
 // Handle discount validation (AJAX)
+// Move this check as early as possible
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'validate_discount') {
-    // Clean buffer to remove any previous output/warnings
+    // Clear any existing output buffers
     while (ob_get_level()) ob_end_clean();
     
-    // Disable error display for JSON response to prevent syntax errors
+    // Start fresh output
+    ob_start();
+    
     ini_set('display_errors', 0);
     header('Content-Type: application/json');
     
     try {
         require_once __DIR__ . '/src/DiscountService.php';
+        
+        // Log for debugging
+        // error_log("Validating discount: " . print_r($_POST, true));
+        
         $code = $_POST['code'] ?? '';
         $amount = floatval($_POST['amount'] ?? 0);
         
         $discount = DiscountService::findActive($code);
         if (!$discount) {
             echo json_encode(['valid' => false, 'message' => 'Invalid or expired code']);
-            exit;
+        } else {
+            $discountAmount = DiscountService::calculate($discount, $amount);
+            
+            echo json_encode([
+                'valid' => true,
+                'discount_amount' => $discountAmount,
+                'final_amount' => max(0, $amount - $discountAmount),
+                'code' => $discount['code'],
+                'id' => $discount['id']
+            ]);
         }
-        
-        $discountAmount = DiscountService::calculate($discount, $amount);
-        
-        echo json_encode([
-            'valid' => true,
-            'discount_amount' => $discountAmount,
-            'final_amount' => max(0, $amount - $discountAmount),
-            'code' => $discount['code'],
-            'id' => $discount['id']
-        ]);
     } catch (Throwable $e) {
-        // Log the full error
-        error_log("Discount Validation Error: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+        error_log("Discount Validation Error: " . $e->getMessage());
         echo json_encode(['valid' => false, 'message' => 'Error: ' . $e->getMessage()]);
     }
+    
+    // Send buffer and kill script immediately
+    ob_end_flush();
     exit;
 }
 
