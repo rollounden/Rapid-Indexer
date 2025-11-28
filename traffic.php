@@ -236,6 +236,9 @@ function updateUI() {
     
     const cost = Math.ceil((qty / 1000) * pricePer1000);
     priceDisplay.textContent = cost;
+    // Calculate cost for user
+    const userCost = (cost * 0.01).toFixed(2);
+    priceDisplay.innerHTML = cost + ' credits <span class="text-gray-400 ml-1">($' + userCost + ')</span>';
     
     if (mode === 'campaign') {
         daysField.classList.remove('hidden');
