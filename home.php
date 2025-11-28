@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/src/SettingsService.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $free_credits = SettingsService::get('free_credits_on_signup', '30');
 
