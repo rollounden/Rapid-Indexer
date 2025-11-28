@@ -733,6 +733,7 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Check Index Status</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Real-time Verification</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Export Reports</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-600 text-sm"></i> 1 Credit per Link</li>
                     </ul>
                     <a href="/register.php" class="block w-full py-3 px-6 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold text-center transition-colors">Get Started</a>
                 </div>
@@ -747,6 +748,7 @@ if (isset($_SESSION['uid'])) {
                     </div>
                     <ul class="space-y-4 mb-8 text-gray-300 flex-1">
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Real Residential IPs</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Geo-Targeted Traffic</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Social Referrers</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Drip-Feed Schedule</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-red-500 text-sm"></i> 60 Credits / 1k</li>
