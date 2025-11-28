@@ -387,15 +387,11 @@ if (isset($_SESSION['uid'])) {
                         <ul class="space-y-3 text-gray-300">
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-check mt-1 text-primary-500"></i>
-                                <span>Instant submission to Google & Yandex</span>
+                                <span>Instant submission to Google</span>
                             </li>
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-check mt-1 text-primary-500"></i>
                                 <span>Select <strong>Drip Feed</strong> to spread submissions over days</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-primary-500"></i>
-                                <span>Optional <strong>VIP Queue</strong> for priority processing</span>
                             </li>
                         </ul>
                     </div>
@@ -481,10 +477,80 @@ if (isset($_SESSION['uid'])) {
                     </div>
                 </div>
 
-                <!-- 3. Buy Credits -->
-                <div id="buy-credits" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
+                <!-- 3. Viral Blast Traffic -->
+                <div id="viral-traffic" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
                     <div class="order-2 md:order-1">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-900/30 text-purple-500 font-bold text-xl border border-purple-900/50 mb-6">3</div>
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-900/30 text-red-500 font-bold text-xl border border-red-900/50 mb-6">3</div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Drive Viral Traffic</h3>
+                        <p class="text-gray-400 text-lg mb-6">
+                            Supercharge your rankings by simulating viral social engagement. Google loves trending content.
+                        </p>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-red-500"></i>
+                                <span>Simulate visitors from Twitter, Reddit, Facebook</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-red-500"></i>
+                                <span>Drip-feed traffic over 1-30 days for natural growth</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check mt-1 text-red-500"></i>
+                                <span>High-quality residential IPs avoid detection</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="order-1 md:order-2 relative group">
+                        <div class="absolute -inset-2 bg-red-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl">
+                            <!-- Traffic Chart Simulation -->
+                            <div class="flex justify-between items-end h-32 gap-2 mb-4">
+                                <div class="w-full bg-red-900/20 rounded-t h-[20%]"></div>
+                                <div class="w-full bg-red-900/40 rounded-t h-[45%]"></div>
+                                <div class="w-full bg-red-600 rounded-t h-[80%] shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
+                                <div class="w-full bg-red-900/50 rounded-t h-[60%]"></div>
+                                <div class="w-full bg-red-900/30 rounded-t h-[30%]"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 font-mono border-t border-white/5 pt-2">
+                                <span>Day 1</span>
+                                <span>Day 2</span>
+                                <span>Day 3</span>
+                            </div>
+                            <div class="mt-4 bg-white/5 rounded p-3 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">Ranking Boost</div>
+                                    <div class="text-white font-bold text-sm">+12 Positions</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Buy Credits -->
+                <div id="buy-credits" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
+                    <div class="order-2 md:order-1 relative group">
+                        <div class="absolute -inset-2 bg-purple-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl text-center">
+                            <h4 class="text-gray-400 uppercase text-xs font-bold mb-4">Payment Gateway</h4>
+                            <div class="bg-black/40 rounded-lg p-6 border border-white/5 mb-6">
+                                <div class="text-3xl font-bold text-white mb-1">$50.00</div>
+                                <div class="text-sm text-gray-500">5,000 Credits</div>
+                            </div>
+                            <button class="w-full py-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20">
+                                <i class="fas fa-lock"></i> Pay with Cryptomus
+                            </button>
+                            <div class="mt-4 text-xs text-gray-500 flex justify-center gap-4">
+                                <span class="flex items-center gap-1"><i class="fab fa-bitcoin"></i> BTC</span>
+                                <span class="flex items-center gap-1"><i class="fab fa-ethereum"></i> ETH</span>
+                                <span class="flex items-center gap-1"><i class="fas fa-dollar-sign"></i> USDT</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-1 md:order-2">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-900/30 text-purple-500 font-bold text-xl border border-purple-900/50 mb-6">4</div>
                         <h3 class="text-2xl font-bold text-white mb-4">Secure Crypto Payments</h3>
                         <p class="text-gray-400 text-lg mb-6">
                             Top up your account instantly using Cryptomus. We support major cryptocurrencies for privacy and speed.
@@ -507,24 +573,6 @@ if (isset($_SESSION['uid'])) {
                             <img src="/assets/img/bitcoin-btc-logo.png" class="h-8 object-contain">
                             <img src="/assets/img/ethereum-eth-logo.png" class="h-8 object-contain">
                             <img src="/assets/img/Zcash-Yellow.png" class="h-8 object-contain">
-                        </div>
-                    </div>
-                    <div class="order-1 md:order-2 relative group">
-                        <div class="absolute -inset-2 bg-purple-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl text-center">
-                            <h4 class="text-gray-400 uppercase text-xs font-bold mb-4">Payment Gateway</h4>
-                            <div class="bg-black/40 rounded-lg p-6 border border-white/5 mb-6">
-                                <div class="text-3xl font-bold text-white mb-1">$50.00</div>
-                                <div class="text-sm text-gray-500">5,000 Credits</div>
-                            </div>
-                            <button class="w-full py-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20">
-                                <i class="fas fa-lock"></i> Pay with Cryptomus
-                            </button>
-                            <div class="mt-4 text-xs text-gray-500 flex justify-center gap-4">
-                                <span class="flex items-center gap-1"><i class="fab fa-bitcoin"></i> BTC</span>
-                                <span class="flex items-center gap-1"><i class="fab fa-ethereum"></i> ETH</span>
-                                <span class="flex items-center gap-1"><i class="fas fa-dollar-sign"></i> USDT</span>
-                            </div>
                         </div>
                     </div>
                 </div>
