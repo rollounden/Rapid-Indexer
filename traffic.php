@@ -93,7 +93,7 @@ include __DIR__ . '/includes/header_new.php';
                 <label class="block text-sm font-medium text-gray-300 mb-2" id="qtyLabel">Total Visitors (Min: 1000 Recommended)</label>
                 <input type="number" name="quantity" id="quantity" min="100" step="100" value="4000" required
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
-                <p class="text-xs text-gray-500 mt-1">Estimated Price: <span id="priceDisplay">0</span> credits</p>
+                <p class="text-xs text-gray-500 mt-1">Estimated Price: <span id="priceDisplay" class="text-white font-bold text-lg">0</span></p>
                 <p class="text-xs text-gray-400 mt-1 hidden" id="campaignInfo">
                     <i class="fas fa-chart-line"></i> Visitors will be distributed in random viral bursts over <span id="daysDisplay">3</span> days to simulate real social engagement.
                 </p>
