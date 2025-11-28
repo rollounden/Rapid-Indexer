@@ -1,4 +1,12 @@
-RewriteEngine On
+Launch Viral Campaign
+Sign up to access our Viral Blast technology. Drip-feed traffic from social sources.
+
+Create Account
+Log In
+
+
+
+ RewriteEngine On
 
 # Remove .php extension
 RewriteCond %{REQUEST_FILENAME} !-d

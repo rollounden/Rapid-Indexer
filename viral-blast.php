@@ -153,7 +153,7 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                 </div>
 
                 <!-- Interactive Demo Card -->
-                <div class="relative mx-auto max-w-md w-full" x-data="{ showTrafficModal: false, trafficQty: 4000 }">
+                <div class="relative mx-auto max-w-md w-full" x-data="{ trafficQty: 4000 }">
                     <div class="absolute -inset-1 bg-gradient-to-r from-primary-600 to-purple-600 rounded-2xl blur opacity-30 animate-pulse"></div>
                     <div class="card rounded-xl p-6 md:p-8 border-primary-600/30 bg-[#1a1a1a] relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">Live Demo</div>
@@ -168,12 +168,12 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                             </div>
                         </div>
 
-                        <form class="space-y-4">
+                        <form class="space-y-4" action="<?php echo $cta_link; ?>">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Target URL</label>
                                 <div class="relative">
                                     <input type="text" class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10 focus:border-primary-500 transition-colors" 
-                                        placeholder="https://example.com/viral-post" readonly x-on:click="showTrafficModal = true">
+                                        placeholder="https://example.com/viral-post">
                                     <div class="absolute right-3 top-3 text-gray-500"><i class="fas fa-link"></i></div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Visitors</label>
-                                    <select class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10 appearance-none cursor-pointer hover:border-primary-500 transition-colors" x-model="trafficQty" x-on:click.prevent="showTrafficModal = true">
+                                    <select class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10 appearance-none cursor-pointer hover:border-primary-500 transition-colors" x-model="trafficQty">
                                         <option value="1000">1,000</option>
                                         <option value="4000" selected>4,000</option>
                                         <option value="10000">10,000</option>
@@ -198,32 +198,11 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                                     <span class="text-gray-400">Estimated Cost:</span>
                                     <span class="px-3 py-1 rounded-md bg-primary-900/20 border border-primary-900/30 text-primary-400 font-mono font-bold" x-text="Math.ceil((trafficQty / 1000) * 60) + ' Credits'">240 Credits</span>
                                 </div>
-                                <button type="button" class="w-full sm:w-auto px-6 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/20" x-on:click.prevent="showTrafficModal = true">
+                                <a href="<?php echo $cta_link; ?>" class="w-full sm:w-auto px-6 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/20 flex items-center justify-center">
                                     Launch Blast <i class="fas fa-rocket ml-1"></i>
-                                </button>
+                                </a>
                             </div>
                         </form>
-
-                        <!-- Traffic Modal -->
-                        <div x-show="showTrafficModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-0">
-                            <div x-show="showTrafficModal" x-transition.opacity @click="showTrafficModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-                            <div x-show="showTrafficModal" x-transition.scale.origin.center class="relative card rounded-xl p-8 max-w-md w-full shadow-2xl border border-white/10">
-                                <button @click="showTrafficModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
-                                    <i class="fa-solid fa-times text-xl"></i>
-                                </button>
-                                <div class="text-center mb-8">
-                                    <div class="w-14 h-14 bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-500 border border-primary-900/50">
-                                        <i class="fa-solid fa-fire text-xl"></i>
-                                    </div>
-                                    <h3 class="text-2xl font-bold text-white mb-2">Launch Viral Campaign</h3>
-                                    <p class="text-gray-400">Sign up to access our <span class="text-white font-bold">Viral Blast</span> technology. Drip-feed traffic from social sources.</p>
-                                </div>
-                                <div class="space-y-3">
-                                    <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold transition-all shadow-lg shadow-primary-900/20">Create Account</a>
-                                    <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
