@@ -756,7 +756,6 @@ if (isset($_SESSION['uid'])) {
 
                 <!-- Traffic Blast -->
                 <div class="rounded-xl p-8 card flex flex-col border border-red-500/30 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Viral</div>
                     <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Traffic Blast</h3>
                     <div class="flex items-baseline gap-1 mb-6">
                         <span class="text-4xl font-extrabold text-red-500">$0.60</span>
