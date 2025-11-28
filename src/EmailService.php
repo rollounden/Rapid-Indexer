@@ -71,7 +71,16 @@ class EmailService
 
     public function sendPromo(string $to, string $subject, string $message)
     {
-        return $this->send($to, $subject, $message);
+        // Override From address for marketing emails
+        $originalEmail = $this->fromEmail;
+        $this->fromEmail = 'marketing@rapid-indexer.com';
+        
+        $result = $this->send($to, $subject, $message);
+        
+        // Restore original email (support@) for other calls
+        $this->fromEmail = $originalEmail;
+        
+        return $result;
     }
 }
 
