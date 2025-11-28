@@ -213,21 +213,18 @@ if (isset($_SESSION['uid'])) {
                 </p>
             </div>
 
-            <!-- Demo visualization -->
-            <div class="mt-20 max-w-4xl mx-auto" x-data="{ showModal: false, urlCount: 0, demoUrls: '' }" x-init="$watch('demoUrls', () => {
-                if (!demoUrls) { urlCount = 0; } else { urlCount = demoUrls.split('\n').filter(line => line.trim().length > 0).length; }
-            });">
-                <div class="card rounded-xl p-6 md:p-8">
+            <div class="mt-20 grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Indexer Demo -->
+                <div class="card rounded-xl p-6 md:p-8 border-white/10 hover:border-primary-500/30 transition-colors" x-data="{ showModal: false, urlCount: 0, demoUrls: '' }" x-init="$watch('demoUrls', () => {
+                    if (!demoUrls) { urlCount = 0; } else { urlCount = demoUrls.split('\n').filter(line => line.trim().length > 0).length; }
+                });">
                     <div class="flex items-center justify-between mb-6">
                         <div>
                             <h2 class="text-lg font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-bolt text-primary-500"></i>
-                                Quick Submit
+                                Quick Indexer
                             </h2>
-                            <p class="text-sm text-gray-400 mt-1">Enter URLs to index immediately</p>
-                        </div>
-                        <div class="hidden md:block text-xs font-medium text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
-                            Max 10,000 URLs / batch
+                            <p class="text-sm text-gray-400 mt-1">Submit URLs to index immediately</p>
                         </div>
                     </div>
 
@@ -251,25 +248,97 @@ if (isset($_SESSION['uid'])) {
                             </button>
                         </div>
                     </form>
-                </div>
-                
-                <!-- Modal -->
-                <div x-show="showModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-0">
-                    <div x-show="showModal" x-transition.opacity @click="showModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-                    <div x-show="showModal" x-transition.scale.origin.center class="relative card rounded-xl p-8 max-w-md w-full shadow-2xl border border-white/10">
-                        <button @click="showModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
-                            <i class="fa-solid fa-times text-xl"></i>
-                        </button>
-                        <div class="text-center mb-8">
-                            <div class="w-14 h-14 bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-500 border border-primary-900/50">
-                                <i class="fa-solid fa-user-plus text-xl"></i>
+
+                    <!-- Modal -->
+                    <div x-show="showModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-0">
+                        <div x-show="showModal" x-transition.opacity @click="showModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+                        <div x-show="showModal" x-transition.scale.origin.center class="relative card rounded-xl p-8 max-w-md w-full shadow-2xl border border-white/10">
+                            <button @click="showModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
+                                <i class="fa-solid fa-times text-xl"></i>
+                            </button>
+                            <div class="text-center mb-8">
+                                <div class="w-14 h-14 bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-500 border border-primary-900/50">
+                                    <i class="fa-solid fa-user-plus text-xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Create Free Account</h3>
+                                <p class="text-gray-400">Sign up to submit your URLs. You'll get <span class="text-primary-400 font-bold"><?php echo $free_credits; ?> free credits</span> instantly.</p>
                             </div>
-                            <h3 class="text-2xl font-bold text-white mb-2">Create Free Account</h3>
-                            <p class="text-gray-400">Sign up to submit your URLs. You'll get <span class="text-primary-400 font-bold"><?php echo $free_credits; ?> free credits</span> instantly.</p>
+                            <div class="space-y-3">
+                                <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-colors">Sign Up Free</a>
+                                <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
+                            </div>
                         </div>
-                        <div class="space-y-3">
-                            <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-colors">Sign Up Free</a>
-                            <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
+                    </div>
+                </div>
+
+                <!-- Traffic Demo (New) -->
+                <div class="card rounded-xl p-6 md:p-8 border-primary-600/30 bg-primary-900/5 hover:border-primary-500/50 transition-all relative overflow-hidden" x-data="{ showTrafficModal: false, trafficQty: 4000 }">
+                    <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">New Feature</div>
+                    
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-fire-flame-curved text-primary-500"></i>
+                                Viral Traffic Blast
+                            </h2>
+                            <p class="text-sm text-gray-400 mt-1">Simulate viral social traffic spikes</p>
+                        </div>
+                    </div>
+
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Target URL</label>
+                            <div class="relative">
+                                <input type="text" class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10" 
+                                    placeholder="https://example.com/viral-post" readonly x-on:click="showTrafficModal = true">
+                                <div class="absolute right-3 top-3 text-gray-500"><i class="fas fa-link"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Visitors</label>
+                                <select class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10 appearance-none" x-model="trafficQty" x-on:click.prevent="showTrafficModal = true">
+                                    <option value="1000">1,000</option>
+                                    <option value="4000" selected>4,000</option>
+                                    <option value="10000">10,000</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Duration</label>
+                                <div class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10">3 Days</div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center pt-2">
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="text-gray-400">Estimated Cost:</span>
+                                <span class="px-3 py-1 rounded-md bg-primary-900/20 border border-primary-900/30 text-primary-400 font-mono font-bold" x-text="Math.ceil((trafficQty / 1000) * 60) + ' Credits'">240 Credits</span>
+                            </div>
+                            <button type="button" class="w-full sm:w-auto px-6 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/20" x-on:click.prevent="showTrafficModal = true">
+                                Launch Blast <i class="fas fa-rocket ml-1"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Traffic Modal -->
+                    <div x-show="showTrafficModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-0">
+                        <div x-show="showTrafficModal" x-transition.opacity @click="showTrafficModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+                        <div x-show="showTrafficModal" x-transition.scale.origin.center class="relative card rounded-xl p-8 max-w-md w-full shadow-2xl border border-white/10">
+                            <button @click="showTrafficModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
+                                <i class="fa-solid fa-times text-xl"></i>
+                            </button>
+                            <div class="text-center mb-8">
+                                <div class="w-14 h-14 bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-500 border border-primary-900/50">
+                                    <i class="fa-solid fa-fire text-xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Launch Viral Campaign</h3>
+                                <p class="text-gray-400">Sign up to access our <span class="text-white font-bold">Viral Blast</span> technology. Drip-feed traffic from social sources.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold transition-all shadow-lg shadow-primary-900/20">Create Account</a>
+                                <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
+                            </div>
                         </div>
                     </div>
                 </div>
