@@ -96,9 +96,11 @@ class CryptomusClient
         return $this->request('/payment', $data);
     }
 
-    public function getPaymentStatus(string $uuid)
+    // Updated to accept array or string for flexibility (order_id or uuid)
+    public function getPaymentStatus($identifier)
     {
-        return $this->request('/payment/info', ['uuid' => $uuid]);
+        $data = is_array($identifier) ? $identifier : ['uuid' => $identifier];
+        return $this->request('/payment/info', $data);
     }
     
     public function verifySignature(array $data): bool

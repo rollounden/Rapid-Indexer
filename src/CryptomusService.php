@@ -138,25 +138,37 @@ class CryptomusService
             throw new Exception('Payment not found');
         }
         
-        // If we have a UUID (capture_id), check by that
+        // Identify if we have UUID or should use order_id
+        $identifier = [];
         if (!empty($payment['paypal_capture_id']) && strpos($payment['paypal_capture_id'], '-') !== false) {
-            // Assuming it's a UUID
-            $response = $this->client->getPaymentStatus($payment['paypal_capture_id']);
+            $identifier = ['uuid' => $payment['paypal_capture_id']];
+        } else {
+            $identifier = ['order_id' => $orderId];
+        }
+
+        $response = $this->client->getPaymentStatus($identifier);
+        
+        // Log this check for debugging
+        $logFile = __DIR__ . '/../storage/logs/manual_check_debug.log';
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " Checking ID: " . json_encode($identifier) . " Response: " . json_encode($response) . "\n", FILE_APPEND);
+        
+        if (isset($response['result']['status'])) {
+            $status = $response['result']['status'];
+            $uuid = $response['result']['uuid'] ?? $payment['paypal_capture_id'] ?? '';
             
-            if (isset($response['result']['status'])) {
-                $status = $response['result']['status'];
-                
-                if ($status === 'paid' || $status === 'paid_over') {
-                    $amount = $response['result']['amount'] ?? $payment['amount'];
-                    $currency = $response['result']['currency'] ?? $payment['currency'];
-                    $this->processSuccess($orderId, $amount, $currency, $payment['paypal_capture_id']);
-                    return 'paid';
-                } elseif ($status === 'cancel' || $status === 'fail') {
-                    $this->processFailure($orderId, $status);
-                    return 'failed';
-                } else {
-                    return $status; // pending, check, etc.
-                }
+            if ($status === 'paid' || $status === 'paid_over') {
+                $amount = $response['result']['amount'] ?? $payment['amount'];
+                $currency = $response['result']['currency'] ?? $payment['currency'];
+                $this->processSuccess($orderId, $amount, $currency, $uuid);
+                return 'paid';
+            } elseif ($status === 'cancel' || $status === 'fail') {
+                $this->processFailure($orderId, $status);
+                return 'failed';
+            } elseif ($status === 'check' || $status === 'process') {
+                 // 'check' means waiting for blockchain confirmations
+                 return 'processing';
+            } else {
+                return $status; // pending, etc.
             }
         }
         
