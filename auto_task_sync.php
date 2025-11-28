@@ -16,20 +16,30 @@ try {
     // Get all tasks that need syncing
     // For checker tasks: sync if processing or older than 15 seconds
     // For indexer tasks: sync if processing or older than 2 minutes
+    // For traffic tasks: sync if processing or older than 5 minutes (handled by TrafficService)
     $stmt = $pdo->prepare('
         SELECT * FROM tasks 
         WHERE status IN (?, ?) 
-        AND speedyindex_task_id IS NOT NULL 
         AND (
             status = ? OR 
             (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 15 SECOND)) OR
-            (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 2 MINUTE))
+            (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 2 MINUTE)) OR
+            (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 5 MINUTE)) OR
+            (type = ? AND created_at < DATE_SUB(NOW(), INTERVAL 5 MINUTE))
         )
         ORDER BY 
             CASE WHEN type = ? THEN 0 ELSE 1 END,
             created_at ASC
     ');
-    $stmt->execute(['processing', 'pending', 'processing', 'checker', 'indexer', 'checker']);
+    $stmt->execute([
+        'processing', 'pending', // status IN
+        'processing',            // status =
+        'checker',               // type =
+        'indexer',               // type =
+        'traffic',               // type =
+        'traffic_campaign',      // type =
+        'checker'                // ORDER BY
+    ]);
     $tasks = $stmt->fetchAll();
     
     if (empty($tasks)) {
@@ -47,17 +57,31 @@ try {
         try {
             echo "Syncing task #{$task['id']} ({$task['type']})...\n";
             
-            $result = TaskService::syncTaskStatus($task['user_id'], $task['id']);
-            
-            if ($result['updated'] > 0) {
-                echo "✅ Task #{$task['id']} synced - {$result['updated']} links updated\n";
-                $synced_count++;
+            if ($task['type'] === 'traffic' || $task['type'] === 'traffic_campaign') {
+                require_once __DIR__ . '/src/TrafficService.php';
+                TrafficService::syncStatus($task['id']);
+                // Traffic sync doesn't return a detailed result array like TaskService yet,
+                // so we assume success if no exception
+                 echo "✅ Task #{$task['id']} synced (Traffic)\n";
+                 $synced_count++;
             } else {
-                echo "⏳ Task #{$task['id']} still processing\n";
+                // Existing logic for indexer/checker
+                if (empty($task['speedyindex_task_id'])) {
+                     echo "⚠️ Task #{$task['id']} skipped (no provider ID)\n";
+                     continue;
+                }
+                $result = TaskService::syncTaskStatus($task['user_id'], $task['id']);
                 
-                // For checker tasks that are still pending, add a small delay before next check
-                if ($task['type'] === 'checker' && $task['status'] === 'pending') {
-                    echo "🔄 Checker task still pending, will retry in next cycle\n";
+                if ($result['updated'] > 0) {
+                    echo "✅ Task #{$task['id']} synced - {$result['updated']} links updated\n";
+                    $synced_count++;
+                } else {
+                    echo "⏳ Task #{$task['id']} still processing\n";
+                    
+                    // For checker tasks that are still pending, add a small delay before next check
+                    if ($task['type'] === 'checker' && $task['status'] === 'pending') {
+                        echo "🔄 Checker task still pending, will retry in next cycle\n";
+                    }
                 }
             }
             

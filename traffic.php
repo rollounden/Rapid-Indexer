@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [
             'link' => $_POST['link'] ?? '',
             'quantity' => $_POST['quantity'] ?? 0,
+            'days' => $_POST['days'] ?? 1,
+            'mode' => $_POST['mode'] ?? 'single',
             'country' => $_POST['country'] ?? 'WW',
             'device' => $_POST['device'] ?? '',
             'type_of_traffic' => $_POST['type_of_traffic'] ?? '',
@@ -69,12 +71,32 @@ include __DIR__ . '/includes/header_new.php';
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
             </div>
 
+            <!-- Mode: Single vs Campaign -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Mode</label>
+                    <select name="mode" id="modeSelector" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                        <option value="campaign" selected>Drip-Feed Campaign (Recommended)</option>
+                        <option value="single">One-Time Blast</option>
+                    </select>
+                </div>
+                
+                <div id="daysField">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Duration (Days)</label>
+                    <input type="number" name="days" id="days" min="1" max="30" value="3"
+                           class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                </div>
+            </div>
+            
             <!-- Quantity -->
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Quantity (Min: 100)</label>
+            <div id="quantityField">
+                <label class="block text-sm font-medium text-gray-300 mb-2" id="qtyLabel">Total Quantity (Min: 100)</label>
                 <input type="number" name="quantity" id="quantity" min="100" step="100" required
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
-                <p class="text-xs text-gray-500 mt-1">Price: <span id="priceDisplay">0</span> credits</p>
+                <p class="text-xs text-gray-500 mt-1">Estimated Price: <span id="priceDisplay">0</span> credits</p>
+                <p class="text-xs text-gray-400 mt-1 hidden" id="campaignInfo">
+                    <i class="fas fa-info-circle"></i> Visitors will be delivered randomly over <span id="daysDisplay">3</span> days.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -144,11 +166,39 @@ const quantityInput = document.getElementById('quantity');
 const priceDisplay = document.getElementById('priceDisplay');
 const pricePer1000 = <?php echo $pricePer1000; ?>;
 
-quantityInput.addEventListener('input', function() {
-    const qty = parseInt(this.value) || 0;
+const modeSelector = document.getElementById('modeSelector');
+const daysField = document.getElementById('daysField');
+const daysInput = document.getElementById('days');
+const qtyLabel = document.getElementById('qtyLabel');
+const campaignInfo = document.getElementById('campaignInfo');
+const daysDisplay = document.getElementById('daysDisplay');
+
+function updateUI() {
+    const mode = modeSelector.value;
+    const qty = parseInt(quantityInput.value) || 0;
+    const days = parseInt(daysInput.value) || 1;
+    
     const cost = Math.ceil((qty / 1000) * pricePer1000);
     priceDisplay.textContent = cost;
-});
+    
+    if (mode === 'campaign') {
+        daysField.classList.remove('hidden');
+        qtyLabel.textContent = 'Total Quantity (Min: 100)';
+        campaignInfo.classList.remove('hidden');
+        daysDisplay.textContent = days;
+    } else {
+        daysField.classList.add('hidden');
+        qtyLabel.textContent = 'Quantity (Min: 100)';
+        campaignInfo.classList.add('hidden');
+    }
+}
+
+quantityInput.addEventListener('input', updateUI);
+daysInput.addEventListener('input', updateUI);
+modeSelector.addEventListener('change', updateUI);
+
+// Init
+updateUI();
 
 const trafficType = document.getElementById('trafficType');
 const googleKeywordField = document.getElementById('googleKeywordField');
