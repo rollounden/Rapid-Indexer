@@ -38,7 +38,13 @@ try {
 
 // Handle discount validation (AJAX)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'validate_discount') {
+    // Clean buffer to remove any previous output/warnings
+    while (ob_get_level()) ob_end_clean();
+    
+    // Disable error display for JSON response to prevent syntax errors
+    ini_set('display_errors', 0);
     header('Content-Type: application/json');
+    
     try {
         require_once __DIR__ . '/src/DiscountService.php';
         $code = $_POST['code'] ?? '';
@@ -59,8 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             'code' => $discount['code'],
             'id' => $discount['id']
         ]);
-    } catch (Exception $e) {
-        echo json_encode(['valid' => false, 'message' => $e->getMessage()]);
+    } catch (Throwable $e) {
+        // Log the full error
+        error_log("Discount Validation Error: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+        echo json_encode(['valid' => false, 'message' => 'Error: ' . $e->getMessage()]);
     }
     exit;
 }
@@ -474,23 +482,29 @@ function paymentForm() {
                 method: 'POST',
                 body: formData
             })
-            .then(r => r.json())
-            .then(data => {
-                if (data.valid) {
-                    this.discountValid = true;
-                    this.discountAmount = data.discount_amount;
-                    this.finalAmount = data.final_amount;
-                    this.discountId = data.id;
-                    this.discountMsg = `Code applied! You save $${data.discount_amount}`;
-                } else {
-                    this.discountValid = false;
-                    this.discountMsg = data.message;
-                    this.finalAmount = 0;
-                    this.discountId = '';
+            .then(r => r.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    if (data.valid) {
+                        this.discountValid = true;
+                        this.discountAmount = data.discount_amount;
+                        this.finalAmount = data.final_amount;
+                        this.discountId = data.id;
+                        this.discountMsg = `Code applied! You save $${data.discount_amount}`;
+                    } else {
+                        this.discountValid = false;
+                        this.discountMsg = data.message;
+                        this.finalAmount = 0;
+                        this.discountId = '';
+                    }
+                } catch (e) {
+                    console.error('Invalid JSON response:', text);
+                    this.discountMsg = 'Server error validating code. See console.';
                 }
             })
             .catch(e => {
-                this.discountMsg = 'Error validating code';
+                this.discountMsg = 'Network error validating code';
             });
         },
         
