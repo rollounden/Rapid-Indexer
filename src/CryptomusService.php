@@ -225,31 +225,73 @@ class CryptomusService
             return 0;
         }
         
-        $updatedCount = 0;
+        // Map by Order ID for quick lookup
+        $paymentsByOrder = [];
+        foreach ($pendingPayments as $p) {
+            if (!empty($p['paypal_order_id'])) {
+                $paymentsByOrder[$p['paypal_order_id']] = $p;
+            }
+        }
         
-        // Log start of sync
+        $updatedCount = 0;
         $logDir = __DIR__ . '/../storage/logs';
         if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
-        file_put_contents($logDir . '/sync_debug.log', date('Y-m-d H:i:s') . " Starting Sync for " . count($pendingPayments) . " payments\n", FILE_APPEND);
+        $logFile = $logDir . '/sync_debug.log';
         
-        foreach ($pendingPayments as $payment) {
-            // Check valid identifier
-            if (empty($payment['paypal_order_id'])) continue;
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " Starting Sync for " . count($pendingPayments) . " payments\n", FILE_APPEND);
+
+        // Try to fetch list from API to bulk update
+        try {
+            // Fetch last 50 payments from API to cover recent pending ones
+            // API doesn't support filtering by status in list, so we get recent history
+            $response = $this->client->request('/payment/list', []); // Default gets recent
             
+            if (isset($response['result']['items']) && is_array($response['result']['items'])) {
+                foreach ($response['result']['items'] as $item) {
+                    $remoteOrderId = $item['order_id'] ?? '';
+                    $remoteStatus = $item['status'] ?? '';
+                    
+                    if ($remoteOrderId && isset($paymentsByOrder[$remoteOrderId])) {
+                        $localPayment = $paymentsByOrder[$remoteOrderId];
+                        
+                        // Check if status changed
+                        // API Statuses: paid, paid_over, confirm_check, check, process, cancel, fail
+                        
+                        if (in_array($remoteStatus, ['paid', 'paid_over', 'confirm_check'])) {
+                             // It's paid!
+                             $this->processSuccess($remoteOrderId, $item['amount'], $item['currency'], $item['uuid']);
+                             $updatedCount++;
+                             file_put_contents($logFile, "  -> Matched & Updated PAID: $remoteOrderId\n", FILE_APPEND);
+                        } elseif (in_array($remoteStatus, ['cancel', 'fail', 'system_fail']) && $localPayment['status'] !== 'failed' && $localPayment['status'] !== 'cancelled') {
+                             // It's failed/cancelled
+                             $this->processFailure($remoteOrderId, $remoteStatus);
+                             $updatedCount++;
+                             file_put_contents($logFile, "  -> Matched & Updated FAILED: $remoteOrderId (Status: $remoteStatus)\n", FILE_APPEND);
+                        }
+                        
+                        // Remove from list so we don't check individually later (optimization)
+                        unset($paymentsByOrder[$remoteOrderId]);
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            file_put_contents($logFile, "  ! Bulk List API Error: " . $e->getMessage() . "\n", FILE_APPEND);
+        }
+        
+        // For any remaining pending payments that weren't in the bulk list (maybe older?), check individually
+        foreach ($paymentsByOrder as $orderId => $payment) {
             try {
-                // Log checking
-                file_put_contents($logDir . '/sync_debug.log', "Checking Payment ID " . $payment['id'] . " (Order: " . $payment['paypal_order_id'] . ")\n", FILE_APPEND);
+                file_put_contents($logFile, "Checking Individual Payment ID " . $payment['id'] . " (Order: " . $orderId . ")\n", FILE_APPEND);
                 
-                $status = $this->checkStatus($payment['paypal_order_id']);
+                $status = $this->checkStatus($orderId);
                 
-                file_put_contents($logDir . '/sync_debug.log', "Result Status: $status\n", FILE_APPEND);
+                file_put_contents($logFile, "Result Status: $status\n", FILE_APPEND);
                 
-                if ($status === 'paid') {
+                if ($status === 'paid' || $status === 'failed') {
                     $updatedCount++;
                 }
             } catch (Exception $e) {
-                // Log and continue
-                file_put_contents($logDir . '/sync_debug.log', "Error syncing payment " . $payment['id'] . ": " . $e->getMessage() . "\n", FILE_APPEND);
+                file_put_contents($logFile, "Error syncing payment " . $payment['id'] . ": " . $e->getMessage() . "\n", FILE_APPEND);
             }
         }
         
