@@ -21,6 +21,9 @@ Phase 4: Admin Dashboard
 - User management; payments log; usage stats; API health/errors; manual task trigger; CSV exports; announcements.
 
 Phase 5: Security, Compliance, Observability
+
+
+
 - HTTPS, CSRF/XSS/SQLi protection, bcrypt, activity logs, GDPR data export/delete.
 - Error dashboards, daily/weekly error reports; abuse detection.
 
