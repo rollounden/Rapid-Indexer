@@ -47,7 +47,7 @@ include __DIR__ . '/includes/header_new.php';
     <!-- Hero Section -->
     <div class="text-center mb-12">
         <div class="inline-flex items-center gap-2 bg-primary-600/10 border border-primary-600/20 rounded-full px-4 py-1 text-primary-400 text-sm font-bold uppercase mb-4">
-            <i class="fas fa-bolt"></i> New Feature
+            <i class="fas fa-bolt"></i> Simulate Virality
         </div>
         <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Viral Website Traffic</h1>
         <p class="text-xl text-gray-400 max-w-2xl mx-auto">Simulate organic virality with our drip-feed traffic system. Boost your rankings, improve metrics, and signal authority to search engines.</p>
