@@ -24,7 +24,7 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
     <meta property="og:url" content="https://rapid-indexer.com/viral-blast.php">
     <meta property="og:title" content="Viral Blast - The Secret to Instant Ranking Boosts">
     <meta property="og:description" content="Don't just build links. Simulate the viral activity Google loves. Get 1000s of real visitors from social referrers today.">
-    <meta property="og:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
+    <meta property="og:image" content="https://rapid-indexer.com/assets/img/viral-traffic-dashboard.png">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
