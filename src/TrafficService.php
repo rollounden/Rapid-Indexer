@@ -83,35 +83,78 @@ class TrafficService
         $days = intval($params['days'] ?? 1);
         if ($days < 1) { throw new Exception('Minimum duration is 1 day'); }
         
+        // Minimum recommended order size
+        // User input quantity should be treated as minimum total
+        // But we'll stick to the quantity provided by user for simplicity, 
+        // or we can enforce a minimum in UI (already done: min 100).
+        
         // Generate Schedule
         $schedule = [];
         $currentTime = time();
         $endTime = $currentTime + ($days * 24 * 3600);
         $totalQuantity = 0;
+        $requestedQuantity = intval($params['quantity'] ?? 0);
         
-        // Loop until we reach end time
-        // Start first run shortly after now (e.g., 5-30 mins)
+        // We want to distribute requestedQuantity over the days in small bursts
+        // Instead of random amount loops, let's work backwards from total quantity
+        // But we also want "random intervals" and "random amounts".
+        
+        // Approach: 
+        // 1. Calculate average runs needed based on avg burst size (~350)
+        // 2. Distribute these runs over the time period
+        
+        $avgBurst = 350; // (100+600)/2
+        $estimatedRuns = ceil($requestedQuantity / $avgBurst);
+        
+        // Ensure we have enough time
+        $totalSeconds = $days * 24 * 3600;
+        $avgInterval = $totalSeconds / $estimatedRuns;
+        
+        // Start first run shortly after now
         $nextRun = $currentTime + rand(300, 1800); 
+        $remainingQty = $requestedQuantity;
         
-        while ($nextRun < $endTime) {
-            $qty = rand(100, 600);
+        while ($remainingQty > 0 && $nextRun < $endTime) {
+            // Calculate burst size
+            // Last run takes remaining
+            if ($remainingQty < 600) {
+                $qty = $remainingQty;
+            } else {
+                $qty = rand(100, 600);
+            }
+            
+            // Safety check: don't go over remaining
+            if ($qty > $remainingQty) $qty = $remainingQty;
+            
             $schedule[] = [
                 'time' => $nextRun,
                 'qty' => $qty
             ];
-            $totalQuantity += $qty;
             
-            // Next interval: 20m (1200s) to 6h (21600s)
-            $nextRun += rand(1200, 21600);
+            $remainingQty -= $qty;
+            $totalQuantity += $qty; // This should equal requestedQuantity at end
+            
+            // Calculate next interval
+            // We want some randomness around the average interval
+            // Variation +/- 30%
+            $variation = $avgInterval * 0.3;
+            $interval = $avgInterval + rand(-$variation, $variation);
+            if ($interval < 1200) $interval = 1200; // Minimum 20 mins
+            
+            $nextRun += $interval;
         }
         
-        if (empty($schedule)) {
-            // Fallback if something weird happened, ensure at least one run
-            $qty = rand(100, 600);
-            $schedule[] = ['time' => $currentTime + 600, 'qty' => $qty];
-            $totalQuantity += $qty;
+        // If we ran out of time but still have quantity, dump it in the last slot or add a slot
+        if ($remainingQty > 0) {
+            if (!empty($schedule)) {
+                $schedule[count($schedule)-1]['qty'] += $remainingQty;
+                $totalQuantity += $remainingQty;
+            } else {
+                $schedule[] = ['time' => $currentTime + 600, 'qty' => $remainingQty];
+                $totalQuantity += $remainingQty;
+            }
         }
-
+        
         // Calculate Cost
         $pricePer1000 = floatval(SettingsService::get('traffic_price_per_1000', 60)); 
         $cost = ceil(($totalQuantity / 1000) * $pricePer1000);
@@ -127,7 +170,7 @@ class TrafficService
                 'runs_count' => count($schedule)
             ]));
             
-            $title = "Auto Traffic: ~$totalQuantity over $days days to {$params['link']}";
+            $title = "Viral Traffic: $totalQuantity visitors over $days days";
             
             $stmt = $pdo->prepare('INSERT INTO tasks (user_id, type, title, status, provider, meta_data) VALUES (?, ?, ?, ?, ?, ?)');
             $stmt->execute([$userId, 'traffic_campaign', $title, 'processing', 'justanotherpanel', $metaData]);

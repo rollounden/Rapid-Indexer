@@ -76,8 +76,8 @@ include __DIR__ . '/includes/header_new.php';
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Mode</label>
                     <select name="mode" id="modeSelector" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
-                        <option value="campaign" selected>Drip-Feed Campaign (Recommended)</option>
-                        <option value="single">One-Time Blast</option>
+                        <option value="campaign" selected>Viral Simulation (Drip-Feed)</option>
+                        <option value="single">Quick Boost (24h Delivery)</option>
                     </select>
                 </div>
                 
@@ -90,12 +90,12 @@ include __DIR__ . '/includes/header_new.php';
             
             <!-- Quantity -->
             <div id="quantityField">
-                <label class="block text-sm font-medium text-gray-300 mb-2" id="qtyLabel">Total Quantity (Min: 100)</label>
-                <input type="number" name="quantity" id="quantity" min="100" step="100" required
+                <label class="block text-sm font-medium text-gray-300 mb-2" id="qtyLabel">Total Visitors (Min: 1000 Recommended)</label>
+                <input type="number" name="quantity" id="quantity" min="100" step="100" value="1000" required
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
                 <p class="text-xs text-gray-500 mt-1">Estimated Price: <span id="priceDisplay">0</span> credits</p>
                 <p class="text-xs text-gray-400 mt-1 hidden" id="campaignInfo">
-                    <i class="fas fa-info-circle"></i> Visitors will be delivered randomly over <span id="daysDisplay">3</span> days.
+                    <i class="fas fa-chart-line"></i> Visitors will be distributed in random viral bursts over <span id="daysDisplay">3</span> days to simulate real social engagement.
                 </p>
             </div>
 
@@ -133,9 +133,9 @@ include __DIR__ . '/includes/header_new.php';
             <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">Type of Traffic</label>
                 <select name="type_of_traffic" id="trafficType" class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
-                    <option value="3">Blank Referrer</option>
-                    <option value="1">Google Keyword</option>
-                    <option value="2">Custom Referrer</option>
+                    <option value="2" selected>Social Media / Custom Referrer (Recommended for Virality)</option>
+                    <option value="1">Google Keyword Search</option>
+                    <option value="3">Direct / Blank Referrer</option>
                 </select>
             </div>
 
@@ -146,10 +146,11 @@ include __DIR__ . '/includes/header_new.php';
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
             </div>
 
-            <div id="referrerField" class="hidden">
-                <label class="block text-sm font-medium text-gray-300 mb-2">Referring URL</label>
-                <input type="url" name="referring_url" placeholder="https://facebook.com"
+            <div id="referrerField">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Referring URL (e.g. Facebook, Twitter, Reddit)</label>
+                <input type="url" name="referring_url" placeholder="https://facebook.com" value="https://facebook.com"
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                <p class="text-xs text-gray-500 mt-1">Simulate traffic coming from popular social platforms.</p>
             </div>
 
             <div class="pt-4">
@@ -183,7 +184,7 @@ function updateUI() {
     
     if (mode === 'campaign') {
         daysField.classList.remove('hidden');
-        qtyLabel.textContent = 'Total Quantity (Min: 100)';
+        qtyLabel.textContent = 'Total Visitors (Min: 1000 Recommended)';
         campaignInfo.classList.remove('hidden');
         daysDisplay.textContent = days;
     } else {
