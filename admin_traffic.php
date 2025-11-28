@@ -28,6 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$schedule_id]);
                 $success = "Schedule #$schedule_id cancelled.";
                 break;
+
+            case 'delete_task':
+                $task_id = $_POST['task_id'];
+                
+                // Start transaction to delete task and related schedules/links
+                $pdo->beginTransaction();
+                try {
+                    // Delete schedule items
+                    $pdo->prepare("DELETE FROM traffic_schedule WHERE task_id = ?")->execute([$task_id]);
+                    
+                    // Delete task links (if any exist for this task)
+                    $pdo->prepare("DELETE FROM task_links WHERE task_id = ?")->execute([$task_id]);
+                    
+                    // Delete task itself
+                    $pdo->prepare("DELETE FROM tasks WHERE id = ?")->execute([$task_id]);
+                    
+                    $pdo->commit();
+                    $success = "Task #$task_id deleted successfully.";
+                } catch (Exception $e) {
+                    $pdo->rollBack();
+                    $error = "Failed to delete task: " . $e->getMessage();
+                }
+                break;
         }
     }
 }
@@ -115,6 +138,7 @@ include __DIR__ . '/includes/header_new.php';
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Details</th>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Progress</th>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-400 uppercase">Status</th>
+                            <th class="px-4 py-3 text-right text-xs font-bold text-gray-400 uppercase">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-white/5">
@@ -151,6 +175,15 @@ include __DIR__ . '/includes/header_new.php';
                                     <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400' : 'bg-red-500/10 text-red-400'); ?>">
                                         <?php echo $task['status']; ?>
                                     </span>
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    <form method="POST" onsubmit="return confirm('Are you sure you want to delete this task and all its scheduled runs? This cannot be undone.');">
+                                        <input type="hidden" name="action" value="delete_task">
+                                        <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                        <button type="submit" class="text-gray-400 hover:text-red-400 transition-colors" title="Delete Task">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
