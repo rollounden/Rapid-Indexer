@@ -122,6 +122,9 @@ include __DIR__ . '/includes/header_new.php';
             <a href="/admin_messages.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-envelope"></i> Messages
             </a>
+            <a href="/admin_email.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+                <i class="fas fa-paper-plane"></i> Send Promo
+            </a>
             <a href="/admin_discounts.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-tags"></i> Discounts
             </a>

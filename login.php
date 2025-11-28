@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Password</label>
-                        <!-- <a href="#" class="text-xs text-primary-500 hover:text-primary-400">Forgot password?</a> -->
+                        <a href="/forgot_password.php" class="text-xs text-primary-500 hover:text-primary-400">Forgot password?</a>
                     </div>
                     <input type="password" name="password" required 
                            class="dark w-full px-4 py-3 rounded-lg border border-white/10 bg-dark-950 text-white focus:border-primary-600 focus:ring-1 focus:ring-primary-600 transition-colors"

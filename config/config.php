@@ -105,3 +105,7 @@ if (isset($_ENV['CRYPTOMUS_MERCHANT_ID']) && isset($_ENV['CRYPTOMUS_PAYMENT_KEY'
     define('CRYPTOMUS_MERCHANT_ID', $_ENV['CRYPTOMUS_MERCHANT_ID']);
     define('CRYPTOMUS_PAYMENT_KEY', $_ENV['CRYPTOMUS_PAYMENT_KEY']);
 }
+
+// Email Configuration
+define('MAIL_FROM_ADDRESS', 'support@rapid-indexer.com');
+define('MAIL_FROM_NAME', 'Rapid Indexer');
