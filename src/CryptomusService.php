@@ -267,9 +267,13 @@ class CryptomusService
             throw new Exception("Payment not found for order ID: $orderId");
         }
         
+        // IMPORTANT: We try to call the remote test-webhook API first.
+        // If it fails (e.g. because of "Payment service not found" or firewall),
+        // we fallback to internal simulation so the Admin action "Force Paid" still works.
+        
         $callbackUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/cryptomus_webhook.php';
         
-        // Basic payload
+        // Basic payload for remote call
         $payload = [
             'url_callback' => $callbackUrl,
             'currency' => $payment['currency'] ?? 'USD',
@@ -291,6 +295,74 @@ class CryptomusService
              $payload['uuid'] = $payment['paypal_capture_id'];
         }
         
-        return $this->client->testWebhookPayment($payload);
+        try {
+             $res = $this->client->testWebhookPayment($payload);
+             // If successful state 0, return it
+             if (isset($res['state']) && $res['state'] === 0) {
+                 return $res;
+             }
+             // If not successful, we continue to fallback below...
+             // But maybe log why
+             $logDir = __DIR__ . '/../storage/logs';
+             if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+             file_put_contents($logDir . '/cryptomus_webhook_debug.log', date('Y-m-d H:i:s') . " Remote test webhook failed, falling back to local simulation. Response: " . json_encode($res) . "\n", FILE_APPEND);
+             
+        } catch (Exception $e) {
+             // Log error and continue to fallback
+             $logDir = __DIR__ . '/../storage/logs';
+             if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+             file_put_contents($logDir . '/cryptomus_webhook_debug.log', date('Y-m-d H:i:s') . " Remote test webhook exception: " . $e->getMessage() . "\n", FILE_APPEND);
+        }
+
+        // FALLBACK: Internal Simulation
+        // This ensures that even if Cryptomus API rejects the test request (e.g. invalid currency pair or invoice not found),
+        // we still process the "Paid" status internally for the Admin.
+        
+         $fakePayload = [
+            'type' => 'payment',
+            'uuid' => $payment['paypal_capture_id'] ?? 'test-uuid-' . time(),
+            'order_id' => $orderId,
+            'amount' => (string)$payment['amount'],
+            'payment_amount' => (string)$payment['amount'],
+            'payment_amount_usd' => (string)$payment['amount'],
+            'merchant_amount' => (string)$payment['amount'],
+            'commission' => '0',
+            'is_final' => true,
+            'status' => $status,
+            'from' => 'test_wallet',
+            'wallet_address_uuid' => null,
+            'network' => 'tron',
+            'currency' => 'USDT',
+            'payer_currency' => 'USDT',
+            'additional_data' => null,
+            'convert' => [
+                'to_currency' => 'USDT',
+                'commission' => null,
+                'rate' => '1.000000'
+            ],
+            'txid' => 'test_txid_' . time(),
+            'sign' => '' // Will be calculated below
+         ];
+         
+         // Manually sign it so handleWebhook accepts it
+         $apiKey = SettingsService::getDecrypted('cryptomus_api_key');
+         if (!$apiKey && defined('CRYPTOMUS_PAYMENT_KEY')) {
+            $apiKey = CRYPTOMUS_PAYMENT_KEY;
+         }
+         
+         $json = json_encode($fakePayload, JSON_UNESCAPED_UNICODE);
+         $sign = md5(base64_encode($json) . $apiKey);
+         $fakePayload['sign'] = $sign;
+         
+         // Call handleWebhook directly
+         
+         // Log the simulated webhook for debugging consistency
+         $logDir = __DIR__ . '/../storage/logs';
+         if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+         file_put_contents($logDir . '/cryptomus_webhook_debug.log', date('Y-m-d H:i:s') . " SIMULATED WEBHOOK:\nPayload: " . json_encode($fakePayload) . "\n-------------------\n", FILE_APPEND);
+
+         $this->handleWebhook($fakePayload);
+         
+         return ['state' => 0, 'message' => 'Simulated webhook (Remote call failed or skipped)'];
     }
 }
