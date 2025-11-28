@@ -2,8 +2,7 @@
 require_once __DIR__ . '/config/config.php';
 session_start();
 
-// Redirect logged-in users to dashboard, or maybe let them see this sales page?
-// Let's keep it accessible but change the CTA button if logged in.
+// Public sales page - no redirect required
 $is_logged_in = isset($_SESSION['uid']);
 $cta_link = $is_logged_in ? '/traffic.php' : '/register.php';
 $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free';
