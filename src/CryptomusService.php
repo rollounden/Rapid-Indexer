@@ -255,4 +255,34 @@ class CryptomusService
         
         return $updatedCount;
     }
+
+    public function triggerTestWebhook($orderId, $status = 'paid')
+    {
+        $pdo = Db::conn();
+        $stmt = $pdo->prepare('SELECT * FROM payments WHERE paypal_order_id = ? LIMIT 1');
+        $stmt->execute([$orderId]);
+        $payment = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$payment) {
+            throw new Exception("Payment not found for order ID: $orderId");
+        }
+        
+        $callbackUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/cryptomus_webhook.php';
+        
+        // Basic payload
+        $payload = [
+            'url_callback' => $callbackUrl,
+            'currency' => $payment['currency'] ?? 'USD',
+            'network' => 'eth', // Dummy network required
+            'order_id' => $orderId,
+            'status' => $status
+        ];
+        
+        // If we have a valid UUID, use it too.
+        if (!empty($payment['paypal_capture_id']) && strpos($payment['paypal_capture_id'], '-') !== false) {
+             $payload['uuid'] = $payment['paypal_capture_id'];
+        }
+        
+        return $this->client->testWebhookPayment($payload);
+    }
 }

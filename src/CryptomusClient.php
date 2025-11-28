@@ -102,6 +102,11 @@ class CryptomusClient
         $data = is_array($identifier) ? $identifier : ['uuid' => $identifier];
         return $this->request('/payment/info', $data);
     }
+
+    public function testWebhookPayment(array $data)
+    {
+        return $this->request('/test-webhook/payment', $data);
+    }
     
     public function verifySignature(array $data): bool
     {

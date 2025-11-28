@@ -41,6 +41,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "Failed to check status: " . $e->getMessage();
             }
         }
+        // Handle Test Webhook
+        elseif ($_POST['action'] === 'test_webhook') {
+            $paymentId = intval($_POST['payment_id']);
+            $orderId = $_POST['order_id'];
+            
+            try {
+                $cryptoService = new CryptomusService();
+                $res = $cryptoService->triggerTestWebhook($orderId, 'paid');
+                
+                if (isset($res['state']) && $res['state'] === 0) {
+                    $success = "Test Webhook triggered for Payment #$paymentId. Check logs/cryptomus_webhook_debug.log.";
+                } else {
+                    $error = "Failed to trigger webhook: " . json_encode($res);
+                }
+            } catch (Exception $e) {
+                $error = "Exception triggering webhook: " . $e->getMessage();
+            }
+        }
         // Handle Sync All Pending
         elseif ($_POST['action'] === 'sync_all') {
             try {
@@ -187,6 +205,15 @@ include __DIR__ . '/includes/header_new.php';
                                             <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($payment['paypal_order_id']); ?>">
                                             <button type="submit" class="p-2 rounded-lg bg-primary-500/10 text-primary-400 hover:bg-primary-500 hover:text-white transition-all" title="Check Status">
                                                 <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        <form method="POST" class="inline-block ml-1">
+                                            <input type="hidden" name="action" value="test_webhook">
+                                            <input type="hidden" name="payment_id" value="<?php echo $payment['id']; ?>">
+                                            <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($payment['paypal_order_id']); ?>">
+                                            <button type="submit" class="p-2 rounded-lg bg-purple-500/10 text-purple-400 hover:bg-purple-500 hover:text-white transition-all" title="Test Webhook (Force Paid)">
+                                                <i class="fas fa-bolt"></i>
                                             </button>
                                         </form>
                                     <?php endif; ?>
