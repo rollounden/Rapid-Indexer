@@ -1,41 +1,10 @@
-# Rapid Indexer URL Rewriting Rules
-
-# Enable URL rewriting
 RewriteEngine On
 
-# Handle root path - serve home page directly
-RewriteRule ^$ home.php [L]
-
-# Remove .php extension from URLs
+# Remove .php extension
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [NC,L]
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
 
-# Redirect .php URLs to clean URLs
-RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
-RewriteRule ^ /%1 [NC,L,R=301]
-
-# Security: Block access to sensitive files
-<Files ".env">
-    Order allow,deny
-    Deny from all
-</Files>
-
-<Files "*.log">
-    Order allow,deny
-    Deny from all
-</Files>
-
-# Security: Block access to config directory
-<Directory "config">
-    Order allow,deny
-    Deny from all
-</Directory>
-
-# Force HTTPS (uncomment when SSL is ready)
+# Force HTTPS (optional but recommended)
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Custom error pages
-ErrorDocument 404 /404.php
-ErrorDocument 500 /500.php

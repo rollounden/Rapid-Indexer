@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account - Rapid Indexer</title>
     <meta name="description" content="Join Rapid Indexer today. Get <?php echo $free_credits; ?> free credits to start indexing your backlinks immediately.">
-    <link rel="canonical" href="https://rapid-indexer.com/register.php">
+    <link rel="canonical" href="https://rapid-indexer.com/register">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph -->

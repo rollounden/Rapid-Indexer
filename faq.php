@@ -4,7 +4,7 @@ session_start();
 
 $page_title = 'Frequently Asked Questions - Rapid Indexer';
 $meta_description = 'Find answers to common questions about Rapid Indexer, pricing, indexing time, and API usage.';
-$canonical_url = 'https://rapid-indexer.com/faq.php';
+$canonical_url = 'https://rapid-indexer.com/faq';
 
 include __DIR__ . '/includes/header_new.php';
 ?>

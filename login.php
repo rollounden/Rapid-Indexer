@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Rapid Indexer</title>
     <meta name="description" content="Sign in to Rapid Indexer to manage your tasks, view reports, and boost your SEO.">
-    <link rel="canonical" href="https://rapid-indexer.com/login.php">
+    <link rel="canonical" href="https://rapid-indexer.com/login">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph -->

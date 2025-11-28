@@ -4,7 +4,7 @@ session_start();
 
 $page_title = 'Privacy Policy - Rapid Indexer';
 $meta_description = 'Learn how Rapid Indexer collects, uses, and protects your personal information.';
-$canonical_url = 'https://rapid-indexer.com/privacy.php';
+$canonical_url = 'https://rapid-indexer.com/privacy';
 
 include __DIR__ . '/includes/header_new.php';
 ?>

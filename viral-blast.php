@@ -17,7 +17,7 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
     <title>Viral Blast - Simulate Virality & Boost Rankings | Rapid Indexer</title>
     <meta name="description" content="Simulate viral social media traffic to boost your webpage rankings. Our tested drip-feed formula delivers real browser hits from high-authority referrers.">
     <meta name="keywords" content="viral traffic, seo traffic, rank boost, social signals, drip feed traffic, real visitors">
-    <link rel="canonical" href="https://rapid-indexer.com/viral-blast.php">
+    <link rel="canonical" href="https://rapid-indexer.com/viral-blast">
     <meta name="robots" content="index, follow">
     
     <meta property="og:type" content="website">
@@ -131,9 +131,15 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-                        <a href="<?php echo $cta_link; ?>" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
-                            <i class="fas fa-rocket"></i> <?php echo $cta_text; ?>
-                        </a>
+                        <?php if ($is_logged_in): ?>
+                            <a href="/traffic.php" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
+                                <i class="fas fa-rocket"></i> Launch Viral Campaign
+                            </a>
+                        <?php else: ?>
+                            <a href="/register.php" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
+                                <i class="fas fa-rocket"></i> Start Viral Campaign Free
+                            </a>
+                        <?php endif; ?>
                         <a href="#formula" class="w-full sm:w-auto px-8 py-4 border border-white/10 text-white font-medium rounded-xl hover:bg-white/5 transition-colors text-lg flex items-center justify-center">
                             See The Formula
                         </a>
@@ -306,15 +312,21 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
 
     <!-- CTA -->
     <section class="py-24">
-        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
             <h2 class="text-4xl font-bold text-white mb-6">Ready to go Viral?</h2>
             <p class="text-xl text-gray-400 mb-10">
                 Stop hoping for traffic. Create it. <br>
                 Join 5,000+ SEOs using Rapid Indexer to dominate the SERPs.
             </p>
-            <a href="<?php echo $cta_link; ?>" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
-                <?php echo $cta_text; ?>
-            </a>
+            <?php if ($is_logged_in): ?>
+                <a href="/traffic.php" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
+                    Launch Viral Campaign
+                </a>
+            <?php else: ?>
+                <a href="/register.php" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
+                    Start Viral Campaign Free
+                </a>
+            <?php endif; ?>
         </div>
     </section>
 
