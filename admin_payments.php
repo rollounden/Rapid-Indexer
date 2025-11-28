@@ -27,10 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $orderId = $_POST['order_id'];
             
             try {
-                // Check if payment exists and method is Cryptomus
-                // We need to check if it's actually cryptomus first? 
-                // The button is only shown if method is cryptomus so we assume yes or check ID.
-                
                 $cryptoService = new CryptomusService();
                 $newStatus = $cryptoService->checkStatus($orderId);
                 
@@ -38,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $success = "Payment #$paymentId confirmed as PAID.";
                 } elseif ($newStatus === 'processing') {
                     $success = "Payment #$paymentId is currently processing on blockchain.";
+                } elseif ($newStatus === 'failed') {
+                    $error = "Payment #$paymentId failed or was cancelled.";
                 } else {
                     $error = "Payment #$paymentId status is '$newStatus'.";
                 }
