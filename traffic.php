@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $params = [
             'link' => $_POST['link'] ?? '',
+            'task_name' => $_POST['task_name'] ?? '',
             'quantity' => $_POST['quantity'] ?? 0,
             'days' => $_POST['days'] ?? 1,
             'mode' => $_POST['mode'] ?? 'single',
@@ -64,6 +65,13 @@ include __DIR__ . '/includes/header_new.php';
     <div class="card p-8 rounded-xl">
         <form method="POST" id="trafficForm" class="space-y-6">
             
+            <!-- Task Name -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Task Name (Optional)</label>
+                <input type="text" name="task_name" placeholder="e.g. My Blog Viral Push" 
+                       class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+            </div>
+
             <!-- Link -->
             <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">Link to Page</label>

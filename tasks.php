@@ -135,27 +135,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $page = max(1, intval($_GET['page'] ?? 1));
 $per_page = 10;
 $offset = ($page - 1) * $per_page;
+$filter = $_GET['filter'] ?? null;
 
-$stmt = $pdo->prepare('
+$whereClause = 'WHERE t.user_id = ?';
+$params = [$_SESSION['uid']];
+
+if ($filter === 'traffic') {
+    $whereClause .= " AND (t.type = 'traffic' OR t.type = 'traffic_campaign')";
+} elseif ($filter) {
+    $whereClause .= " AND t.type = ?";
+    $params[] = $filter;
+}
+
+$stmt = $pdo->prepare("
     SELECT t.*, 
            COUNT(tl.id) as total_links,
-           SUM(CASE WHEN tl.status = "indexed" THEN 1 ELSE 0 END) as indexed_links,
-           SUM(CASE WHEN tl.status = "unindexed" THEN 1 ELSE 0 END) as unindexed_links,
-           SUM(CASE WHEN tl.status = "pending" THEN 1 ELSE 0 END) as pending_links,
-           SUM(CASE WHEN tl.status = "error" THEN 1 ELSE 0 END) as error_links
+           SUM(CASE WHEN tl.status = 'indexed' THEN 1 ELSE 0 END) as indexed_links,
+           SUM(CASE WHEN tl.status = 'unindexed' THEN 1 ELSE 0 END) as unindexed_links,
+           SUM(CASE WHEN tl.status = 'pending' THEN 1 ELSE 0 END) as pending_links,
+           SUM(CASE WHEN tl.status = 'error' THEN 1 ELSE 0 END) as error_links
     FROM tasks t 
     LEFT JOIN task_links tl ON t.id = tl.task_id 
-    WHERE t.user_id = ? 
+    $whereClause
     GROUP BY t.id 
     ORDER BY t.created_at DESC 
-    LIMIT ' . (int)$per_page . ' OFFSET ' . (int)$offset
+    LIMIT " . (int)$per_page . " OFFSET " . (int)$offset
 );
-$stmt->execute([$_SESSION['uid']]);
+$stmt->execute($params);
 $tasks = $stmt->fetchAll();
 
 // Get total count for pagination
-$stmt = $pdo->prepare('SELECT COUNT(*) FROM tasks WHERE user_id = ?');
-$stmt->execute([$_SESSION['uid']]);
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM tasks t $whereClause");
+$stmt->execute($params);
 $total_tasks = $stmt->fetchColumn();
 $total_pages = ceil($total_tasks / $per_page);
 
@@ -168,9 +179,19 @@ include __DIR__ . '/includes/header_new.php';
             <h1 class="text-3xl font-bold text-white">My Tasks</h1>
             <p class="text-gray-400 mt-1">Manage and monitor your indexing campaigns.</p>
         </div>
-        <a href="/dashboard" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg shadow-primary-900/20 flex items-center gap-2">
-            <i class="fas fa-plus"></i> Create New Task
-        </a>
+        <div class="flex gap-2">
+            <!-- Tab Filters -->
+            <div class="bg-white/5 p-1 rounded-lg flex">
+                <a href="/tasks.php" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo !isset($_GET['filter']) ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">All</a>
+                <a href="/tasks.php?filter=indexer" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'indexer') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Indexer</a>
+                <a href="/tasks.php?filter=checker" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'checker') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Checker</a>
+                <a href="/tasks.php?filter=traffic" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'traffic') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Traffic</a>
+            </div>
+            
+            <a href="/dashboard" class="bg-white/10 hover:bg-white/20 text-white font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-2">
+                <i class="fas fa-plus"></i> New
+            </a>
+        </div>
     </div>
 
     <?php if ($error): ?>
@@ -226,7 +247,15 @@ include __DIR__ . '/includes/header_new.php';
                                         </div>
                                         <div>
                                             <div class="font-bold text-white flex items-center gap-2">
-                                                <?php echo htmlspecialchars(ucfirst($task['type'])); ?> Task #<?php echo $task['id']; ?>
+                                                <?php 
+                                                if ($task['type'] === 'traffic' || $task['type'] === 'traffic_campaign') {
+                                                    $meta = json_decode($task['meta_data'] ?? '{}', true);
+                                                    // Try to get title from task first, fallback to auto-generated
+                                                    echo htmlspecialchars($task['title'] ?: 'Traffic Campaign');
+                                                } else {
+                                                    echo htmlspecialchars(ucfirst($task['type'])) . ' Task #' . $task['id'];
+                                                }
+                                                ?>
                                                 <?php if ($task['vip']): ?>
                                                     <span class="px-2 py-0.5 rounded text-[10px] bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-bold">VIP</span>
                                                 <?php endif; ?>
@@ -234,7 +263,7 @@ include __DIR__ . '/includes/header_new.php';
                                             <div class="text-sm text-gray-500">
                                                 <?php echo date('M j, Y g:i A', strtotime($task['created_at'])); ?>
                                             </div>
-                                            <?php if ($task['title']): ?>
+                                            <?php if ($task['title'] && $task['type'] !== 'traffic' && $task['type'] !== 'traffic_campaign'): ?>
                                                 <div class="text-xs text-gray-400 mt-1 italic">
                                                     "<?php echo htmlspecialchars($task['title']); ?>"
                                                 </div>

@@ -170,7 +170,12 @@ class TrafficService
                 'runs_count' => count($schedule)
             ]));
             
-            $title = "Viral Traffic: $totalQuantity visitors over $days days";
+            // Use user provided title or auto-generate
+            if (!empty($params['task_name'])) {
+                $title = $params['task_name'];
+            } else {
+                $title = "Viral Traffic: $totalQuantity visitors over $days days";
+            }
             
             $stmt = $pdo->prepare('INSERT INTO tasks (user_id, type, title, status, provider, meta_data) VALUES (?, ?, ?, ?, ?, ?)');
             $stmt->execute([$userId, 'traffic_campaign', $title, 'processing', 'justanotherpanel', $metaData]);
