@@ -94,7 +94,8 @@ class CryptomusService
         $currency = $data['currency'] ?? 'USD';
         $uuid = $data['uuid'] ?? '';
 
-        if ($status === 'paid' || $status === 'paid_over') {
+        // Allow crediting on 'check' (unconfirmed) and 'process' status as requested
+        if ($status === 'paid' || $status === 'paid_over' || $status === 'check' || $status === 'process') {
             $this->processSuccess($orderId, $amount, $currency, $uuid);
         } elseif ($status === 'cancel' || $status === 'fail') {
             $this->processFailure($orderId, $status);
@@ -158,17 +159,15 @@ class CryptomusService
                 $status = $response['result']['status'];
                 $uuid = $response['result']['uuid'] ?? $payment['paypal_capture_id'] ?? '';
                 
-                if ($status === 'paid' || $status === 'paid_over') {
+                // Allow crediting on 'check' (unconfirmed) and 'process' status as requested
+                if ($status === 'paid' || $status === 'paid_over' || $status === 'check' || $status === 'process') {
                     $amount = $response['result']['amount'] ?? $payment['amount'];
                     $currency = $response['result']['currency'] ?? $payment['currency'];
                     $this->processSuccess($orderId, $amount, $currency, $uuid);
-                    return 'paid';
+                    return 'paid'; // Treat as paid for UI
                 } elseif ($status === 'cancel' || $status === 'fail') {
                     $this->processFailure($orderId, $status);
                     return 'failed';
-                } elseif ($status === 'check' || $status === 'process') {
-                     // 'check' means waiting for blockchain confirmations
-                     return 'processing';
                 } else {
                     return $status; // pending, etc.
                 }
