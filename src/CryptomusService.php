@@ -244,7 +244,7 @@ class CryptomusService
         try {
             // Fetch last 50 payments from API to cover recent pending ones
             // API doesn't support filtering by status in list, so we get recent history
-            $response = $this->client->request('/payment/list', []); // Default gets recent
+            $response = $this->client->getPaymentList([]); // Default gets recent
             
             if (isset($response['result']['items']) && is_array($response['result']['items'])) {
                 foreach ($response['result']['items'] as $item) {

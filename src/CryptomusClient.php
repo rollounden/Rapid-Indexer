@@ -102,6 +102,11 @@ class CryptomusClient
         $data = is_array($identifier) ? $identifier : ['uuid' => $identifier];
         return $this->request('/payment/info', $data);
     }
+    
+    public function getPaymentList(array $data = [])
+    {
+        return $this->request('/payment/list', $data);
+    }
 
     public function testWebhookPayment(array $data)
     {
