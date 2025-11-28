@@ -273,11 +273,19 @@ class CryptomusService
         $payload = [
             'url_callback' => $callbackUrl,
             'currency' => $payment['currency'] ?? 'USD',
-            'network' => 'eth', // Dummy network required
+            'network' => 'ETH', // Use uppercase, usually reliable
             'order_id' => $orderId,
             'status' => $status
         ];
         
+        // "Payment service not found" usually means the currency/network combo is invalid.
+        // If we recorded it as USD, we need to fake a crypto currency for the test webhook
+        // because real webhooks send the COIN currency (e.g. USDT, LTCT).
+        if ($payload['currency'] === 'USD') {
+            $payload['currency'] = 'USDT';
+            $payload['network'] = 'tron'; 
+        }
+
         // If we have a valid UUID, use it too.
         if (!empty($payment['paypal_capture_id']) && strpos($payment['paypal_capture_id'], '-') !== false) {
              $payload['uuid'] = $payment['paypal_capture_id'];
