@@ -51,9 +51,15 @@ class CryptomusService
         $response = $this->client->createPayment($orderId, $amount, $currency, $successUrl, $cancelUrl, $callbackUrl);
 
         if (isset($response['result']['url'])) {
+            // Update with UUID if available
+            if (isset($response['result']['uuid'])) {
+                $stmt = $pdo->prepare('UPDATE payments SET paypal_capture_id = ? WHERE id = ?');
+                $stmt->execute([$response['result']['uuid'], $paymentId]);
+            }
+            
             return [
                 'payment_url' => $response['result']['url'],
-                'uuid' => $response['result']['uuid']
+                'uuid' => $response['result']['uuid'] ?? null
             ];
         }
 
@@ -76,6 +82,9 @@ class CryptomusService
         $hash = md5(base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE)) . $apiKey);
 
         if ($hash !== $sign) {
+            // Fallback check: sometimes json_encode behaves differently
+            // Try without unescaped unicode if failed? 
+            // But docs say unicode.
             throw new Exception('Invalid signature');
         }
 
@@ -87,6 +96,8 @@ class CryptomusService
 
         if ($status === 'paid' || $status === 'paid_over') {
             $this->processSuccess($orderId, $amount, $currency, $uuid);
+        } elseif ($status === 'cancel' || $status === 'fail') {
+            $this->processFailure($orderId, $status);
         }
     }
 
@@ -107,5 +118,48 @@ class CryptomusService
         }
 
         PaymentService::markPaid($payment['id'], $payment['user_id'], $uuid, $amount, $currency);
+    }
+    
+    private function processFailure($orderId, $status)
+    {
+        $pdo = Db::conn();
+        $stmt = $pdo->prepare('UPDATE payments SET status = ? WHERE paypal_order_id = ? AND status = "pending"');
+        $stmt->execute([$status === 'cancel' ? 'failed' : 'failed', $orderId]);
+    }
+    
+    public function checkStatus($orderId)
+    {
+        $pdo = Db::conn();
+        $stmt = $pdo->prepare('SELECT * FROM payments WHERE paypal_order_id = ? LIMIT 1');
+        $stmt->execute([$orderId]);
+        $payment = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$payment) {
+            throw new Exception('Payment not found');
+        }
+        
+        // If we have a UUID (capture_id), check by that
+        if (!empty($payment['paypal_capture_id']) && strpos($payment['paypal_capture_id'], '-') !== false) {
+            // Assuming it's a UUID
+            $response = $this->client->getPaymentStatus($payment['paypal_capture_id']);
+            
+            if (isset($response['result']['status'])) {
+                $status = $response['result']['status'];
+                
+                if ($status === 'paid' || $status === 'paid_over') {
+                    $amount = $response['result']['amount'] ?? $payment['amount'];
+                    $currency = $response['result']['currency'] ?? $payment['currency'];
+                    $this->processSuccess($orderId, $amount, $currency, $payment['paypal_capture_id']);
+                    return 'paid';
+                } elseif ($status === 'cancel' || $status === 'fail') {
+                    $this->processFailure($orderId, $status);
+                    return 'failed';
+                } else {
+                    return $status; // pending, check, etc.
+                }
+            }
+        }
+        
+        return $payment['status'];
     }
 }
