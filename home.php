@@ -168,6 +168,7 @@ if (isset($_SESSION['uid'])) {
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center gap-8">
+                    <a href="/viral-blast.php" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fas fa-fire"></i> Viral Blast</a>
                     <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Features</a>
                     <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Pricing</a>
                     <a href="/faq.php" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</a>
@@ -364,6 +365,17 @@ if (isset($_SESSION['uid'])) {
             </div>
 
             <div class="grid md:grid-cols-3 gap-6">
+                <!-- Viral Blast Card (New) -->
+                <div class="p-8 rounded-xl card border border-primary-600/50 bg-primary-900/10 hover:bg-primary-900/20 transition-colors group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">New</div>
+                    <div class="w-12 h-12 bg-primary-600/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-600/30 transition-colors border border-primary-600/30">
+                        <i class="fa-solid fa-fire-flame-curved text-primary-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Viral Blast</h3>
+                    <p class="text-gray-400 mb-4">Simulate viral social traffic with our tested drip-feed formula. Boost "User Behavior" signals.</p>
+                    <a href="/viral-blast.php" class="text-primary-400 font-bold text-sm hover:text-white transition-colors">Learn the Formula <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+
                 <!-- Card 1 -->
                 <div class="p-8 rounded-xl card hover:border-primary-700/50 transition-colors group">
                     <div class="w-12 h-12 bg-primary-900/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-900/30 transition-colors border border-primary-900/30">
