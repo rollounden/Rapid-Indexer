@@ -515,7 +515,7 @@ if (isset($_SESSION['uid'])) {
                             <h4 class="text-gray-400 uppercase text-xs font-bold mb-4">Payment Gateway</h4>
                             <div class="bg-black/40 rounded-lg p-6 border border-white/5 mb-6">
                                 <div class="text-3xl font-bold text-white mb-1">$50.00</div>
-                                <div class="text-sm text-gray-500">2,500 Credits</div>
+                                <div class="text-sm text-gray-500">5,000 Credits</div>
                             </div>
                             <button class="w-full py-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20">
                                 <i class="fas fa-lock"></i> Pay with Cryptomus
@@ -697,6 +697,7 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Force Google Crawl</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Tiered Links & Traffic</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> 98% Success Rate</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-500 text-sm"></i> 2 Credits per Link</li>
                     </ul>
                     <a href="/register.php" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
                 </div>
