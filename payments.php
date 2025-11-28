@@ -1,6 +1,51 @@
 <?php
+// AJAX Handler for Discount Validation
+// MUST be at the very top before ANY whitespace or includes
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'validate_discount') {
+    // Clean buffer to remove any previous output/warnings
+    while (ob_get_level()) ob_end_clean();
+    ob_start();
+    
+    // Disable error display for JSON response
+    ini_set('display_errors', 0);
+    header('Content-Type: application/json');
+    
+    try {
+        // Manually include necessary files for this isolated request
+        require_once __DIR__ . '/config/config.php';
+        require_once __DIR__ . '/src/Db.php';
+        require_once __DIR__ . '/src/SettingsService.php';
+        require_once __DIR__ . '/src/DiscountService.php';
+        
+        $code = $_POST['code'] ?? '';
+        $amount = floatval($_POST['amount'] ?? 0);
+        
+        $discount = DiscountService::findActive($code);
+        if (!$discount) {
+            echo json_encode(['valid' => false, 'message' => 'Invalid or expired code']);
+        } else {
+            $discountAmount = DiscountService::calculate($discount, $amount);
+            
+            echo json_encode([
+                'valid' => true,
+                'discount_amount' => $discountAmount,
+                'final_amount' => max(0, $amount - $discountAmount),
+                'code' => $discount['code'],
+                'id' => $discount['id']
+            ]);
+        }
+    } catch (Throwable $e) {
+        error_log("Discount Validation Error: " . $e->getMessage());
+        echo json_encode(['valid' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    }
+    
+    // Send buffer and kill script immediately
+    ob_end_flush();
+    exit;
+}
+
 require_once __DIR__ . '/config/config.php';
-// Ensure logs work
+// Ensure logs work for normal page load
 ini_set('display_errors', 1);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
@@ -36,51 +81,6 @@ try {
     // Fallback to default
 }
 
-// Handle discount validation (AJAX)
-// Move this check as early as possible
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'validate_discount') {
-    // Clear any existing output buffers
-    while (ob_get_level()) ob_end_clean();
-    
-    // Start fresh output
-    ob_start();
-    
-    ini_set('display_errors', 0);
-    header('Content-Type: application/json');
-    
-    try {
-        require_once __DIR__ . '/src/DiscountService.php';
-        
-        // Log for debugging
-        // error_log("Validating discount: " . print_r($_POST, true));
-        
-        $code = $_POST['code'] ?? '';
-        $amount = floatval($_POST['amount'] ?? 0);
-        
-        $discount = DiscountService::findActive($code);
-        if (!$discount) {
-            echo json_encode(['valid' => false, 'message' => 'Invalid or expired code']);
-        } else {
-            $discountAmount = DiscountService::calculate($discount, $amount);
-            
-            echo json_encode([
-                'valid' => true,
-                'discount_amount' => $discountAmount,
-                'final_amount' => max(0, $amount - $discountAmount),
-                'code' => $discount['code'],
-                'id' => $discount['id']
-            ]);
-        }
-    } catch (Throwable $e) {
-        error_log("Discount Validation Error: " . $e->getMessage());
-        echo json_encode(['valid' => false, 'message' => 'Error: ' . $e->getMessage()]);
-    }
-    
-    // Send buffer and kill script immediately
-    ob_end_flush();
-    exit;
-}
-
 // Handle payment creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'create_payment' || $_POST['action'] === 'create_crypto_payment') {
@@ -99,15 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $credits_base = $original_amount ? $original_amount : $amount;
             $credits = intval($credits_base / (float)$price_per_credit);
         
-            // Check minimum payment (based on PAID amount)
-            // If highly discounted, maybe allow lower? 
-            // PayPal has strict limits (usually > 0.01). Cryptomus too.
-            // Let's enforce $1.00 min for safety if discounted, or keep $10 if not?
-            // Original code had $10 min.
-            // If I have a $100 pack and 90% off -> $10.
-            // If I have a $10 pack and 50% off -> $5.
-            // Let's just enforce min $1.00 for now to allow discounts to work effectively.
-            
             if ($amount < 1.00) {
                 $error = 'Minimum payment amount is $1.00';
             } else {
