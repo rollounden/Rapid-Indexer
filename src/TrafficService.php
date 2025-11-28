@@ -237,12 +237,23 @@ class TrafficService
                 // Prepare params
                 $meta = json_decode($run['meta_data'], true) ?? [];
                 
+                // Make sure we default quantity if something weird happened
+                $quantity = (int)($run['quantity'] ?? 100);
+                if ($quantity < 100) $quantity = 100; // JAP minimum usually
+
                 $apiParams = [
                     'service' => $serviceId,
                     'link' => $meta['link'] ?? '', // Should be in meta
-                    'quantity' => $run['quantity'],
+                    'quantity' => $quantity,
                     'country' => $meta['country'] ?? null,
                 ];
+                
+                // Ensure run parameter is set if needed (though normally 1)
+                // JAP "runs" usually means repeats, but here we are scheduling them ourselves.
+                // However, the "runs" param might be mandatory or we might want to set it to 1 explicitly.
+                // $apiParams['runs'] = 1; 
+                // $apiParams['interval'] = 0;
+
                 self::enrichApiParams($apiParams, $meta);
 
                 if (empty($apiParams['link'])) {

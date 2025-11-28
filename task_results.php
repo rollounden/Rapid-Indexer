@@ -137,10 +137,47 @@ include __DIR__ . '/includes/header_new.php';
     </div>
     
     <?php if ($task['type'] === 'traffic_campaign'): ?>
-        <!-- Traffic Schedule View -->
         <div class="card rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
-                <h5 class="font-bold text-white">Campaign Schedule</h5>
+                <h5 class="font-bold text-white">Traffic Delivery (Viral Wave)</h5>
+            </div>
+            <div class="p-6">
+                <!-- Chart Visualization -->
+                <div class="h-64 flex items-end gap-1 w-full">
+                    <?php 
+                    $maxQty = 0;
+                    foreach ($schedule as $run) {
+                        if ($run['quantity'] > $maxQty) $maxQty = $run['quantity'];
+                    }
+                    if ($maxQty == 0) $maxQty = 1; // Prevent division by zero
+                    
+                    foreach ($schedule as $run): 
+                        $heightPercent = ($run['quantity'] / $maxQty) * 100;
+                        $barColor = 'bg-primary-600'; // Default (pending)
+                        if ($run['status'] === 'completed') $barColor = 'bg-green-500';
+                        if ($run['status'] === 'processing') $barColor = 'bg-blue-500';
+                        if ($run['status'] === 'failed') $barColor = 'bg-red-500';
+                    ?>
+                        <div class="flex-1 flex flex-col items-center group relative">
+                            <!-- Tooltip -->
+                            <div class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/90 text-white text-xs p-2 rounded whitespace-nowrap z-10 border border-white/10">
+                                <?php echo $run['quantity']; ?> visitors<br>
+                                <?php echo date('M j, H:i', strtotime($run['scheduled_at'])); ?>
+                            </div>
+                            
+                            <div class="<?php echo $barColor; ?> w-full rounded-t opacity-80 hover:opacity-100 transition-opacity relative" style="height: <?php echo $heightPercent; ?>%"></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                
+                <div class="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+                    <span>Start: <?php echo !empty($schedule) ? date('M j', strtotime($schedule[0]['scheduled_at'])) : '-'; ?></span>
+                    <span>End: <?php echo !empty($schedule) ? date('M j', strtotime(end($schedule)['scheduled_at'])) : '-'; ?></span>
+                </div>
+            </div>
+            
+            <div class="px-6 py-4 border-t border-white/5 bg-white/5">
+                <h5 class="font-bold text-white mb-4">Detailed Schedule</h5>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full">
