@@ -12,6 +12,7 @@ if (!isset($_SESSION['uid']) || ($_SESSION['role'] ?? '') !== 'admin') {
 }
 
 require_once __DIR__ . '/src/Db.php';
+require_once __DIR__ . '/src/CryptomusService.php'; // Include service
 $pdo = Db::conn();
 
 $error = '';
@@ -20,7 +21,31 @@ $success = '';
 // Handle actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
-        if ($_POST['action'] === 'delete_payment') {
+        // Handle manual status check
+        if ($_POST['action'] === 'check_status') {
+            $paymentId = intval($_POST['payment_id']);
+            $orderId = $_POST['order_id'];
+            
+            try {
+                // Check if payment exists and method is Cryptomus
+                // We need to check if it's actually cryptomus first? 
+                // The button is only shown if method is cryptomus so we assume yes or check ID.
+                
+                $cryptoService = new CryptomusService();
+                $newStatus = $cryptoService->checkStatus($orderId);
+                
+                if ($newStatus === 'paid') {
+                    $success = "Payment #$paymentId confirmed as PAID.";
+                } elseif ($newStatus === 'processing') {
+                    $success = "Payment #$paymentId is currently processing on blockchain.";
+                } else {
+                    $error = "Payment #$paymentId status is '$newStatus'.";
+                }
+            } catch (Exception $e) {
+                $error = "Failed to check status: " . $e->getMessage();
+            }
+        }
+        elseif ($_POST['action'] === 'delete_payment') {
             $paymentId = intval($_POST['payment_id']);
             try {
                 // Check if payment exists
@@ -134,7 +159,19 @@ include __DIR__ . '/includes/header_new.php';
                                     <div class="text-sm text-gray-300"><?php echo date('M j, Y', strtotime($payment['created_at'])); ?></div>
                                     <div class="text-xs text-gray-500"><?php echo date('H:i', strtotime($payment['created_at'])); ?></div>
                                 </td>
-                                <td class="px-6 py-4 text-right">
+                                <td class="px-6 py-4 text-right flex justify-end gap-2">
+                                    <!-- Check Status Button for Pending Cryptomus Payments -->
+                                    <?php if ($payment['status'] === 'pending' && $payment['method'] === 'cryptomus' && !empty($payment['paypal_order_id'])): ?>
+                                        <form method="POST" class="inline-block">
+                                            <input type="hidden" name="action" value="check_status">
+                                            <input type="hidden" name="payment_id" value="<?php echo $payment['id']; ?>">
+                                            <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($payment['paypal_order_id']); ?>">
+                                            <button type="submit" class="p-2 rounded-lg bg-primary-500/10 text-primary-400 hover:bg-primary-500 hover:text-white transition-all" title="Check Status">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                
                                     <button @click="deleteModal = true; deletePaymentId = '<?php echo $payment['id']; ?>'" 
                                             class="p-2 rounded-lg bg-white/5 text-red-400 hover:bg-red-500 hover:text-white transition-all" title="Delete Payment">
                                         <i class="fas fa-trash"></i>
