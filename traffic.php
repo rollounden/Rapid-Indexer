@@ -43,8 +43,8 @@ include __DIR__ . '/includes/header_new.php';
 
 <div class="max-w-4xl mx-auto px-6 lg:px-8 py-10">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-white">Buy Website Traffic</h1>
-        <p class="text-gray-400 mt-1">Boost your website rankings with real human traffic.</p>
+        <h1 class="text-3xl font-bold text-white">Viral Website Traffic</h1>
+        <p class="text-gray-400 mt-1">Simulate virality and temporarily boost webpage rankings.</p>
     </div>
 
     <?php if ($error): ?>
@@ -147,10 +147,10 @@ include __DIR__ . '/includes/header_new.php';
             </div>
 
             <div id="referrerField">
-                <label class="block text-sm font-medium text-gray-300 mb-2">Referring URL (e.g. Facebook, Twitter, Reddit)</label>
-                <input type="url" name="referring_url" placeholder="https://facebook.com" value="https://facebook.com"
+                <label class="block text-sm font-medium text-gray-300 mb-2">Referring URL (e.g. a Backlink, Reddit Post, or Tweet)</label>
+                <input type="url" name="referring_url" placeholder="https://twitter.com/user/status/123456789" value=""
                        class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
-                <p class="text-xs text-gray-500 mt-1">Simulate traffic coming from popular social platforms.</p>
+                <p class="text-xs text-gray-500 mt-1">We recommend using a specific backlink or social post URL instead of a root domain for better realism.</p>
             </div>
 
             <div class="pt-4">
