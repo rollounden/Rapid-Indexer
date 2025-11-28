@@ -128,6 +128,9 @@ include __DIR__ . '/includes/header_new.php';
             <a href="/admin_discounts.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-tags"></i> Discounts
             </a>
+            <a href="/admin_traffic.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+                <i class="fas fa-chart-line"></i> Traffic
+            </a>
             <a href="/admin_settings.php" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-all flex items-center gap-2">
                 <i class="fas fa-cog"></i> Settings
             </a>
