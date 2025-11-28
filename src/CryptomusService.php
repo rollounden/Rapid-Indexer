@@ -262,11 +262,14 @@ class CryptomusService
                              $this->processSuccess($remoteOrderId, $item['amount'], $item['currency'], $item['uuid']);
                              $updatedCount++;
                              file_put_contents($logFile, "  -> Matched & Updated PAID: $remoteOrderId\n", FILE_APPEND);
-                        } elseif (in_array($remoteStatus, ['cancel', 'fail', 'system_fail']) && $localPayment['status'] !== 'failed' && $localPayment['status'] !== 'cancelled') {
-                             // It's failed/cancelled
-                             $this->processFailure($remoteOrderId, $remoteStatus);
-                             $updatedCount++;
-                             file_put_contents($logFile, "  -> Matched & Updated FAILED: $remoteOrderId (Status: $remoteStatus)\n", FILE_APPEND);
+                        } elseif (in_array($remoteStatus, ['cancel', 'fail', 'system_fail'])) {
+                             // It's failed/cancelled - UPDATE even if currently 'pending'
+                             // But only if it's NOT already marked as paid locally (safety)
+                             if ($localPayment['status'] !== 'paid' && $localPayment['status'] !== 'completed') {
+                                 $this->processFailure($remoteOrderId, $remoteStatus);
+                                 $updatedCount++;
+                                 file_put_contents($logFile, "  -> Matched & Updated FAILED: $remoteOrderId (Status: $remoteStatus)\n", FILE_APPEND);
+                             }
                         }
                         
                         // Remove from list so we don't check individually later (optimization)
