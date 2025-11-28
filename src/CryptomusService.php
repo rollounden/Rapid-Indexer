@@ -150,7 +150,10 @@ class CryptomusService
             $response = $this->client->getPaymentStatus($identifier);
             
             // Log this check for debugging
-            $logFile = __DIR__ . '/../storage/logs/manual_check_debug.log';
+            $logDir = __DIR__ . '/../storage/logs';
+            if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+            $logFile = $logDir . '/manual_check_debug.log';
+            
             file_put_contents($logFile, date('Y-m-d H:i:s') . " Checking ID: " . json_encode($identifier) . " Response: " . json_encode($response) . "\n", FILE_APPEND);
             
             // Check if API returned an error in 'state' or 'message' even if HTTP 200
@@ -215,38 +218,38 @@ class CryptomusService
             AND created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)
         ");
         $stmt->execute();
-        $pendingPayments = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC); // Key by ID
+        // Use fetchAll without group/unique to get a simple array of arrays
+        $pendingPayments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($pendingPayments)) {
             return 0;
         }
-
-        // Fetch payment list from Cryptomus
-        // Note: This returns all payments. We should filter by date if possible, but let's grab last 50
-        // Cryptomus API supports date_from.
-        $dateFrom = date('Y-m-d H:i:s', strtotime('-24 hours'));
-        
-        // We need to use request directly via client or exposed method. 
-        // Since `request` is private in Client, we'll add `getPaymentList` to Client or use reflection (bad).
-        // Let's assume we added `getPaymentList` to Client.
-        
-        // Since I cannot edit Client easily in this context without another tool call, 
-        // and `request` is private, we will try to use `getPaymentStatus` one by one for safety.
-        // Batching via `list` endpoint would be better but requires Client update.
         
         $updatedCount = 0;
         
-        foreach ($pendingPayments as $id => $payment) {
+        // Log start of sync
+        $logDir = __DIR__ . '/../storage/logs';
+        if (!is_dir($logDir)) { @mkdir($logDir, 0775, true); }
+        file_put_contents($logDir . '/sync_debug.log', date('Y-m-d H:i:s') . " Starting Sync for " . count($pendingPayments) . " payments\n", FILE_APPEND);
+        
+        foreach ($pendingPayments as $payment) {
+            // Check valid identifier
             if (empty($payment['paypal_order_id'])) continue;
             
             try {
+                // Log checking
+                file_put_contents($logDir . '/sync_debug.log', "Checking Payment ID " . $payment['id'] . " (Order: " . $payment['paypal_order_id'] . ")\n", FILE_APPEND);
+                
                 $status = $this->checkStatus($payment['paypal_order_id']);
+                
+                file_put_contents($logDir . '/sync_debug.log', "Result Status: $status\n", FILE_APPEND);
+                
                 if ($status === 'paid') {
                     $updatedCount++;
                 }
             } catch (Exception $e) {
                 // Log and continue
-                error_log("Failed to sync payment $id: " . $e->getMessage());
+                file_put_contents($logDir . '/sync_debug.log', "Error syncing payment " . $payment['id'] . ": " . $e->getMessage() . "\n", FILE_APPEND);
             }
         }
         
