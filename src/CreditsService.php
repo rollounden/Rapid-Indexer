@@ -14,6 +14,27 @@ class CreditsService
         return intval($row['credits_balance'] ?? 0);
     }
 
+    public static function hasEnough(int $userId, int $amount): bool
+    {
+        return self::getBalance($userId) >= $amount;
+    }
+
+    public static function deduct(int $userId, int $amount, string $reason, ?string $refTable = null, ?int $refId = null): void
+    {
+        if ($amount < 0) { throw new InvalidArgumentException('Amount must be positive'); }
+        // Check balance first (optional, adjust handles negative balance technically but we want to prevent it)
+        if (!self::hasEnough($userId, $amount)) {
+             throw new Exception('Insufficient credits');
+        }
+        self::adjust($userId, -$amount, $reason, $refTable, $refId);
+    }
+
+    public static function add(int $userId, int $amount, string $reason, ?string $refTable = null, ?int $refId = null): void
+    {
+        if ($amount < 0) { throw new InvalidArgumentException('Amount must be positive'); }
+        self::adjust($userId, $amount, $reason, $refTable, $refId);
+    }
+
     public static function adjust(int $userId, int $delta, string $reason, ?string $referenceTable = null, ?int $referenceId = null): void
     {
         $pdo = Db::conn();

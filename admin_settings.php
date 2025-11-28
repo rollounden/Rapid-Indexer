@@ -80,6 +80,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['cost_vip'])) {
             SettingsService::set('cost_vip', $_POST['cost_vip']);
         }
+        if (isset($_POST['traffic_price_per_1000'])) {
+            SettingsService::set('traffic_price_per_1000', $_POST['traffic_price_per_1000']);
+        }
+
+        if (isset($_POST['jap_api_key'])) {
+            $key = trim($_POST['jap_api_key']);
+            if (!empty($key) && strpos($key, '*') === false) {
+                SettingsService::setEncrypted('jap_api_key', $key);
+            }
+        }
 
         $success = 'Settings saved successfully.';
     } catch (Exception $e) {
@@ -110,6 +120,10 @@ $price_per_credit = SettingsService::get('price_per_credit', (string)PRICE_PER_C
 $cost_indexing = SettingsService::get('cost_indexing', (string)COST_INDEXING);
 $cost_checking = SettingsService::get('cost_checking', (string)COST_CHECKING);
 $cost_vip = SettingsService::get('cost_vip', (string)COST_VIP_EXTRA);
+$traffic_price_per_1000 = SettingsService::get('traffic_price_per_1000', '30');
+
+$jap_api_key_decrypted = SettingsService::getDecrypted('jap_api_key', '');
+$jap_api_key_display = $jap_api_key_decrypted ? substr($jap_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($jap_api_key_decrypted, -4) : '';
 
 // Check Ralfy Status if key is present
 if ($ralfy_api_key_decrypted) {
@@ -319,8 +333,24 @@ include __DIR__ . '/includes/header_new.php';
                         <input type="number" step="1" name="cost_vip" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($cost_vip); ?>" required>
                         <p class="text-xs text-gray-500 mt-2">Additional credits for VIP processing</p>
                     </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Traffic Price per 1000 (Credits)</label>
+                        <input type="number" step="1" name="traffic_price_per_1000" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($traffic_price_per_1000); ?>" required>
+                    </div>
                 </div>
                 <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Pricing Settings</button>
+            </form>
+        </div>
+
+        <!-- Traffic Settings -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/5 pb-4">Traffic Service Settings</h3>
+            <form method="POST">
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">JustAnotherPanel API Key</label>
+                    <input type="text" name="jap_api_key" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($jap_api_key_display); ?>" placeholder="Enter new API Key">
+                </div>
+                <button type="submit" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors font-bold">Save Traffic Settings</button>
             </form>
         </div>
 

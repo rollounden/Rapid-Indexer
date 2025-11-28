@@ -25,7 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'sync_status':
                 $task_id = $_POST['task_id'];
                 try {
-                    TaskService::syncTaskStatus($_SESSION['uid'], $task_id);
+                    // Check task type first
+                    $stmt = $pdo->prepare('SELECT type FROM tasks WHERE id = ? AND user_id = ?');
+                    $stmt->execute([$task_id, $_SESSION['uid']]);
+                    $t = $stmt->fetch();
+                    
+                    if ($t && $t['type'] === 'traffic') {
+                        require_once __DIR__ . '/src/TrafficService.php';
+                        TrafficService::syncStatus($task_id);
+                    } else {
+                        TaskService::syncTaskStatus($_SESSION['uid'], $task_id);
+                    }
                     $success = 'Task status updated successfully.';
                 } catch (Exception $e) {
                     $error = 'Failed to sync task status: ' . $e->getMessage();
@@ -207,7 +217,11 @@ include __DIR__ . '/includes/header_new.php';
                                     <div class="flex items-center gap-3">
                                         <div class="flex-shrink-0">
                                             <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400">
-                                                <i class="<?php echo $task['search_engine'] === 'google' ? 'fab fa-google' : 'fab fa-yandex'; ?>"></i>
+                                                <?php if ($task['type'] === 'traffic'): ?>
+                                                    <i class="fas fa-users"></i>
+                                                <?php else: ?>
+                                                    <i class="<?php echo $task['search_engine'] === 'google' ? 'fab fa-google' : 'fab fa-yandex'; ?>"></i>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div>

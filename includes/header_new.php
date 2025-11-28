@@ -149,6 +149,7 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/dashboard" class="text-sm font-medium <?php echo $current_page === 'dashboard.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Dashboard</a>
                     <a href="/tasks.php" class="text-sm font-medium <?php echo $current_page === 'tasks.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Tasks</a>
+                    <a href="/traffic.php" class="text-sm font-medium <?php echo $current_page === 'traffic.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Traffic</a>
                     <a href="/payments.php" class="text-sm font-medium <?php echo $current_page === 'payments.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Payments</a>
                     
                     <!-- Support Dropdown -->
@@ -199,6 +200,7 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
             <div class="px-4 pt-2 pb-4 space-y-1">
                 <a href="/dashboard" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'dashboard.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Dashboard</a>
                 <a href="/tasks.php" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'tasks.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Tasks</a>
+                <a href="/traffic.php" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'traffic.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Traffic</a>
                 <a href="/payments.php" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'payments.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Payments</a>
                 <a href="/faq.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">FAQ</a>
                 <a href="/contact.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Contact Us</a>
