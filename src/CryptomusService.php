@@ -151,6 +151,17 @@ class CryptomusService
             $logFile = __DIR__ . '/../storage/logs/manual_check_debug.log';
             file_put_contents($logFile, date('Y-m-d H:i:s') . " Checking ID: " . json_encode($identifier) . " Response: " . json_encode($response) . "\n", FILE_APPEND);
             
+            // Check if API returned an error in 'state' or 'message' even if HTTP 200
+            if (isset($response['state']) && $response['state'] !== 0) {
+                $msg = $response['message'] ?? json_encode($response);
+                // If it says active transaction, treat as processing
+                if (strpos(strtolower($msg), 'active transaction') !== false) {
+                    return 'processing';
+                }
+                // Otherwise throw so it's caught below
+                throw new Exception("API Error: " . $msg);
+            }
+
             if (isset($response['result']['status'])) {
                 $status = $response['result']['status'];
                 $uuid = $response['result']['uuid'] ?? $payment['paypal_capture_id'] ?? '';
@@ -184,6 +195,7 @@ class CryptomusService
             if (strpos(strtolower($msg), 'active transaction') !== false) {
                 return 'processing';
             }
+            // Don't swallow other errors, throw them so admin knows
             throw $e;
         }
         
