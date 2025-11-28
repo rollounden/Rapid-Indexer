@@ -110,8 +110,8 @@ class TrafficService
         $totalSeconds = $days * 24 * 3600;
         $avgInterval = $totalSeconds / $estimatedRuns;
         
-        // Start first run shortly after now
-        $nextRun = $currentTime + rand(300, 1800); 
+        // Start first run almost immediately (30-90s delay)
+        $nextRun = $currentTime + rand(30, 90); 
         $remainingQty = $requestedQuantity;
         
         while ($remainingQty > 0 && $nextRun < $endTime) {

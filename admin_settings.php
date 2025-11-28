@@ -124,7 +124,7 @@ $price_per_credit = SettingsService::get('price_per_credit', (string)PRICE_PER_C
 $cost_indexing = SettingsService::get('cost_indexing', (string)COST_INDEXING);
 $cost_checking = SettingsService::get('cost_checking', (string)COST_CHECKING);
 $cost_vip = SettingsService::get('cost_vip', (string)COST_VIP_EXTRA);
-$traffic_price_per_1000 = SettingsService::get('traffic_price_per_1000', '30');
+$traffic_price_per_1000 = SettingsService::get('traffic_price_per_1000', '60');
 
 $jap_api_key_decrypted = SettingsService::getDecrypted('jap_api_key', '');
 $jap_api_key_display = $jap_api_key_decrypted ? substr($jap_api_key_decrypted, 0, 4) . str_repeat('*', 20) . substr($jap_api_key_decrypted, -4) : '';
