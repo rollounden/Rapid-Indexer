@@ -17,7 +17,12 @@ class CreditsService
     public static function adjust(int $userId, int $delta, string $reason, ?string $referenceTable = null, ?int $referenceId = null): void
     {
         $pdo = Db::conn();
-        $pdo->beginTransaction();
+        $inTransaction = $pdo->inTransaction();
+        
+        if (!$inTransaction) {
+            $pdo->beginTransaction();
+        }
+        
         try {
             $stmt = $pdo->prepare('UPDATE users SET credits_balance = credits_balance + ? WHERE id = ?');
             $stmt->execute([$delta, $userId]);
@@ -25,9 +30,13 @@ class CreditsService
             $stmt = $pdo->prepare('INSERT INTO credit_ledger (user_id, delta, reason, reference_table, reference_id) VALUES (?, ?, ?, ?, ?)');
             $stmt->execute([$userId, $delta, $reason, $referenceTable, $referenceId]);
 
-            $pdo->commit();
+            if (!$inTransaction) {
+                $pdo->commit();
+            }
         } catch (Throwable $e) {
-            $pdo->rollBack();
+            if (!$inTransaction) {
+                $pdo->rollBack();
+            }
             throw $e;
         }
     }
@@ -46,7 +55,12 @@ class CreditsService
         $required = $totalPerUrl * $numUrls;
 
         $pdo = Db::conn();
-        $pdo->beginTransaction();
+        $inTransaction = $pdo->inTransaction();
+
+        if (!$inTransaction) {
+            $pdo->beginTransaction();
+        }
+
         try {
             $stmt = $pdo->prepare('SELECT credits_balance FROM users WHERE id = ? FOR UPDATE');
             $stmt->execute([$userId]);
@@ -61,9 +75,13 @@ class CreditsService
             $stmt = $pdo->prepare('INSERT INTO credit_ledger (user_id, delta, reason) VALUES (?, ?, ?)');
             $stmt->execute([$userId, -$required, 'task_deduction']);
 
-            $pdo->commit();
+            if (!$inTransaction) {
+                $pdo->commit();
+            }
         } catch (Throwable $e) {
-            $pdo->rollBack();
+            if (!$inTransaction) {
+                $pdo->rollBack();
+            }
             throw $e;
         }
     }

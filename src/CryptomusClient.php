@@ -36,6 +36,15 @@ class CryptomusClient
             'Content-Type: application/json'
         ];
 
+        // Fix for "There is already an active transaction" error?
+        // This error usually comes from the API if we are polling too fast.
+        // But here the user sees it on sync.
+        // Maybe we need to close connection explicitly or add sleep?
+        // Or maybe we are reusing the same curl handle? No, it's init every time.
+        
+        // NOTE: If "There is already an active transaction" persists, it might be an issue with concurrent requests
+        // or rate limiting on Cryptomus side.
+        
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
