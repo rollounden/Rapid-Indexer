@@ -34,7 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         if (empty($urls)) {
             $error = 'Please enter at least one URL.';
         } else {
-            $created = TaskService::createTask($userId, $engine, $type, $urls, $title, $vip);
+            $dripFeed = isset($_POST['drip_feed']) && $_POST['drip_feed'] === '1';
+            $dripDuration = isset($_POST['drip_duration']) ? (int)$_POST['drip_duration'] : 3;
+            $dripConfig = $dripFeed ? ['duration_days' => $dripDuration] : null;
+            
+            $created = TaskService::createTask($userId, $engine, $type, $urls, $title, $vip, $dripConfig);
             $success = 'Task created successfully!';
         }
     } catch (Exception $e) {
@@ -195,13 +199,37 @@ include __DIR__ . '/includes/header_new.php';
                                     <p class="text-xs text-yellow-500 font-bold">+<?php echo $cost_vip; ?> credits/link for faster processing</p>
                                 </div>
                             </div>
-                            <style>
-                                .toggle-checkbox:checked { right: 0; border-color: #be123c; }
-                                .toggle-checkbox:checked + .toggle-label { background-color: #be123c; }
-                                .toggle-checkbox { right: auto; left: 0; border-color: #4b5563; transition: all 0.3s; top: 0; }
-                                .toggle-label { width: 3rem; }
-                                .relative { position: relative; height: 1.5rem; width: 3rem; }
-                            </style>
+                        </div>
+
+                        <div class="mb-6" id="dripSection" style="display: none;">
+                            <div class="flex flex-col gap-4 p-4 bg-blue-900/10 border border-blue-900/20 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="drip_feed" id="dripFeed" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="dripFeed" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                                    </div>
+                                    <div>
+                                        <label for="dripFeed" class="font-bold text-white cursor-pointer">Drip Feed Indexing</label>
+                                        <p class="text-xs text-blue-400 font-bold">Spread submission over time to look more natural</p>
+                                    </div>
+                                </div>
+                                
+                                <div id="dripOptions" style="display: none;" class="pl-14">
+                                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Duration</label>
+                                    <select name="drip_duration" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                                        <option value="1">1 Day (24 Hours)</option>
+                                        <option value="2">2 Days</option>
+                                        <option value="3" selected>3 Days</option>
+                                        <option value="5">5 Days</option>
+                                        <option value="7">7 Days</option>
+                                        <option value="14">14 Days</option>
+                                        <option value="30">30 Days</option>
+                                    </select>
+                                    <p class="text-xs text-gray-500 mt-2">
+                                        Links will be submitted in random batches throughout the selected duration.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="bg-black/20 rounded-lg p-4 mb-6 border border-white/5 flex justify-between items-center">
@@ -281,6 +309,11 @@ include __DIR__ . '/includes/header_new.php';
         const typeSelect = document.getElementById('typeSelect');
         const vipSection = document.getElementById('vipSection');
         const vipCheckbox = document.getElementById('vipQueue');
+        
+        const dripSection = document.getElementById('dripSection');
+        const dripCheckbox = document.getElementById('dripFeed');
+        const dripOptions = document.getElementById('dripOptions');
+
         const costDisplay = document.getElementById('estimatedCost');
         
         const COST_INDEXING = <?php echo $cost_indexing; ?>;
@@ -300,15 +333,27 @@ include __DIR__ . '/includes/header_new.php';
             let total = count * (baseCost + extra);
             costDisplay.textContent = new Intl.NumberFormat().format(total);
             
-            // VIP logic
-            if (type === 'indexer' && ENABLE_VIP) {
-                vipSection.style.display = 'block';
+            // VIP and Drip logic
+            if (type === 'indexer') {
+                if (ENABLE_VIP) vipSection.style.display = 'block';
+                dripSection.style.display = 'block';
             } else {
                 vipSection.style.display = 'none';
+                dripSection.style.display = 'none';
                 if (vipCheckbox) vipCheckbox.checked = false;
+                if (dripCheckbox) {
+                    dripCheckbox.checked = false;
+                    dripOptions.style.display = 'none';
+                }
             }
         }
         
+        if (dripCheckbox) {
+            dripCheckbox.addEventListener('change', function() {
+                dripOptions.style.display = this.checked ? 'block' : 'none';
+            });
+        }
+
         urlsInput.addEventListener('input', updateCost);
         typeSelect.addEventListener('change', updateCost);
         if (vipCheckbox) vipCheckbox.addEventListener('change', updateCost);

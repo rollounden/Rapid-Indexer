@@ -8,7 +8,7 @@ require_once __DIR__ . '/SettingsService.php';
 
 class TaskService
 {
-    public static function createTask(int $userId, string $engine, string $type, array $urls, ?string $title, bool $vip): array
+    public static function createTask(int $userId, string $engine, string $type, array $urls, ?string $title, bool $vip, ?array $dripConfig = null): array
     {
         if (count($urls) === 0) { throw new Exception('No URLs provided'); }
         if (!in_array($engine, ['google','yandex'], true)) { throw new Exception('Invalid engine'); }
@@ -30,14 +30,53 @@ class TaskService
         $pdo = Db::conn();
         $pdo->beginTransaction();
         try {
-            // Insert task with provider
-            $stmt = $pdo->prepare('INSERT INTO tasks (user_id, type, search_engine, title, vip, status, provider) VALUES (?, ?, ?, ?, ?, ?, ?)');
-            $stmt->execute([$userId, $type, $engine, $title, $vip ? 1 : 0, 'pending', $provider]);
+            // Drip Feed Logic
+            $isDrip = ($dripConfig !== null && isset($dripConfig['duration_days']));
+            $dripPercentage = 100;
+            $dripInterval = 1440;
+            $nextRun = null;
+            $status = 'pending';
+
+            if ($isDrip && $type === 'indexer') { // Only indexer supports drip
+                $durationDays = (int)$dripConfig['duration_days'];
+                if ($durationDays < 1) $durationDays = 1;
+                
+                // Strategy: 12 batches per day (Every 2 hours)
+                $batchesPerDay = 12;
+                $totalBatches = $durationDays * $batchesPerDay;
+                $dripPercentage = (int)ceil(100 / $totalBatches);
+                $dripInterval = 120; // 2 hours
+                $nextRun = date('Y-m-d H:i:s'); // Start immediately
+            } else {
+                $isDrip = false; 
+            }
+
+            // Insert task with provider and drip options
+            $stmt = $pdo->prepare('INSERT INTO tasks (user_id, type, search_engine, title, vip, status, provider, is_drip_feed, drip_percentage, drip_interval_minutes, next_run_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt->execute([
+                $userId, 
+                $type, 
+                $engine, 
+                $title, 
+                $vip ? 1 : 0, 
+                $status, 
+                $provider,
+                $isDrip ? 1 : 0,
+                $isDrip ? $dripPercentage : null,
+                $isDrip ? $dripInterval : null,
+                $nextRun
+            ]);
             $taskId = intval($pdo->lastInsertId());
 
             $insertLink = $pdo->prepare('INSERT INTO task_links (task_id, url, status) VALUES (?, ?, ?)');
             foreach ($urls as $url) {
                 $insertLink->execute([$taskId, $url, 'pending']);
+            }
+
+            // If Drip Feed, we stop here. The background worker will pick it up.
+            if ($isDrip) {
+                $pdo->commit();
+                return ['task_id' => $taskId, 'is_drip_feed' => true, 'provider' => $provider];
             }
 
             if ($provider === 'ralfy') {
