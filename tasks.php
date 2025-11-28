@@ -287,7 +287,32 @@ include __DIR__ . '/includes/header_new.php';
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <?php if ($task['total_links'] > 0): ?>
+                                    <?php if ($task['type'] === 'traffic_campaign'): ?>
+                                        <?php
+                                            $stmt = $pdo->prepare("SELECT SUM(quantity) as total, SUM(CASE WHEN status = 'completed' THEN quantity ELSE 0 END) as delivered FROM traffic_schedule WHERE task_id = ?");
+                                            $stmt->execute([$task['id']]);
+                                            $tStats = $stmt->fetch();
+                                            $totalVisitors = $tStats['total'] ?? 0;
+                                            $deliveredVisitors = $tStats['delivered'] ?? 0;
+                                            $percent = $totalVisitors > 0 ? ($deliveredVisitors / $totalVisitors) * 100 : 0;
+                                        ?>
+                                        <div class="w-full bg-white/10 rounded-full h-2 mb-2">
+                                            <div class="bg-primary-600 h-2 rounded-full transition-all duration-500" style="width: <?php echo $percent; ?>%"></div>
+                                        </div>
+                                        <div class="flex justify-between text-xs text-gray-500">
+                                            <span><?php echo round($percent); ?>% Done</span>
+                                            <span><?php echo number_format($deliveredVisitors); ?>/<?php echo number_format($totalVisitors); ?> Visitors</span>
+                                        </div>
+                                    <?php elseif ($task['type'] === 'traffic'): ?>
+                                        <?php
+                                            $meta = json_decode($task['meta_data'] ?? '{}', true);
+                                            $qty = $meta['quantity'] ?? 0;
+                                        ?>
+                                        <div class="text-sm text-gray-400">
+                                            <span class="text-white font-bold"><?php echo number_format($qty); ?></span> Visitors
+                                            <div class="text-xs text-gray-500 mt-1">Single Blast</div>
+                                        </div>
+                                    <?php elseif ($task['total_links'] > 0): ?>
                                         <?php 
                                         $completed = $task['indexed_links'] + $task['unindexed_links'];
                                         $percentage = ($completed / $task['total_links']) * 100;
