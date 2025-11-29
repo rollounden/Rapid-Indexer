@@ -23,7 +23,7 @@ class Db
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     ]);
                     return self::$pdo;
-                } catch (PDOException $e) {
+                } catch (\PDOException $e) {
                     // Fallback 1: Try 127.0.0.1 if host was localhost
                     if ($host === 'localhost') {
                          try {
@@ -33,7 +33,7 @@ class Db
                                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                             ]);
                             return self::$pdo;
-                         } catch (Exception $e2) {
+                         } catch (\Exception $e2) {
                              // Continue to socket check
                          }
                     }
@@ -54,7 +54,7 @@ class Db
                                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                                 ]);
                                 return self::$pdo;
-                            } catch (Exception $e3) {
+                            } catch (\Exception $e3) {
                                 // Continue
                             }
                         }
