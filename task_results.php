@@ -47,6 +47,38 @@ if ($task['type'] === 'traffic_campaign') {
     $links = $stmt->fetchAll();
 }
 
+// Handle updates to drip schedule date
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_drip_date') {
+    try {
+        if (!$task['is_drip_feed']) {
+            throw new Exception("This is not a drip feed task.");
+        }
+        
+        $newDate = $_POST['next_run_at'] ?? '';
+        // Validate date format (simple check)
+        if (!strtotime($newDate)) {
+            throw new Exception("Invalid date format.");
+        }
+        
+        // Convert to UTC for database storage (assuming input is local/browser time, but for MVP treating as UTC or server time)
+        // Ideally we should handle timezone conversion, but sticking to server time for now.
+        $formattedDate = date('Y-m-d H:i:s', strtotime($newDate));
+        
+        $stmt = $pdo->prepare("UPDATE tasks SET next_run_at = ? WHERE id = ?");
+        $stmt->execute([$formattedDate, $task_id]);
+        
+        $success = "Next batch schedule updated to $formattedDate";
+        
+        // Refresh task details
+        $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?');
+        $stmt->execute([$task_id, $_SESSION['uid']]);
+        $task = $stmt->fetch();
+        
+    } catch (Exception $e) {
+        $error = "Failed to update schedule: " . $e->getMessage();
+    }
+}
+
 // Handle manual drip force send
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'force_drip_send') {
     try {
@@ -205,14 +237,31 @@ include __DIR__ . '/includes/header_new.php';
             <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
                 <i class="fas fa-info-circle text-xl"></i>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-1">Drip Feed Active</h4>
-                <p class="text-sm text-gray-400">
-                    This task is being drip-fed over time. 
-                    <?php if ($task['next_run_at']): ?>
-                        Next batch scheduled for: <span class="text-white font-mono"><?php echo date('M j, H:i', strtotime($task['next_run_at'])); ?></span>
-                    <?php endif; ?>
-                </p>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h4 class="text-white font-bold mb-1">Drip Feed Active</h4>
+                    <p class="text-sm text-gray-400">
+                        This task is being drip-fed over time. 
+                        <?php if ($task['next_run_at']): ?>
+                            Next batch scheduled for: <span class="text-white font-mono"><?php echo date('M j, H:i', strtotime($task['next_run_at'])); ?></span>
+                        <?php endif; ?>
+                    </p>
+                </div>
+                
+                <?php if ($task['status'] !== 'completed'): ?>
+                    <div x-data="{ editing: false, newDate: '<?php echo $task['next_run_at'] ? date('Y-m-d\TH:i', strtotime($task['next_run_at'])) : ''; ?>' }">
+                        <button @click="editing = !editing" x-show="!editing" class="text-xs text-blue-400 hover:text-blue-300 underline ml-2">
+                            Change Schedule
+                        </button>
+                        
+                        <form method="POST" x-show="editing" class="flex items-center gap-2 mt-2" x-cloak>
+                            <input type="hidden" name="action" value="update_drip_date">
+                            <input type="datetime-local" name="next_run_at" x-model="newDate" class="bg-black/30 border border-blue-500/30 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <button type="submit" class="px-2 py-1 rounded bg-blue-500 text-white text-xs hover:bg-blue-600 transition-colors">Save</button>
+                            <button type="button" @click="editing = false" class="px-2 py-1 rounded border border-white/10 text-gray-400 text-xs hover:bg-white/10 transition-colors">Cancel</button>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     <?php endif; ?>
