@@ -209,12 +209,7 @@ include __DIR__ . '/includes/header_new.php';
             </span>
 
             <?php if (!empty($task['is_drip_feed']) && $task['status'] !== 'completed'): ?>
-                <form method="POST" class="inline-block ml-2" onsubmit="return confirm('Are you sure you want to force the next batch?');">
-                    <input type="hidden" name="action" value="force_drip_send">
-                    <button type="submit" class="px-3 py-1 rounded-lg bg-primary-600 text-white hover:bg-primary-700 text-sm font-bold transition-colors flex items-center gap-2">
-                        <i class="fas fa-paper-plane"></i> Force Send Batch
-                    </button>
-                </form>
+                <!-- Force Send Button Removed per user request -->
             <?php endif; ?>
         </div>
     </div>
@@ -256,15 +251,15 @@ include __DIR__ . '/includes/header_new.php';
                 
                 <?php if ($task['status'] !== 'completed'): ?>
                     <div x-data="{ editing: false, newDate: '<?php echo $task['next_run_at'] ? date('Y-m-d\TH:i', strtotime($task['next_run_at'])) : ''; ?>' }">
-                        <button @click="editing = !editing" x-show="!editing" class="text-xs text-blue-400 hover:text-blue-300 underline ml-2">
-                            Change Schedule
+                        <button @click="editing = !editing" x-show="!editing" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-2 border border-white/10">
+                            <i class="fas fa-calendar-alt"></i> Reschedule
                         </button>
                         
                         <form method="POST" x-show="editing" class="flex items-center gap-2 mt-2" x-cloak>
                             <input type="hidden" name="action" value="update_drip_date">
-                            <input type="datetime-local" name="next_run_at" x-model="newDate" class="bg-black/30 border border-blue-500/30 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500">
-                            <button type="submit" class="px-2 py-1 rounded bg-blue-500 text-white text-xs hover:bg-blue-600 transition-colors">Save</button>
-                            <button type="button" @click="editing = false" class="px-2 py-1 rounded border border-white/10 text-gray-400 text-xs hover:bg-white/10 transition-colors">Cancel</button>
+                            <input type="datetime-local" name="next_run_at" x-model="newDate" class="bg-[#111] border border-white/20 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500">
+                            <button type="submit" class="px-3 py-1.5 rounded bg-primary-600 text-white text-xs font-bold hover:bg-primary-700 transition-colors">Save</button>
+                            <button type="button" @click="editing = false" class="px-3 py-1.5 rounded border border-white/10 text-gray-400 text-xs hover:bg-white/10 transition-colors">Cancel</button>
                         </form>
                     </div>
                 <?php endif; ?>
