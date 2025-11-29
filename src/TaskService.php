@@ -225,6 +225,101 @@ class TaskService
         fclose($fh);
         return $csv;
     }
+
+    public static function processDripFeedBatch(int $taskId): array
+    {
+        $pdo = Db::conn();
+        $stmt = $pdo->prepare("SELECT * FROM tasks WHERE id = ?");
+        $stmt->execute([$taskId]);
+        $task = $stmt->fetch();
+
+        if (!$task) throw new Exception("Task not found");
+        if (!$task['is_drip_feed']) throw new Exception("Not a drip feed task");
+
+        // Get total links count
+        $countStmt = $pdo->prepare("SELECT COUNT(*) FROM task_links WHERE task_id = ?");
+        $countStmt->execute([$taskId]);
+        $totalLinks = (int)$countStmt->fetchColumn();
+        
+        // Get pending links
+        $pendingStmt = $pdo->prepare("SELECT id, url FROM task_links WHERE task_id = ? AND status = 'pending' LIMIT 10000");
+        $pendingStmt->execute([$taskId]);
+        $pendingLinks = $pendingStmt->fetchAll();
+        $pendingCount = count($pendingLinks);
+        
+        if ($pendingCount === 0) {
+            $pdo->prepare("UPDATE tasks SET status = 'completed', completed_at = NOW(), next_run_at = NULL WHERE id = ?")->execute([$taskId]);
+            return ['status' => 'completed', 'message' => 'No pending links. Task marked completed.'];
+        }
+        
+        // Calculate batch size
+        $percentage = $task['drip_percentage'] ?: 10;
+        if ($percentage <= 0) $percentage = 10;
+        
+        $batchSize = (int)ceil($totalLinks * ($percentage / 100));
+        if ($batchSize < 1) $batchSize = 1;
+        
+        // Take the batch
+        $batchLinks = array_slice($pendingLinks, 0, $batchSize);
+        $batchUrls = array_column($batchLinks, 'url');
+        $batchLinkIds = array_column($batchLinks, 'id');
+        
+        // Submit to provider
+        $provider = $task['provider'];
+        $providerTaskId = null;
+        $providerBatchId = null;
+        
+        if ($provider === 'ralfy') {
+            $apiKey = SettingsService::getDecrypted('ralfy_api_key');
+            if (!$apiKey) throw new Exception('RalfyIndex API key missing');
+            
+            $client = new RalfyIndexClient($apiKey, $task['user_id']);
+            $projectName = $task['title'] ? preg_replace('/[^a-zA-Z0-9 _.-]/', '', $task['title']) . " (Batch)" : null;
+            
+            $api = $client->createProject($batchUrls, $projectName);
+            $body = json_decode($api['body'] ?? '', true) ?: [];
+             
+            if (($api['httpCode'] ?? 500) >= 400 || isset($body['errorCode'])) {
+                throw new Exception("RalfyIndex Error: " . ($body['message'] ?? 'Unknown'));
+            }
+        } else {
+            // SpeedyIndex
+            $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $task['user_id']);
+            $api = $client->createTask($task['search_engine'], $task['type'], $batchUrls, $task['title'] . " (Batch)");
+            $body = json_decode($api['body'] ?? '', true) ?: [];
+            
+            $providerTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
+            if (!$providerTaskId) throw new Exception('Failed to create SpeedyIndex task');
+            
+            $providerBatchId = $providerTaskId;
+        }
+        
+        // Transaction to update DB
+        $pdo->beginTransaction();
+        
+        try {
+            // Create Batch Record
+            $batchStmt = $pdo->prepare("INSERT INTO task_batches (task_id, provider_batch_id, link_count, status) VALUES (?, ?, ?, 'submitted')");
+            $batchStmt->execute([$taskId, $providerBatchId, count($batchUrls)]);
+            $batchId = $pdo->lastInsertId();
+            
+            // Update Links
+            $linkIdsStr = implode(',', array_map('intval', $batchLinkIds));
+            $pdo->exec("UPDATE task_links SET status = 'indexed', batch_id = $batchId, checked_at = NOW() WHERE id IN ($linkIdsStr)");
+            
+            // Update Task Next Run
+            $interval = $task['drip_interval_minutes'] ?: 1440;
+            $pdo->prepare("UPDATE tasks SET status = 'processing', next_run_at = DATE_ADD(NOW(), INTERVAL ? MINUTE) WHERE id = ?")
+                ->execute([$interval, $taskId]);
+                
+            $pdo->commit();
+            return ['status' => 'success', 'count' => count($batchUrls), 'batch_id' => $batchId];
+            
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
 }
 
 

@@ -35,6 +35,38 @@ $stmt = $pdo->prepare('SELECT * FROM task_links WHERE task_id = ? ORDER BY id');
 $stmt->execute([$task_id]);
 $links = $stmt->fetchAll();
 
+// Handle manual drip force send
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'force_drip_send') {
+    try {
+        if (!$task['is_drip_feed']) {
+            throw new Exception("This is not a drip feed task.");
+        }
+        
+        require_once __DIR__ . '/src/TaskService.php';
+        $result = TaskService::processDripFeedBatch($task_id);
+        
+        if (isset($result['status']) && $result['status'] === 'completed') {
+            $success = "Drip feed completed! All links submitted.";
+        } else {
+            $count = $result['count'] ?? 0;
+            $success = "Successfully forced batch of $count links.";
+        }
+        
+        // Refresh task details
+        $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?');
+        $stmt->execute([$task_id, $_SESSION['uid']]);
+        $task = $stmt->fetch();
+        
+        // Refresh links
+        $stmt = $pdo->prepare('SELECT * FROM task_links WHERE task_id = ? ORDER BY id');
+        $stmt->execute([$task_id]);
+        $links = $stmt->fetchAll();
+        
+    } catch (Exception $e) {
+        $error = "Failed to force send: " . $e->getMessage();
+    }
+}
+
 // Calculate stats
 $total = count($links);
 $indexed = 0;
@@ -70,6 +102,15 @@ include __DIR__ . '/includes/header_new.php';
             <span class="px-3 py-1 rounded-full text-sm font-bold uppercase <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'); ?>">
                 <?php echo ucfirst($task['status']); ?>
             </span>
+            
+            <?php if ($task['is_drip_feed'] && $task['status'] !== 'completed'): ?>
+                <form method="POST" class="inline-block ml-2" onsubmit="return confirm('Are you sure you want to force the next batch?');">
+                    <input type="hidden" name="action" value="force_drip_send">
+                    <button type="submit" class="px-3 py-1 rounded-lg bg-primary-600 text-white hover:bg-primary-700 text-sm font-bold transition-colors flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Force Send Batch
+                    </button>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
     
