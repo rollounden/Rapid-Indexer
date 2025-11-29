@@ -136,6 +136,20 @@ include __DIR__ . '/includes/header_new.php';
 
 <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10" x-data="{ showDetails: false, detailsContent: '' }">
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <?php if (isset($success)): ?>
+            <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-lg flex items-center gap-3">
+                <i class="fas fa-check-circle"></i>
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (isset($error)): ?>
+            <div class="mb-6 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-3">
+                <i class="fas fa-exclamation-circle"></i>
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
         <div>
             <nav class="flex items-center text-sm text-gray-400 mb-2">
                 <a href="/tasks.php" class="hover:text-white transition-colors">Tasks</a>
