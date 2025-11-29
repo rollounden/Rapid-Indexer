@@ -81,35 +81,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // Handle manual drip force send
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'force_drip_send') {
-    try {
-        if (!$task['is_drip_feed']) {
-            throw new Exception("This is not a drip feed task.");
+    // Check if we're already handling a POST to prevent double submission if browser reposts
+    if (!isset($success) && !isset($error)) {
+        try {
+            // Re-fetch task to ensure we have latest status
+            $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?');
+            $stmt->execute([$task_id, $_SESSION['uid']]);
+            $latestTask = $stmt->fetch();
+
+            if (!$latestTask || !$latestTask['is_drip_feed']) {
+                throw new Exception("This is not a valid drip feed task.");
+            }
+            
+            require_once __DIR__ . '/src/TaskService.php';
+            $result = TaskService::processDripFeedBatch($task_id);
+            
+            if (isset($result['status']) && $result['status'] === 'completed') {
+                $success = "Drip feed completed! All links submitted.";
+            } else {
+                $count = $result['count'] ?? 0;
+                $success = "Successfully forced batch of $count links.";
+            }
+            
+            // Refresh task details for display
+            $task = $latestTask; // Update local variable
+            
+            // Refresh links
+            if ($task['type'] !== 'traffic_campaign') {
+                $stmt = $pdo->prepare('SELECT * FROM task_links WHERE task_id = ? ORDER BY id');
+                $stmt->execute([$task_id]);
+                $links = $stmt->fetchAll();
+            }
+            
+        } catch (Exception $e) {
+            $error = "Failed to force send: " . $e->getMessage();
         }
-        
-        require_once __DIR__ . '/src/TaskService.php';
-        $result = TaskService::processDripFeedBatch($task_id);
-        
-        if (isset($result['status']) && $result['status'] === 'completed') {
-            $success = "Drip feed completed! All links submitted.";
-        } else {
-            $count = $result['count'] ?? 0;
-            $success = "Successfully forced batch of $count links.";
-        }
-        
-        // Refresh task details
-        $stmt = $pdo->prepare('SELECT * FROM tasks WHERE id = ? AND user_id = ?');
-        $stmt->execute([$task_id, $_SESSION['uid']]);
-        $task = $stmt->fetch();
-        
-        // Refresh links
-        if ($task['type'] !== 'traffic_campaign') {
-            $stmt = $pdo->prepare('SELECT * FROM task_links WHERE task_id = ? ORDER BY id');
-            $stmt->execute([$task_id]);
-            $links = $stmt->fetchAll();
-        }
-        
-    } catch (Exception $e) {
-        $error = "Failed to force send: " . $e->getMessage();
     }
 }
 
