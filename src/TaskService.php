@@ -142,6 +142,26 @@ class TaskService
         $stmt->execute([$taskId, $userId]);
         $task = $stmt->fetch();
         if (!$task) { throw new Exception('Task not found'); }
+        
+        // Handle Drip Feed Tasks
+        if (!empty($task['is_drip_feed'])) {
+            // Drip feed tasks don't have a single provider ID and status is managed by auto_drip_feed.php
+            // However, we can update the progress based on link status
+            $pendingCountStmt = $pdo->prepare('SELECT COUNT(*) FROM task_links WHERE task_id = ? AND status = ?');
+            $pendingCountStmt->execute([$taskId, 'pending']);
+            $pendingCount = (int) $pendingCountStmt->fetchColumn();
+            
+            // If no pending links, mark as completed if not already
+            if ($pendingCount === 0 && $task['status'] !== 'completed') {
+                 $pdo->prepare('UPDATE tasks SET status = "completed", completed_at = NOW() WHERE id = ?')
+                    ->execute([$taskId]);
+                 return ['ok' => true, 'updated' => 0, 'pending' => 0, 'status' => 'completed', 'msg' => 'Drip feed complete'];
+            }
+            
+            // If still pending, just return status
+            return ['ok' => true, 'updated' => 0, 'pending' => $pendingCount, 'status' => $task['status'], 'msg' => 'Drip feed active'];
+        }
+
         if (!$task['speedyindex_task_id']) { throw new Exception('No provider task id'); }
 
         $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);

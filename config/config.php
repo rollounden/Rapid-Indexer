@@ -1,6 +1,9 @@
 <?php
 // Production config for SpeedyIndex SaaS MVP
 
+// Set Timezone to UTC for consistency
+date_default_timezone_set('UTC');
+
 // Set up production error handling
 // Temporarily enabling display_errors for debugging if requested
 ini_set('display_errors', 1);
