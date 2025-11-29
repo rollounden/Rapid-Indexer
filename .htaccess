@@ -1,9 +1,10 @@
 RewriteEngine On
 
 # 1. Redirect direct requests for .php files to the extensionless version
-#    (DISABLED TEMPORARILY)
-# RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
-# RewriteRule ^ /%1 [R=301,L,NE]
+#    (e.g. /about.php -> /about)
+#    This prevents users from seeing the .php extension in the address bar.
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
 
 # 2. Handle extensionless requests
 #    (e.g. /about -> serves about.php)
