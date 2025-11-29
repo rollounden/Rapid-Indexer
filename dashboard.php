@@ -201,35 +201,8 @@ include __DIR__ . '/includes/header_new.php';
                             </div>
                         </div>
 
-                        <div class="mb-6" id="dripSection" style="display: none;">
-                            <div class="flex flex-col gap-4 p-4 bg-blue-900/10 border border-blue-900/20 rounded-lg">
-                                <div class="flex items-center gap-3">
-                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                                        <input type="checkbox" name="drip_feed" id="dripFeed" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                                        <label for="dripFeed" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
-                                    </div>
-                                    <div>
-                                        <label for="dripFeed" class="font-bold text-white cursor-pointer">Drip Feed Indexing</label>
-                                        <p class="text-xs text-blue-400 font-bold">Spread submission over time to look more natural</p>
-                                    </div>
-                                </div>
-                                
-                                <div id="dripOptions" style="display: none;" class="pl-14">
-                                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Duration</label>
-                                    <select name="drip_duration" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
-                                        <option value="1">1 Day (24 Hours)</option>
-                                        <option value="2">2 Days</option>
-                                        <option value="3" selected>3 Days</option>
-                                        <option value="5">5 Days</option>
-                                        <option value="7">7 Days</option>
-                                        <option value="14">14 Days</option>
-                                        <option value="30">30 Days</option>
-                                    </select>
-                                    <p class="text-xs text-gray-500 mt-2">
-                                        Links will be submitted in random batches throughout the selected duration.
-                                    </p>
-                                </div>
-                            </div>
+                        <div id="dripSection" style="display: none;">
+                            <!-- Drip feed removed temporarily -->
                         </div>
                         
                         <div class="bg-black/20 rounded-lg p-4 mb-6 border border-white/5 flex justify-between items-center">
