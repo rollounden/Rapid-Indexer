@@ -5,6 +5,11 @@ require_once __DIR__ . '/src/SpeedyIndexClient.php';
 require_once __DIR__ . '/src/RalfyIndexClient.php';
 require_once __DIR__ . '/src/SettingsService.php';
 
+// Force include Db class if not already loaded
+if (!class_exists('Db')) {
+    require_once __DIR__ . '/src/Db.php';
+}
+
 // Set time limit to avoid timeouts
 set_time_limit(600);
 
