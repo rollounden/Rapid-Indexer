@@ -350,12 +350,21 @@ include __DIR__ . '/includes/header_new.php';
                                         $completed = $task['indexed_links'] + $task['unindexed_links'];
                                         // For Drip Feed, 'indexed' means submitted.
                                         $percentage = ($completed / $task['total_links']) * 100;
+                                        
+                                        // Override progress for standard countdown
+                                        $progressText = round($percentage) . "% " . (!empty($task['is_drip_feed']) ? 'Submitted' : 'Complete');
+                                        $progressWidth = $percentage;
+                                        
+                                        if ($showCountdown) {
+                                            $progressWidth = 0;
+                                            $progressText = "Waiting to Start";
+                                        }
                                         ?>
                                         <div class="w-full bg-white/10 rounded-full h-2 mb-2">
-                                            <div class="bg-primary-600 h-2 rounded-full transition-all duration-500" style="width: <?php echo $percentage; ?>%"></div>
+                                            <div class="bg-primary-600 h-2 rounded-full transition-all duration-500" style="width: <?php echo $progressWidth; ?>%"></div>
                                         </div>
                                         <div class="flex justify-between text-xs text-gray-500">
-                                            <span><?php echo round($percentage); ?>% <?php echo !empty($task['is_drip_feed']) ? 'Submitted' : 'Complete'; ?></span>
+                                            <span><?php echo $progressText; ?></span>
                                             <span><?php echo $completed; ?>/<?php echo $task['total_links']; ?> Links</span>
                                         </div>
                                         <?php if (!empty($task['is_drip_feed']) && $task['status'] === 'processing'): ?>
