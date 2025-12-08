@@ -4,6 +4,7 @@ require_once __DIR__ . '/Db.php';
 require_once __DIR__ . '/CreditsService.php';
 require_once __DIR__ . '/SpeedyIndexClient.php';
 require_once __DIR__ . '/RalfyIndexClient.php';
+require_once __DIR__ . '/RocketIndexerClient.php';
 require_once __DIR__ . '/SettingsService.php';
 
 class TaskService
@@ -16,6 +17,13 @@ class TaskService
 
         // Determine provider
         $provider = SettingsService::get('indexing_provider', 'speedyindex');
+        
+        // Check for RocketIndexer VIP override
+        $useRocketVip = SettingsService::get('use_rocket_for_vip', '0') === '1';
+        if ($vip && $useRocketVip && $type === 'indexer') {
+            $provider = 'rocketindexer';
+        }
+
         if ($type === 'checker') {
             $provider = 'speedyindex';
         }
@@ -79,7 +87,39 @@ class TaskService
                 return ['task_id' => $taskId, 'is_drip_feed' => true, 'provider' => $provider];
             }
 
-            if ($provider === 'ralfy') {
+            if ($provider === 'rocketindexer') {
+                $apiKey = SettingsService::getDecrypted('rocket_api_key');
+                if (!$apiKey) {
+                    throw new Exception('RocketIndexer API key not configured');
+                }
+                $client = new RocketIndexerClient($apiKey, $userId);
+
+                // RocketIndexer processes URLs individually. 
+                // We'll mark the task as "processing" and let a background worker handle status checks,
+                // OR since it's "fast", we just submit them all now.
+                
+                foreach ($urls as $url) {
+                    $res = $client->submitUrl($url);
+                    $body = json_decode($res['body'] ?? '', true);
+                    
+                    // Store tracking ID for this specific URL in task_links
+                    $trackingId = $body['tracking_id'] ?? null;
+                    $status = ($body['success'] ?? false) ? 'indexed' : 'error';
+                    $error = $body['message'] ?? null;
+                    
+                    $linkStmt = $pdo->prepare('UPDATE task_links SET status = ?, result_data = ?, error_code = ? WHERE task_id = ? AND url = ?');
+                    $resultData = $trackingId ? json_encode(['tracking_id' => $trackingId, 'provider' => 'rocketindexer']) : null;
+                    $linkStmt->execute([$status, $resultData, $error ? 0 : null, $taskId, $url]);
+                }
+
+                // Mark task as completed since we submitted everything
+                $stmt = $pdo->prepare('UPDATE tasks SET status = "completed", completed_at = NOW(), provider = "rocketindexer" WHERE id = ?');
+                $stmt->execute([$taskId]);
+
+                $pdo->commit();
+                return ['task_id' => $taskId, 'provider' => 'rocketindexer'];
+
+            } elseif ($provider === 'ralfy') {
                 $apiKey = SettingsService::getDecrypted('ralfy_api_key');
                 if (!$apiKey) {
                     throw new Exception('RalfyIndex API key not configured');

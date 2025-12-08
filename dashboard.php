@@ -189,16 +189,39 @@ include __DIR__ . '/includes/header_new.php';
                         </div>
                         
                         <div class="mb-6" id="vipSection" style="display: none;">
-                            <div class="flex items-center gap-3 p-4 bg-yellow-900/10 border border-yellow-900/20 rounded-lg">
-                                <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                                    <input type="checkbox" name="vip" id="vipQueue" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                                    <label for="vipQueue" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                            <div class="flex flex-col gap-3 p-4 bg-yellow-900/10 border border-yellow-900/20 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="vip" id="vipQueue" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="vipQueue" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                                    </div>
+                                    <div>
+                                        <label for="vipQueue" class="font-bold text-white cursor-pointer flex items-center gap-2">
+                                            VIP Priority Queue <i class="fas fa-bolt text-yellow-400"></i>
+                                        </label>
+                                        <p class="text-xs text-yellow-500 font-bold">+<?php echo $cost_vip; ?> credits/link</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label for="vipQueue" class="font-bold text-white cursor-pointer">VIP Queue Priority</label>
-                                    <p class="text-xs text-yellow-500 font-bold">+<?php echo $cost_vip; ?> credits/link for faster processing</p>
+                                <div class="ml-14 text-xs text-gray-400 space-y-1">
+                                    <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> <strong>Under 2 minute indexing</strong> - Ultra-fast processing</p>
+                                    <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> Best for <strong>Tier 1 / Money Sites</strong> requiring premium handling</p>
+                                    <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> Enhanced system reliability and success rates</p>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Standard Queue Info (Visible when VIP is not checked) -->
+                        <div id="standardQueueInfo" class="mb-6 p-4 bg-blue-900/10 border border-blue-900/20 rounded-lg">
+                             <div class="flex items-start gap-3">
+                                <i class="fas fa-clock text-blue-400 mt-1"></i>
+                                <div>
+                                    <strong class="text-blue-400 text-sm block mb-1">Standard Indexing Timeline</strong>
+                                    <p class="text-xs text-gray-400">
+                                        Submission to search engines starts in <strong>~2 hours</strong>. 
+                                        Full indexing cycle may take up to <strong>48 hours</strong>.
+                                    </p>
+                                </div>
+                             </div>
                         </div>
 
                         <div id="dripSection" style="display: none;">
@@ -310,6 +333,12 @@ include __DIR__ . '/includes/header_new.php';
             if (type === 'indexer') {
                 if (ENABLE_VIP) vipSection.style.display = 'block';
                 dripSection.style.display = 'block';
+                
+                // Toggle standard info based on VIP
+                const standardInfo = document.getElementById('standardQueueInfo');
+                if (standardInfo) {
+                    standardInfo.style.display = isVip ? 'none' : 'block';
+                }
             } else {
                 vipSection.style.display = 'none';
                 dripSection.style.display = 'none';
