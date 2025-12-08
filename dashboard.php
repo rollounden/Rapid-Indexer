@@ -220,7 +220,7 @@ include __DIR__ . '/includes/header_new.php';
                                     </div>
                                 </div>
                                 <div class="ml-14 text-xs text-gray-400 space-y-1">
-                                    <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> <strong>Under 2 minute indexing</strong> - Ultra-fast processing</p>
+                                    <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> <strong>Under 2 minute indexing</strong> - Ultra-fast processing and premium system</p>
                                     <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> Best for <strong>Tier 1 / Money Sites</strong> requiring premium handling</p>
                                     <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> Enhanced system reliability and success rates</p>
                                 </div>
