@@ -103,7 +103,12 @@ class TaskService
                     $body = json_decode($res['body'] ?? '', true);
                     
                     // Store tracking ID for this specific URL in task_links
-                    $trackingId = $body['tracking_id'] ?? $body['data']['id'] ?? $body['data']['tracking_id'] ?? null;
+                    // API returns tracking_ids array in data object
+                    $trackingId = null;
+                    if (isset($body['data']['tracking_ids']) && is_array($body['data']['tracking_ids']) && !empty($body['data']['tracking_ids'])) {
+                        $trackingId = $body['data']['tracking_ids'][0];
+                    }
+
                     $success = $body['success'] ?? false;
                     $status = $success ? 'indexed' : 'error';
                     $error = $body['message'] ?? null;
