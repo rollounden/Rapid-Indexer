@@ -286,10 +286,38 @@ include __DIR__ . '/includes/header_new.php';
                                         'error' => 'bg-red-500/10 text-red-400 border-red-500/20',
                                     ];
                                     $class = $statusClasses[$task['status']] ?? 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+                                    
+                                    // Countdown Logic for Non-VIP Indexer Tasks
+                                    $showCountdown = false;
+                                    $countdownText = '';
+                                    
+                                    if ($task['type'] === 'indexer' && empty($task['vip'])) {
+                                        $createdTime = strtotime($task['created_at']);
+                                        $startTime = $createdTime + (2 * 3600); // 2 hours later
+                                        $now = time();
+                                        
+                                        if ($now < $startTime) {
+                                            $showCountdown = true;
+                                            $timeLeft = $startTime - $now;
+                                            $hours = floor($timeLeft / 3600);
+                                            $minutes = floor(($timeLeft % 3600) / 60);
+                                            // Ensure at least 1m if seconds remain
+                                            if ($hours == 0 && $minutes == 0 && $timeLeft > 0) $minutes = 1;
+                                            
+                                            $countdownText = "Starts in {$hours}h {$minutes}m";
+                                            $class = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+                                        }
+                                    }
                                     ?>
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold border <?php echo $class; ?> uppercase tracking-wide">
-                                        <?php echo htmlspecialchars($task['status']); ?>
-                                    </span>
+                                    <?php if ($showCountdown): ?>
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold border <?php echo $class; ?> uppercase tracking-wide flex items-center gap-2" title="Standard indexing has a 2-hour delay">
+                                            <i class="fas fa-hourglass-half"></i> <?php echo $countdownText; ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold border <?php echo $class; ?> uppercase tracking-wide">
+                                            <?php echo htmlspecialchars($task['status']); ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php if ($task['type'] === 'traffic_campaign'): ?>
