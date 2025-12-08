@@ -64,7 +64,8 @@ $taskStats = $stmt->fetch();
 $stmt = $pdo->prepare('SELECT COUNT(*) as total_payments, SUM(amount) as total_spent FROM payments WHERE user_id = ? AND status = "paid"');
 $stmt->execute([$userId]);
 $paymentStats = $stmt->fetch();
-$isPaidUser = ($paymentStats['total_payments'] ?? 0) > 0;
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+$isPaidUser = ($paymentStats['total_spent'] ?? 0) > 0 || $isAdmin;
 
 $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
 
@@ -336,7 +337,7 @@ include __DIR__ . '/includes/header_new.php';
         const COST_INDEXING = <?php echo $cost_indexing; ?>;
         const COST_CHECKING = <?php echo $cost_checking; ?>;
         const COST_VIP = <?php echo $cost_vip; ?>;
-        const ENABLE_VIP = <?php echo $enable_vip_queue === '1' ? 'true' : 'false'; ?>;
+        const ENABLE_VIP = true; // Always enable UI if code present
         
         function updateCost() {
             const urls = urlsInput.value.trim().split('\n').filter(line => line.trim() !== '');
