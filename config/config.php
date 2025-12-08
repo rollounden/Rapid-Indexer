@@ -77,7 +77,7 @@ const DEFAULT_PRICE_PER_CREDIT_USD = 0.01;
 // Task Costs (in Credits/Cents)
 const DEFAULT_COST_INDEXING = 2; // $0.02 per URL
 const DEFAULT_COST_CHECKING = 1;  // $0.01 per URL
-const DEFAULT_COST_VIP_EXTRA = 5; // +$0.05 for VIP
+const DEFAULT_COST_VIP_EXTRA = 15; // +$0.15 for VIP
 
 // Backward compatibility constants - TO BE REMOVED AFTER REFACTOR
 const PRICE_PER_CREDIT_USD = DEFAULT_PRICE_PER_CREDIT_USD;

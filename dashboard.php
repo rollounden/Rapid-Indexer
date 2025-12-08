@@ -195,8 +195,8 @@ include __DIR__ . '/includes/header_new.php';
                             <div class="flex flex-col gap-3 p-4 bg-yellow-900/10 border border-yellow-900/20 rounded-lg">
                                 <div class="flex items-center gap-3">
                                     <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                                        <input type="checkbox" name="vip" id="vipQueue" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                                        <label for="vipQueue" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                                        <input type="checkbox" name="vip" id="vipQueue" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer peer"/>
+                                        <label for="vipQueue" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer peer-checked:bg-yellow-500 peer-checked:border-yellow-500"></label>
                                     </div>
                                     <div>
                                         <label for="vipQueue" class="font-bold text-white cursor-pointer flex items-center gap-2">
