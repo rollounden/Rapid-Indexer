@@ -75,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             SettingsService::set('enable_vip_queue', $_POST['enable_vip_queue']);
         }
 
+        if (isset($_POST['vip_require_payment'])) {
+            SettingsService::set('vip_require_payment', $_POST['vip_require_payment']);
+        }
+
         if (isset($_POST['free_credits_on_signup'])) {
             SettingsService::set('free_credits_on_signup', intval($_POST['free_credits_on_signup']));
         }
@@ -132,6 +136,7 @@ $cryptomus_api_key_display = $cryptomus_api_key_decrypted ? substr($cryptomus_ap
 $enable_paypal = SettingsService::get('enable_paypal', '1');
 $enable_cryptomus = SettingsService::get('enable_cryptomus', '1');
 $enable_vip_queue = SettingsService::get('enable_vip_queue', '1');
+$vip_require_payment = SettingsService::get('vip_require_payment', '1');
 $free_credits_on_signup = SettingsService::get('free_credits_on_signup', '30');
 
 // Pricing Settings
@@ -375,6 +380,18 @@ include __DIR__ . '/includes/header_new.php';
                     <input type="hidden" name="enable_vip_queue" value="0" id="hiddenVip">
                 </div>
                 
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <label class="text-white font-bold block">Require Payment for VIP</label>
+                        <p class="text-xs text-gray-400">Only allow users who have spent money to use VIP Queue</p>
+                    </div>
+                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="vip_require_payment" id="vipPayment" value="1" <?php echo $vip_require_payment === '1' ? 'checked' : ''; ?> class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="vipPayment" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                    <input type="hidden" name="vip_require_payment" value="0" id="hiddenVipPayment">
+                </div>
+                
                 <div class="mb-6">
                     <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Free Credits on Signup</label>
                     <input type="number" name="free_credits_on_signup" class="w-full bg-[#111] border border-[#333] rounded-lg p-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors" value="<?php echo htmlspecialchars($free_credits_on_signup); ?>" min="0">
@@ -383,12 +400,16 @@ include __DIR__ . '/includes/header_new.php';
                 <script>
                     const vipToggle = document.getElementById('enableVip');
                     const vipHidden = document.getElementById('hiddenVip');
+                    const vipPayToggle = document.getElementById('vipPayment');
+                    const vipPayHidden = document.getElementById('hiddenVipPayment');
                     
                     function updateVipHidden() {
                         vipHidden.disabled = vipToggle.checked;
+                        vipPayHidden.disabled = vipPayToggle.checked;
                     }
                     
                     vipToggle.addEventListener('change', updateVipHidden);
+                    vipPayToggle.addEventListener('change', updateVipHidden);
                     updateVipHidden();
                 </script>
 

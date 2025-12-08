@@ -46,6 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (Exception $e) {
                 $error = 'Failed to adjust credits: ' . $e->getMessage();
             }
+        } elseif ($_POST['action'] === 'toggle_vip') {
+            $userId = intval($_POST['user_id']);
+            $enabled = intval($_POST['enabled']);
+            try {
+                // Assuming column exists (requires ALTER TABLE users ADD COLUMN vip_enabled TINYINT(1) DEFAULT 0)
+                $stmt = $pdo->prepare('UPDATE users SET vip_enabled = ? WHERE id = ?');
+                $stmt->execute([$enabled, $userId]);
+                $success = "VIP status updated for user #$userId";
+            } catch (Exception $e) {
+                // If column doesn't exist, this might fail
+                $error = 'Failed to update VIP status (Check DB schema): ' . $e->getMessage();
+            }
         }
     }
 }
@@ -115,6 +127,7 @@ include __DIR__ . '/includes/header_new.php';
                         <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">User Details</th>
                         <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Role</th>
                         <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Credits</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">VIP</th>
                         <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Joined</th>
                         <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
@@ -134,6 +147,16 @@ include __DIR__ . '/includes/header_new.php';
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-300 font-mono">
                                 <?php echo number_format($user['credits_balance']); ?>
+                            </td>
+                            <td class="px-6 py-4">
+                                <form method="POST" class="inline">
+                                    <input type="hidden" name="action" value="toggle_vip">
+                                    <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                    <input type="hidden" name="enabled" value="<?php echo ($user['vip_enabled'] ?? 0) ? 0 : 1; ?>">
+                                    <button type="submit" class="text-[10px] font-bold px-2 py-1 rounded <?php echo ($user['vip_enabled'] ?? 0) ? 'bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30' : 'bg-gray-500/20 text-gray-500 hover:bg-gray-500/30'; ?>">
+                                        <?php echo ($user['vip_enabled'] ?? 0) ? 'ON' : 'OFF'; ?>
+                                    </button>
+                                </form>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold <?php echo $user['status'] === 'active' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'; ?>">

@@ -64,8 +64,22 @@ $taskStats = $stmt->fetch();
 $stmt = $pdo->prepare('SELECT COUNT(*) as total_payments, SUM(amount) as total_spent FROM payments WHERE user_id = ? AND status = "paid"');
 $stmt->execute([$userId]);
 $paymentStats = $stmt->fetch();
+
+// Check user VIP flag
+$userVip = false;
+try {
+    $stmt = $pdo->prepare('SELECT vip_enabled FROM users WHERE id = ?');
+    $stmt->execute([$userId]);
+    $userVip = (bool)$stmt->fetchColumn();
+} catch (Exception $e) {
+    // Column might not exist yet
+}
+
+$requirePayment = SettingsService::get('vip_require_payment', '1') === '1';
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
-$isPaidUser = ($paymentStats['total_spent'] ?? 0) > 0 || $isAdmin;
+$hasSpent = ($paymentStats['total_spent'] ?? 0) > 0;
+
+$isPaidUser = $isAdmin || $userVip || !$requirePayment || $hasSpent;
 
 $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
 
