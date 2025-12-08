@@ -72,18 +72,35 @@ $total = count($links);
 $indexed = 0;
 $unindexed = 0;
 $pending = 0;
-$error = 0;
+$errorLinks = 0;
 
 foreach ($links as $link) {
     switch ($link['status']) {
         case 'indexed': $indexed++; break;
         case 'unindexed': $unindexed++; break;
         case 'pending': $pending++; break;
-        case 'error': $error++; break;
+        case 'error': $errorLinks++; break;
     }
 }
 
 $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
+
+// Countdown Logic
+$showCountdown = false;
+$countdownText = '';
+if ($task['type'] === 'indexer' && empty($task['vip'])) {
+    $createdTime = strtotime($task['created_at']);
+    $startTime = $createdTime + (2 * 3600);
+    $now = time();
+    if ($now < $startTime) {
+        $showCountdown = true;
+        $timeLeft = $startTime - $now;
+        $hours = floor($timeLeft / 3600);
+        $minutes = floor(($timeLeft % 3600) / 60);
+        if ($hours == 0 && $minutes == 0 && $timeLeft > 0) $minutes = 1;
+        $countdownText = "Starts in {$hours}h {$minutes}m";
+    }
+}
 
 include __DIR__ . '/includes/header_new.php';
 ?>
@@ -99,9 +116,15 @@ include __DIR__ . '/includes/header_new.php';
             <h1 class="text-3xl font-bold text-white"><?php echo htmlspecialchars($task['title'] ?: 'Untitled Task'); ?></h1>
         </div>
         <div>
-            <span class="px-3 py-1 rounded-full text-sm font-bold uppercase <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'); ?>">
-                <?php echo ucfirst($task['status']); ?>
-            </span>
+            <?php if ($showCountdown): ?>
+                <span class="px-3 py-1 rounded-full text-sm font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center gap-2" title="Standard indexing has a 2-hour delay">
+                    <i class="fas fa-hourglass-half"></i> <?php echo $countdownText; ?>
+                </span>
+            <?php else: ?>
+                <span class="px-3 py-1 rounded-full text-sm font-bold uppercase <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'); ?>">
+                    <?php echo ucfirst($task['status']); ?>
+                </span>
+            <?php endif; ?>
             
             <?php if ($task['is_drip_feed'] && $task['status'] !== 'completed'): ?>
                 <form method="POST" class="inline-block ml-2" onsubmit="return confirm('Are you sure you want to force the next batch?');">
@@ -130,6 +153,10 @@ include __DIR__ . '/includes/header_new.php';
         <div class="card rounded-xl p-4 text-center">
             <h3 class="text-3xl font-bold text-gray-400"><?php echo $pending; ?></h3>
             <div class="text-xs text-gray-500 uppercase font-bold mt-1">Pending</div>
+        </div>
+        <div class="card rounded-xl p-4 text-center">
+            <h3 class="text-3xl font-bold text-red-400"><?php echo $errorLinks; ?></h3>
+            <div class="text-xs text-gray-500 uppercase font-bold mt-1">Errors</div>
         </div>
     </div>
     
