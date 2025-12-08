@@ -163,7 +163,7 @@ include __DIR__ . '/includes/header_new.php';
     <div class="card rounded-xl overflow-hidden">
         <div class="px-6 py-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
             <h5 class="font-bold text-white">Links</h5>
-            <?php if ($task['status'] === 'completed'): ?>
+            <?php if ($task['status'] === 'completed' && !$showCountdown): ?>
                 <form method="POST" action="/tasks.php">
                     <input type="hidden" name="action" value="export_csv">
                     <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">

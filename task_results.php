@@ -150,23 +150,45 @@ if ($task['type'] === 'traffic_campaign') {
     $indexed = 0;
     $unindexed = 0;
     $pending = 0;
-    $error = 0;
+    $errorLinks = 0;
     
     foreach ($links as $link) {
         switch ($link['status']) {
             case 'indexed': $indexed++; break;
             case 'unindexed': $unindexed++; break;
             case 'pending': $pending++; break;
-            case 'error': $error++; break;
+            case 'error': $errorLinks++; break;
         }
     }
     
     $box1_label = 'Total Links'; $box1_val = $total;
-    $box2_label = 'Indexed'; $box2_val = $indexed;
+    $box2_label = ($task['type'] === 'indexer') ? 'Crawled' : 'Indexed';
+    $box2_val = $indexed;
     $box3_label = 'Unindexed'; $box3_val = $unindexed;
     $box4_label = 'Pending'; $box4_val = $pending;
     
     $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
+    
+    // Countdown Logic for Standard Indexer Tasks
+    $showCountdown = false;
+    $countdownText = '';
+    
+    if ($task['type'] === 'indexer' && empty($task['vip'])) {
+        $createdTime = strtotime($task['created_at']);
+        $startTime = $createdTime + (2 * 3600); // 2 hours later
+        $now = time();
+        
+        if ($now < $startTime) {
+            $showCountdown = true;
+            $timeLeft = $startTime - $now;
+            $hours = floor($timeLeft / 3600);
+            $minutes = floor(($timeLeft % 3600) / 60);
+            // Ensure at least 1m if seconds remain
+            if ($hours == 0 && $minutes == 0 && $timeLeft > 0) $minutes = 1;
+            
+            $countdownText = "Starts in {$hours}h {$minutes}m";
+        }
+    }
 }
 
 include __DIR__ . '/includes/header_new.php';
@@ -204,9 +226,15 @@ include __DIR__ . '/includes/header_new.php';
             </h1>
         </div>
         <div>
-            <span class="px-3 py-1 rounded-full text-sm font-bold uppercase <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'); ?>">
-                <?php echo ucfirst($task['status']); ?>
-            </span>
+            <?php if ($showCountdown): ?>
+                <span class="px-3 py-1 rounded-full text-sm font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center gap-2" title="Standard indexing has a 2-hour delay">
+                    <i class="fas fa-hourglass-half"></i> <?php echo $countdownText; ?>
+                </span>
+            <?php else: ?>
+                <span class="px-3 py-1 rounded-full text-sm font-bold uppercase <?php echo $task['status'] === 'completed' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : ($task['status'] === 'processing' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'); ?>">
+                    <?php echo ucfirst($task['status']); ?>
+                </span>
+            <?php endif; ?>
 
             <?php if (!empty($task['is_drip_feed']) && $task['status'] !== 'completed'): ?>
                 <!-- Force Send Button Removed per user request -->
@@ -402,7 +430,7 @@ include __DIR__ . '/includes/header_new.php';
         <div class="card rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
                 <h5 class="font-bold text-white">Links</h5>
-                <?php if ($task['status'] === 'completed'): ?>
+                <?php if ($task['status'] === 'completed' && !$showCountdown): ?>
                     <form method="POST" action="/tasks.php">
                         <input type="hidden" name="action" value="export_csv">
                         <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
@@ -435,14 +463,19 @@ include __DIR__ . '/includes/header_new.php';
                                 <td class="px-6 py-4">
                                     <?php
                                     $badge_class = 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+                                    $statusLabel = ucfirst($link['status']);
+                                    
                                     switch ($link['status']) {
-                                        case 'indexed': $badge_class = 'bg-green-500/10 text-green-400 border-green-500/20'; break;
+                                        case 'indexed': 
+                                            $badge_class = 'bg-green-500/10 text-green-400 border-green-500/20'; 
+                                            if ($task['type'] === 'indexer') $statusLabel = 'Crawled';
+                                            break;
                                         case 'unindexed': $badge_class = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'; break;
                                         case 'error': $badge_class = 'bg-red-500/10 text-red-400 border-red-500/20'; break;
                                     }
                                     ?>
                                     <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold border <?php echo $badge_class; ?>">
-                                        <?php echo ucfirst($link['status']); ?>
+                                        <?php echo $statusLabel; ?>
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-400">
