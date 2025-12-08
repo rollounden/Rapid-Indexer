@@ -150,7 +150,7 @@ if (isset($_SESSION['uid'])) {
             <div class="flex w-full items-center justify-center gap-5 px-4 py-2 sm:px-6 lg:px-8">
                 <p class="text-sm font-medium tracking-wide">
                     <span class="bg-white/10 px-2 py-0.5 rounded text-xs mr-2 font-bold">NEW</span>
-                    Now with 70% Faster Indexing Engine
+                    VIP Queue Available: Get Indexed in Under 2 Minutes!
                 </p>
             </div>
         </div>
@@ -220,7 +220,7 @@ if (isset($_SESSION['uid'])) {
                 </h2>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Don't just build links. Power them up. Rapid Indexer forces Google to crawl your backlinks and simulates viral social traffic to boost your rankings.
+                    Don't just build links. Power them up. Rapid Indexer forces Google to crawl your backlinks (<span class="text-primary-400 font-bold">Under 2 mins with VIP!</span>) and simulates viral social traffic to boost your rankings.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -391,7 +391,11 @@ if (isset($_SESSION['uid'])) {
                         <ul class="space-y-3 text-gray-300">
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-check mt-1 text-primary-500"></i>
-                                <span>Instant submission to Google</span>
+                                <span>Standard indexing starts in ~2 hours (48h cycle)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-bolt mt-1 text-yellow-500"></i>
+                                <span class="text-white font-bold">VIP Queue: Under 2 minute indexing</span>
                             </li>
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-check mt-1 text-primary-500"></i>
@@ -688,8 +692,8 @@ if (isset($_SESSION['uid'])) {
                     <div class="w-12 h-12 bg-primary-900/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-900/30 transition-colors border border-primary-900/30">
                         <i class="fa-solid fa-rocket text-primary-500 text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Instant Discovery</h3>
-                    <p class="text-gray-400">Direct submission signals to search engines force them to crawl your URLs immediately.</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Fast & VIP Indexing</h3>
+                    <p class="text-gray-400">Standard links submit in ~2 hours. Upgrade to <strong class="text-white">VIP</strong> for under 2-minute processing for your money sites.</p>
                 </div>
 
                 <!-- Card 2 -->

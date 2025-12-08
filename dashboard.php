@@ -64,6 +64,7 @@ $taskStats = $stmt->fetch();
 $stmt = $pdo->prepare('SELECT COUNT(*) as total_payments, SUM(amount) as total_spent FROM payments WHERE user_id = ? AND status = "paid"');
 $stmt->execute([$userId]);
 $paymentStats = $stmt->fetch();
+$isPaidUser = ($paymentStats['total_payments'] ?? 0) > 0;
 
 $currentProvider = SettingsService::get('indexing_provider', 'speedyindex');
 
@@ -189,6 +190,7 @@ include __DIR__ . '/includes/header_new.php';
                         </div>
                         
                         <div class="mb-6" id="vipSection" style="display: none;">
+                            <?php if ($isPaidUser): ?>
                             <div class="flex flex-col gap-3 p-4 bg-yellow-900/10 border border-yellow-900/20 rounded-lg">
                                 <div class="flex items-center gap-3">
                                     <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
@@ -208,6 +210,25 @@ include __DIR__ . '/includes/header_new.php';
                                     <p class="text-yellow-200/80"><i class="fas fa-check mr-1"></i> Enhanced system reliability and success rates</p>
                                 </div>
                             </div>
+                            <?php else: ?>
+                            <div class="flex flex-col gap-3 p-4 bg-gray-800/50 border border-gray-700 rounded-lg relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                                <div class="flex items-center gap-3">
+                                     <div class="w-12 h-8 flex items-center justify-center bg-gray-700/50 rounded-full text-gray-400 border border-gray-600">
+                                         <i class="fas fa-lock text-sm"></i>
+                                     </div>
+                                     <div>
+                                         <strong class="text-gray-300 block flex items-center gap-2">
+                                             VIP Priority Queue <span class="text-[10px] uppercase bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded border border-yellow-500/20">Locked</span>
+                                         </strong>
+                                         <p class="text-xs text-gray-500">Purchase credits to unlock <strong class="text-gray-300">Under 2 Minute Indexing</strong></p>
+                                     </div>
+                                     <a href="/payments.php" class="ml-auto text-xs bg-primary-600 hover:bg-primary-500 text-white px-3 py-1.5 rounded transition-colors font-bold z-10 shadow-lg shadow-primary-900/20">
+                                         Unlock Now
+                                     </a>
+                                </div>
+                            </div>
+                            <?php endif; ?>
                         </div>
 
                         <!-- Standard Queue Info (Visible when VIP is not checked) -->
@@ -334,10 +355,10 @@ include __DIR__ . '/includes/header_new.php';
                 if (ENABLE_VIP) vipSection.style.display = 'block';
                 dripSection.style.display = 'block';
                 
-                // Toggle standard info based on VIP
+                // Toggle standard info based on VIP (only if VIP checkbox exists)
                 const standardInfo = document.getElementById('standardQueueInfo');
                 if (standardInfo) {
-                    standardInfo.style.display = isVip ? 'none' : 'block';
+                    standardInfo.style.display = (isVip) ? 'none' : 'block';
                 }
             } else {
                 vipSection.style.display = 'none';
