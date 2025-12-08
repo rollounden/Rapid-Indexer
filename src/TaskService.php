@@ -103,8 +103,9 @@ class TaskService
                     $body = json_decode($res['body'] ?? '', true);
                     
                     // Store tracking ID for this specific URL in task_links
-                    $trackingId = $body['tracking_id'] ?? null;
-                    $status = ($body['success'] ?? false) ? 'indexed' : 'error';
+                    $trackingId = $body['tracking_id'] ?? $body['data']['id'] ?? $body['data']['tracking_id'] ?? null;
+                    $success = $body['success'] ?? false;
+                    $status = $success ? 'indexed' : 'error';
                     $error = $body['message'] ?? null;
                     
                     $linkStmt = $pdo->prepare('UPDATE task_links SET status = ?, result_data = ?, error_code = ? WHERE task_id = ? AND url = ?');

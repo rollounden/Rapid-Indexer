@@ -282,7 +282,7 @@ include __DIR__ . '/includes/header_new.php';
                             </div>
                             <div class="flex items-center gap-2">
                                 <strong class="text-purple-400">Balance:</strong> 
-                                <span class="text-white"><?php echo isset($rocket_balance_data['data']['balance']) ? number_format($rocket_balance_data['data']['balance']) . ' links' : 'N/A'; ?></span>
+                                <span class="text-white"><?php echo isset($rocket_balance_data['data']['credits']['available']) ? number_format($rocket_balance_data['data']['credits']['available']) . ' credits' : 'N/A'; ?></span>
                             </div>
                         </div>
                     <?php endif; ?>
