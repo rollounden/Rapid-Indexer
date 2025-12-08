@@ -145,30 +145,6 @@ if ($task['type'] === 'traffic_campaign') {
     $progress = $total > 0 ? round(($completedQty / $total) * 100) : 0;
     
 } else {
-    // Standard logic
-    $total = count($links);
-    $indexed = 0;
-    $unindexed = 0;
-    $pending = 0;
-    $errorLinks = 0;
-    
-    foreach ($links as $link) {
-        switch ($link['status']) {
-            case 'indexed': $indexed++; break;
-            case 'unindexed': $unindexed++; break;
-            case 'pending': $pending++; break;
-            case 'error': $errorLinks++; break;
-        }
-    }
-    
-    $box1_label = 'Total Links'; $box1_val = $total;
-    $box2_label = ($task['type'] === 'indexer') ? 'Crawled' : 'Indexed';
-    $box2_val = $indexed;
-    $box3_label = 'Unindexed'; $box3_val = $unindexed;
-    $box4_label = 'Pending'; $box4_val = $pending;
-    
-    $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
-    
     // Countdown Logic for Standard Indexer Tasks
     $showCountdown = false;
     $countdownText = '';
@@ -189,6 +165,37 @@ if ($task['type'] === 'traffic_campaign') {
             $countdownText = "Starts in {$hours}h {$minutes}m";
         }
     }
+
+    // Standard logic
+    $total = count($links);
+    $indexed = 0;
+    $unindexed = 0;
+    $pending = 0;
+    $errorLinks = 0;
+    
+    foreach ($links as $link) {
+        switch ($link['status']) {
+            case 'indexed': $indexed++; break;
+            case 'unindexed': $unindexed++; break;
+            case 'pending': $pending++; break;
+            case 'error': $errorLinks++; break;
+        }
+    }
+    
+    // Override stats for countdown visual consistency
+    if ($showCountdown) {
+        // Shift 'indexed' (submitted) to 'pending' visually
+        $pending += $indexed;
+        $indexed = 0;
+    }
+    
+    $box1_label = 'Total Links'; $box1_val = $total;
+    $box2_label = ($task['type'] === 'indexer') ? 'Crawled' : 'Indexed';
+    $box2_val = $indexed;
+    $box3_label = 'Unindexed'; $box3_val = $unindexed;
+    $box4_label = 'Pending'; $box4_val = $pending;
+    
+    $progress = $total > 0 ? round((($indexed + $unindexed) / $total) * 100) : 0;
 }
 
 include __DIR__ . '/includes/header_new.php';
@@ -465,13 +472,19 @@ include __DIR__ . '/includes/header_new.php';
                                     $badge_class = 'bg-gray-500/10 text-gray-400 border-gray-500/20';
                                     $statusLabel = ucfirst($link['status']);
                                     
-                                    switch ($link['status']) {
-                                        case 'indexed': 
-                                            $badge_class = 'bg-green-500/10 text-green-400 border-green-500/20'; 
-                                            if ($task['type'] === 'indexer') $statusLabel = 'Crawled';
-                                            break;
-                                        case 'unindexed': $badge_class = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'; break;
-                                        case 'error': $badge_class = 'bg-red-500/10 text-red-400 border-red-500/20'; break;
+                                    if ($showCountdown && $link['status'] === 'indexed') {
+                                        // Override for visual consistency during delay
+                                        $badge_class = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+                                        $statusLabel = 'Scheduled';
+                                    } else {
+                                        switch ($link['status']) {
+                                            case 'indexed': 
+                                                $badge_class = 'bg-green-500/10 text-green-400 border-green-500/20'; 
+                                                if ($task['type'] === 'indexer') $statusLabel = 'Crawled';
+                                                break;
+                                            case 'unindexed': $badge_class = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'; break;
+                                            case 'error': $badge_class = 'bg-red-500/10 text-red-400 border-red-500/20'; break;
+                                        }
                                     }
                                     ?>
                                     <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold border <?php echo $badge_class; ?>">
