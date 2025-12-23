@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/config/config.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $page_title = 'Frequently Asked Questions - Rapid Indexer';
 $meta_description = 'Find answers to common questions about Rapid Indexer, pricing, indexing time, and API usage.';
@@ -102,7 +102,7 @@ include __DIR__ . '/includes/header_new.php';
                         <i class="fas fa-chevron-down text-gray-400 transition-transform" :class="{ 'rotate-180': open }"></i>
                     </button>
                     <div x-show="open" x-collapse class="px-6 py-4 text-gray-400 border-t border-white/5">
-                        The VIP Queue allows you to prioritize your tasks for faster processing. This is available for indexing tasks with up to 100 URLs and costs an additional 5 credits per link.
+                        The VIP Queue allows you to prioritize your tasks for faster processing. This is available for indexing tasks additional credits per link.
                     </div>
                 </div>
             </div>

@@ -56,7 +56,7 @@ if (!is_dir(__DIR__ . '/storage/logs')) {
 }
 ini_set('error_log', __DIR__ . '/storage/logs/php_errors.log');
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 // Check if user is logged in
 if (!isset($_SESSION['uid'])) {
