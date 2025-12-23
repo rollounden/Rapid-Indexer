@@ -36,6 +36,12 @@ Check your account status and credit balance.
 - **URL**: `?action=me`
 - **Method**: `GET`
 
+**cURL Example:**
+```bash
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=me" \
+     -H "X-API-Key: YOUR_API_KEY"
+```
+
 **Response:**
 ```json
 {
@@ -81,6 +87,19 @@ Submit URLs for indexing or checking.
   "title": "My Blog Posts",
   "vip": true
 }
+```
+
+**cURL Example:**
+```bash
+curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
+     -H "X-API-Key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "urls": ["https://example.com/page1", "https://example.com/page2"],
+       "type": "indexer",
+       "engine": "google",
+       "title": "My Blog Posts"
+     }'
 ```
 
 **Response:**
@@ -131,6 +150,20 @@ Simulate viral traffic to your URLs.
 }
 ```
 
+**cURL Example:**
+```bash
+curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
+     -H "X-API-Key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "type": "traffic",
+       "link": "https://example.com/viral-post",
+       "quantity": 5000,
+       "mode": "campaign",
+       "country": "US"
+     }'
+```
+
 **Response:**
 ```json
 {
@@ -148,6 +181,12 @@ Check the status of a specific task.
 
 - **URL**: `?action=get_task&task_id={id}`
 - **Method**: `GET`
+
+**cURL Example:**
+```bash
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+```
 
 **Response:**
 ```json
@@ -176,6 +215,12 @@ Get detailed status for each link in a task.
 
 - **URL**: `?action=get_task_links&task_id={id}`
 - **Method**: `GET`
+
+**cURL Example:**
+```bash
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task_links&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+```
 
 **Response:**
 ```json

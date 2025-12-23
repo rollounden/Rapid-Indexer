@@ -158,6 +158,14 @@ include __DIR__ . '/includes/header_new.php';
                     <code class="text-gray-300 text-sm font-mono">?action=me</code>
                 </div>
                 
+                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=me" \
+     -H "X-API-Key: YOUR_API_KEY"
+</pre>
+                </div>
+
                 <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
                 <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
 <pre class="text-gray-300 font-mono text-xs">
@@ -234,6 +242,21 @@ include __DIR__ . '/includes/header_new.php';
   "engine": "google",
   "title": "My Blog Posts"
 }
+</pre>
+                </div>
+
+                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
+     -H "X-API-Key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "urls": ["https://example.com/page1", "https://example.com/page2"],
+       "type": "indexer",
+       "engine": "google",
+       "title": "My Blog Posts"
+     }'
 </pre>
                 </div>
 
@@ -317,6 +340,14 @@ include __DIR__ . '/includes/header_new.php';
                     <code class="text-gray-300 text-sm font-mono">?action=get_task&task_id={id}</code>
                 </div>
                 
+                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+</pre>
+                </div>
+
                 <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
                 <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
 <pre class="text-gray-300 font-mono text-xs">
@@ -345,6 +376,14 @@ include __DIR__ . '/includes/header_new.php';
                     <code class="text-gray-300 text-sm font-mono">?action=get_task_links&task_id={id}</code>
                 </div>
                 
+                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task_links&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+</pre>
+                </div>
+
                 <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
                 <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
 <pre class="text-gray-300 font-mono text-xs">
