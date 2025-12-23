@@ -94,6 +94,54 @@ Submit URLs for indexing or checking.
 }
 ```
 
+### 2a. Create Traffic Task
+
+Simulate viral traffic to your URLs.
+
+- **URL**: `?action=create_task`
+- **Method**: `POST`
+- **Content-Type**: `application/json`
+
+**Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `type` | string | **Yes** | - | Must be `traffic` |
+| `link` | string | **Yes** | - | Target URL to boost |
+| `quantity` | int | **Yes** | - | Total visitors (Min: 100) |
+| `mode` | string | No | `single` | `single` (Quick) or `campaign` (Drip-feed) |
+| `days` | int | No | `1` | Duration in days (if mode=`campaign`) |
+| `country` | string | No | `WW` | 2-letter code (e.g., US, DE, WW) |
+| `device` | int | No | `5` | `1`=Desktop, `2`=Android, `3`=iOS, `5`=Mixed |
+| `type_of_traffic` | int | No | `2` | `1`=Google Keyword, `2`=Referrer, `3`=Direct |
+| `google_keyword` | string | No | - | Required if type_of_traffic=`1` |
+| `referring_url` | string | No | - | Required if type_of_traffic=`2` |
+
+**Request Body Example:**
+```json
+{
+  "type": "traffic",
+  "link": "https://example.com/viral-post",
+  "quantity": 5000,
+  "mode": "campaign",
+  "days": 3,
+  "country": "US",
+  "type_of_traffic": 2,
+  "referring_url": "https://twitter.com/news/status/123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Traffic task created successfully",
+  "task_id": 457,
+  "total_quantity": 5000,
+  "runs": 12
+}
+```
+
 ### 3. Get Task Details
 
 Check the status of a specific task.

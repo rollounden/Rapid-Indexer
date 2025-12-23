@@ -64,43 +64,82 @@ try {
         case 'create_task':
             if ($method !== 'POST') throw new Exception('Method not allowed', 405);
             
-            $urls = $input['urls'] ?? [];
-            if (is_string($urls)) {
-                // Allow newline separated string too
-                $urls = array_values(array_filter(array_map('trim', preg_split('/\r?\n/', $urls))));
-            }
-            
-            if (empty($urls) || !is_array($urls)) {
-                throw new Exception('No URLs provided. Send "urls" as array or newline-separated string.');
-            }
-            
-            $engine = $input['engine'] ?? 'google';
             $type = $input['type'] ?? 'indexer';
-            $title = $input['title'] ?? null;
-            $vip = filter_var($input['vip'] ?? false, FILTER_VALIDATE_BOOLEAN);
-            
-            // Drip Feed
-            $dripFeed = filter_var($input['drip_feed'] ?? false, FILTER_VALIDATE_BOOLEAN);
-            $dripDuration = isset($input['drip_duration_days']) ? (int)$input['drip_duration_days'] : 3;
-            $dripConfig = $dripFeed ? ['duration_days' => $dripDuration] : null;
-            
-            // Check VIP setting
-            $enable_vip_queue = SettingsService::get('enable_vip_queue', '1') === '1';
-            if ($vip && !$enable_vip_queue) {
-                $vip = false; // Silently fallback or throw? Fallback seems safer but maybe misleading.
-                // Let's stick to TaskService logic which might not check enabling, but Dashboard does.
-                // We should probably respect the setting.
+
+            if ($type === 'traffic') {
+                require_once __DIR__ . '/../../src/TrafficService.php';
+
+                // Map inputs
+                $link = $input['link'] ?? $input['url'] ?? null;
+                // If user sent "urls" array, take first
+                if (!$link && !empty($input['urls']) && is_array($input['urls'])) {
+                    $link = $input['urls'][0] ?? null;
+                }
+
+                if (!$link) throw new Exception('Missing "link" or "url" parameter for traffic task');
+
+                $params = [
+                    'link' => $link,
+                    'task_name' => $input['title'] ?? $input['task_name'] ?? null,
+                    'quantity' => $input['quantity'] ?? 0,
+                    'mode' => $input['mode'] ?? 'single',
+                    'days' => $input['days'] ?? 1,
+                    'country' => $input['country'] ?? 'WW',
+                    'device' => $input['device'] ?? '',
+                    'type_of_traffic' => $input['type_of_traffic'] ?? '',
+                    'google_keyword' => $input['google_keyword'] ?? '',
+                    'referring_url' => $input['referring_url'] ?? '',
+                ];
+
+                $result = TrafficService::createTrafficTask($userId, $params);
+
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Traffic task created successfully',
+                    'task_id' => $result['task_id'],
+                    'provider_order_id' => $result['order_id'] ?? null,
+                    'total_quantity' => $result['total_quantity'] ?? $params['quantity'],
+                    'runs' => $result['runs'] ?? 1
+                ]);
+
+            } else {
+                // Indexer / Checker
+                $urls = $input['urls'] ?? [];
+                if (is_string($urls)) {
+                    // Allow newline separated string too
+                    $urls = array_values(array_filter(array_map('trim', preg_split('/\r?\n/', $urls))));
+                }
+                
+                if (empty($urls) || !is_array($urls)) {
+                    throw new Exception('No URLs provided. Send "urls" as array or newline-separated string.');
+                }
+                
+                $engine = $input['engine'] ?? 'google';
+                // Type is already read above
+                $title = $input['title'] ?? null;
+                $vip = filter_var($input['vip'] ?? false, FILTER_VALIDATE_BOOLEAN);
+                
+                // Drip Feed
+                $dripFeed = filter_var($input['drip_feed'] ?? false, FILTER_VALIDATE_BOOLEAN);
+                $dripDuration = isset($input['drip_duration_days']) ? (int)$input['drip_duration_days'] : 3;
+                $dripConfig = $dripFeed ? ['duration_days' => $dripDuration] : null;
+                
+                // Check VIP setting
+                $enable_vip_queue = SettingsService::get('enable_vip_queue', '1') === '1';
+                if ($vip && !$enable_vip_queue) {
+                    $vip = false;
+                }
+                
+                $result = TaskService::createTask($userId, $engine, $type, $urls, $title, $vip, $dripConfig);
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Task created successfully',
+                    'task_id' => $result['task_id'],
+                    'provider' => $result['provider'] ?? 'unknown',
+                    'is_drip_feed' => $result['is_drip_feed'] ?? false
+                ]);
             }
-            
-            $result = TaskService::createTask($userId, $engine, $type, $urls, $title, $vip, $dripConfig);
-            
-            echo json_encode([
-                'success' => true,
-                'message' => 'Task created successfully',
-                'task_id' => $result['task_id'],
-                'provider' => $result['provider'] ?? 'unknown',
-                'is_drip_feed' => $result['is_drip_feed'] ?? false
-            ]);
             break;
 
         case 'get_task':

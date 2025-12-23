@@ -251,6 +251,63 @@ include __DIR__ . '/includes/header_new.php';
                 </div>
             </div>
 
+            <!-- 2a. Create Traffic Task -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">2a. Create Traffic Task</h4>
+                <p class="text-gray-400 mb-2 text-sm">Simulate viral traffic to your URLs.</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30">POST</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=create_task</code>
+                </div>
+                
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="text-xs text-gray-300 uppercase bg-white/5">
+                            <tr>
+                                <th class="px-3 py-2">Parameter</th>
+                                <th class="px-3 py-2">Required</th>
+                                <th class="px-3 py-2">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="bg-white/5">
+                                <td class="px-3 py-2 font-mono text-primary-300">type</td>
+                                <td class="px-3 py-2 text-red-400">Yes</td>
+                                <td class="px-3 py-2">Must be `traffic`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2 font-mono text-primary-300">link</td>
+                                <td class="px-3 py-2 text-red-400">Yes</td>
+                                <td class="px-3 py-2">Target URL to boost</td>
+                            </tr>
+                            <tr class="bg-white/5">
+                                <td class="px-3 py-2 font-mono text-primary-300">quantity</td>
+                                <td class="px-3 py-2 text-red-400">Yes</td>
+                                <td class="px-3 py-2">Total visitors (Min: 100)</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2 font-mono text-primary-300">mode</td>
+                                <td class="px-3 py-2">No</td>
+                                <td class="px-3 py-2">`single` (default) or `campaign`</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-sm font-bold text-gray-400 mb-2">Request Body Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "type": "traffic",
+  "link": "https://example.com/viral-post",
+  "quantity": 5000,
+  "mode": "campaign",
+  "country": "US"
+}
+</pre>
+                </div>
+            </div>
+
             <!-- 3. Get Task Details -->
             <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
                 <h4 class="text-lg font-bold text-white mb-2">3. Get Task Details</h4>
