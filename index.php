@@ -13,42 +13,125 @@ switch ($path) {
     case '/':
         // Serve dashboard if logged in, otherwise serve home page
         if (isset($_SESSION['uid'])) {
-            header('Location: /dashboard');
-            exit;
+            require_once __DIR__ . '/dashboard.php';
         } else {
-            // Include home page directly
             require_once __DIR__ . '/home.php';
-            exit;
         }
         break;
 
+    case '/dashboard':
+        require_once __DIR__ . '/dashboard.php';
+        break;
+
+    case '/login':
     case '/auth':
-        // Redirect to login for backward compatibility
-        header('Location: /login.php');
-        exit;
+        require_once __DIR__ . '/login.php';
+        break;
+
+    case '/register':
+        require_once __DIR__ . '/register.php';
+        break;
+
+    case '/forgot-password':
+    case '/forgot_password':
+        require_once __DIR__ . '/forgot_password.php';
+        break;
+
+    case '/reset-password':
+    case '/reset_password':
+        require_once __DIR__ . '/reset_password.php';
+        break;
+
+    case '/logout':
+        require_once __DIR__ . '/logout.php';
         break;
 
     case '/tasks':
-        // Redirect to new tasks page
-        header('Location: /tasks.php');
-        exit;
+        require_once __DIR__ . '/tasks.php';
+        break;
+
+    case '/task_details':
+        require_once __DIR__ . '/task_details.php';
+        break;
+
+    case '/task_results':
+        require_once __DIR__ . '/task_results.php';
+        break;
+
+    case '/traffic':
+        require_once __DIR__ . '/traffic.php';
         break;
 
     case '/payments':
-        // Redirect to new payments page
-        header('Location: /payments.php');
-        exit;
+        require_once __DIR__ . '/payments.php';
         break;
 
     case '/admin':
-        // Redirect to new admin page
-        header('Location: /admin.php');
-        exit;
+        require_once __DIR__ . '/admin.php';
+        break;
+
+    case '/faq':
+        require_once __DIR__ . '/faq.php';
+        break;
+
+    case '/contact':
+        require_once __DIR__ . '/contact.php';
+        break;
+
+    case '/terms':
+        require_once __DIR__ . '/terms.php';
+        break;
+
+    case '/privacy':
+        require_once __DIR__ . '/privacy.php';
+        break;
+        
+    case '/api_access':
+        require_once __DIR__ . '/api_access.php';
+        break;
+        
+    case '/viral-blast':
+        require_once __DIR__ . '/viral-blast.php';
+        break;
+
+    case '/refund':
+        require_once __DIR__ . '/refund.php';
+        break;
+
+    case '/payment_success':
+        require_once __DIR__ . '/payment_success.php';
+        break;
+
+    case '/payment_cancel':
+        require_once __DIR__ . '/payment_cancel.php';
+        break;
+
+    // Admin Pages
+    case '/admin_users':
+        require_once __DIR__ . '/admin_users.php';
+        break;
+    case '/admin_payments':
+        require_once __DIR__ . '/admin_payments.php';
+        break;
+    case '/admin_messages':
+        require_once __DIR__ . '/admin_messages.php';
+        break;
+    case '/admin_email':
+        require_once __DIR__ . '/admin_email.php';
+        break;
+    case '/admin_discounts':
+        require_once __DIR__ . '/admin_discounts.php';
+        break;
+    case '/admin_traffic':
+        require_once __DIR__ . '/admin_traffic.php';
+        break;
+    case '/admin_settings':
+        require_once __DIR__ . '/admin_settings.php';
         break;
 
     case '/webhook_paypal':
         // Keep webhook endpoint as is
-require_once __DIR__ . '/src/Db.php';
+        require_once __DIR__ . '/src/Db.php';
         require_once __DIR__ . '/src/PaymentService.php';
         
         // Read raw body and headers
@@ -115,7 +198,16 @@ require_once __DIR__ . '/src/Db.php';
         break;
 
     default:
+        // Try to serve static assets or 404
+        if (file_exists(__DIR__ . $path) && !is_dir(__DIR__ . $path)) {
+             // Let the web server handle it? 
+             // If we are here, it means the request was rewritten to index.php or handled by it.
+             // But usually static files are served directly by nginx/apache.
+             // If this is a PHP CLI server or similar configuration:
+             return false; 
+        }
+        
         http_response_code(404);
-        echo '404 Not Found';
+        require_once __DIR__ . '/404.php';
         break;
 }

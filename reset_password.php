@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?= htmlspecialchars($success) ?>
             </div>
             <div class="text-center">
-                <a href="/login.php" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-all shadow-lg shadow-rose-900/20">Login Now</a>
+                <a href="/login" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-all shadow-lg shadow-rose-900/20">Login Now</a>
             </div>
         <?php else: ?>
             <?php if ($error): ?>

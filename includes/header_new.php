@@ -148,9 +148,9 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/dashboard" class="text-sm font-medium <?php echo $current_page === 'dashboard.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Dashboard</a>
-                    <a href="/tasks.php" class="text-sm font-medium <?php echo $current_page === 'tasks.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Tasks</a>
-                    <a href="/traffic.php" class="text-sm font-medium <?php echo $current_page === 'traffic.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Traffic</a>
-                    <a href="/payments.php" class="text-sm font-medium <?php echo $current_page === 'payments.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Payments</a>
+                    <a href="/tasks" class="text-sm font-medium <?php echo $current_page === 'tasks.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Tasks</a>
+                    <a href="/traffic" class="text-sm font-medium <?php echo $current_page === 'traffic.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Traffic</a>
+                    <a href="/payments" class="text-sm font-medium <?php echo $current_page === 'payments.php' ? 'text-primary-500' : 'text-gray-300 hover:text-white'; ?> transition-colors">Payments</a>
                     
                     <!-- Support Dropdown -->
                     <div class="relative" x-data="{ open: false }">
@@ -158,8 +158,8 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
                             Support <i class="fas fa-chevron-down text-xs ml-1"></i>
                         </button>
                         <div x-show="open" x-cloak class="absolute right-0 mt-2 w-48 bg-[#1c1c1c] border border-[#333] rounded-lg shadow-xl py-1 z-50">
-                            <a href="/faq.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">FAQ</a>
-                            <a href="/contact.php" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">Contact Us</a>
+                            <a href="/faq" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">FAQ</a>
+                            <a href="/contact" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">Contact Us</a>
                         </div>
                     </div>
 
@@ -183,7 +183,8 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
                                 <p class="text-xs text-gray-500 uppercase">Signed in as</p>
                                 <p class="text-sm font-bold text-white truncate"><?php echo htmlspecialchars($_SESSION['email'] ?? 'User'); ?></p>
                             </div>
-                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300">Log out</a>
+                            <a href="/api_access" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">API Access</a>
+                            <a href="/logout" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300">Log out</a>
                         </div>
                     </div>
                 </div>
@@ -199,16 +200,17 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
         <div x-show="mobileMenuOpen" x-cloak class="md:hidden bg-[#1c1c1c] border-b border-white/5">
             <div class="px-4 pt-2 pb-4 space-y-1">
                 <a href="/dashboard" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'dashboard.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Dashboard</a>
-                <a href="/tasks.php" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'tasks.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Tasks</a>
-                <a href="/traffic.php" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'traffic.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Traffic</a>
-                <a href="/payments.php" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'payments.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Payments</a>
-                <a href="/faq.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">FAQ</a>
-                <a href="/contact.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Contact Us</a>
+                <a href="/tasks" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'tasks.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Tasks</a>
+                <a href="/traffic" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'traffic.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Traffic</a>
+                <a href="/payments" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'payments.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Payments</a>
+                <a href="/faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">FAQ</a>
+                <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Contact Us</a>
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                 <a href="/admin" class="block px-3 py-2 rounded-md text-base font-medium <?php echo strpos($current_page, 'admin') === 0 ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Admin</a>
                 <?php endif; ?>
+                <a href="/api_access" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'api_access.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">API Access</a>
                 <div class="border-t border-white/10 my-2"></div>
-                <a href="/logout.php" class="block px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-red-500/10">Log out</a>
+                <a href="/logout" class="block px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-red-500/10">Log out</a>
             </div>
         </div>
     </nav>

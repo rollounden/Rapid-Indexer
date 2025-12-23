@@ -111,7 +111,7 @@ include __DIR__ . '/includes/header_new.php';
     
     <div class="text-center mt-12">
         <p class="text-lg text-gray-400 mb-6">Still have questions?</p>
-        <a href="/contact.php" class="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg transition-all shadow-lg shadow-primary-900/20">
+        <a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg transition-all shadow-lg shadow-primary-900/20">
             Contact Support
         </a>
     </div>

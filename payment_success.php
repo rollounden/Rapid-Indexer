@@ -262,21 +262,21 @@ try {
                     </div>
                     
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="dashboard.php" class="px-6 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors text-center">
+                        <a href="/dashboard" class="px-6 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors text-center">
                             <i class="fas fa-home mr-2"></i> Dashboard
                         </a>
                         
                         <?php if (($status === 'pending' || $status === 'processing') && isset($order_id)): ?>
-                            <a href="payment_success.php?order_id=<?php echo htmlspecialchars($order_id); ?>&action=check_status" class="px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-bold transition-all shadow-lg shadow-primary-900/20 text-center">
+                            <a href="/payment_success?order_id=<?php echo htmlspecialchars($order_id); ?>&action=check_status" class="px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-bold transition-all shadow-lg shadow-primary-900/20 text-center">
                                 <i class="fas fa-sync-alt mr-2"></i> Check Status Again
                             </a>
                         <?php elseif ($status === 'failed'): ?>
-                             <a href="payments.php" class="px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-bold transition-all shadow-lg shadow-primary-900/20 text-center">
+                             <a href="/payments" class="px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-bold transition-all shadow-lg shadow-primary-900/20 text-center">
                                 <i class="fas fa-redo mr-2"></i> Try Again
                             </a>
                         <?php endif; ?>
                         
-                        <a href="tasks.php" class="px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-bold transition-all shadow-lg shadow-primary-900/20 text-center">
+                        <a href="/tasks" class="px-6 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-bold transition-all shadow-lg shadow-primary-900/20 text-center">
                             <i class="fas fa-rocket mr-2"></i> New Task
                         </a>
                     </div>

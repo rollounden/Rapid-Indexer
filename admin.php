@@ -7,7 +7,7 @@ session_start();
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['uid']) || ($_SESSION['role'] ?? '') !== 'admin') {
-    header('Location: /login.php');
+    header('Location: /login');
     exit;
 }
 
@@ -113,25 +113,25 @@ include __DIR__ . '/includes/header_new.php';
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h1 class="text-3xl font-bold text-white">Admin Dashboard</h1>
         <div class="flex flex-wrap gap-2">
-            <a href="/admin_users.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+            <a href="/admin_users" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-users"></i> Users
             </a>
-            <a href="/admin_payments.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+            <a href="/admin_payments" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-credit-card"></i> Payments
             </a>
-            <a href="/admin_messages.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+            <a href="/admin_messages" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-envelope"></i> Messages
             </a>
-            <a href="/admin_email.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+            <a href="/admin_email" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-paper-plane"></i> Send Promo
             </a>
-            <a href="/admin_discounts.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+            <a href="/admin_discounts" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-tags"></i> Discounts
             </a>
-            <a href="/admin_traffic.php" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
+            <a href="/admin_traffic" class="px-4 py-2 rounded-lg border border-primary-600 text-primary-400 hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2">
                 <i class="fas fa-chart-line"></i> Traffic
             </a>
-            <a href="/admin_settings.php" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-all flex items-center gap-2">
+            <a href="/admin_settings" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-all flex items-center gap-2">
                 <i class="fas fa-cog"></i> Settings
             </a>
         </div>

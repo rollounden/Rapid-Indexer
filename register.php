@@ -185,12 +185,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <div class="text-center mt-6">
                     <span class="text-gray-400">Already have an account?</span>
-                    <a href="/login.php" class="font-bold text-primary-500 hover:text-primary-400 ml-1">Sign in</a>
+                    <a href="/login" class="font-bold text-primary-500 hover:text-primary-400 ml-1">Sign in</a>
                 </div>
             </form>
             
             <div class="mt-12 text-center text-xs text-gray-500">
-                By registering, you agree to our <a href="/terms.php" class="underline hover:text-gray-300">Terms</a> and <a href="/privacy.php" class="underline hover:text-gray-300">Privacy Policy</a>.
+                By registering, you agree to our <a href="/terms" class="underline hover:text-gray-300">Terms</a> and <a href="/privacy" class="underline hover:text-gray-300">Privacy Policy</a>.
             </div>
         </div>
     </div>

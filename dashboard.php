@@ -4,7 +4,7 @@ session_start();
 
 // Redirect if not logged in
 if (!isset($_SESSION['uid'])) {
-    header('Location: /login.php');
+    header('Location: /login');
     exit;
 }
 
@@ -238,7 +238,7 @@ include __DIR__ . '/includes/header_new.php';
                                          </strong>
                                          <p class="text-xs text-gray-500">Purchase credits to unlock <strong class="text-gray-300">Under 2 Minute Indexing</strong></p>
                                      </div>
-                                     <a href="/payments.php" class="ml-auto text-xs bg-primary-600 hover:bg-primary-500 text-white px-3 py-1.5 rounded transition-colors font-bold z-10 shadow-lg shadow-primary-900/20">
+                                     <a href="/payments" class="ml-auto text-xs bg-primary-600 hover:bg-primary-500 text-white px-3 py-1.5 rounded transition-colors font-bold z-10 shadow-lg shadow-primary-900/20">
                                          Unlock Now
                                      </a>
                                 </div>
@@ -291,7 +291,7 @@ include __DIR__ . '/includes/header_new.php';
             <div class="card rounded-xl overflow-hidden h-full">
                 <div class="px-6 py-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
                     <h3 class="text-lg font-bold text-white">Recent Tasks</h3>
-                    <a href="/tasks.php" class="text-xs font-bold text-primary-400 hover:text-primary-300 uppercase">View All</a>
+                    <a href="/tasks" class="text-xs font-bold text-primary-400 hover:text-primary-300 uppercase">View All</a>
                 </div>
                 <div class="divide-y divide-white/5">
                     <?php if (empty($recentTasks)): ?>

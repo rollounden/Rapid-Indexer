@@ -11,16 +11,16 @@
             <div class="col-md-3 col-6">
                 <h6 class="fw-bold mb-3">Legal</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="/terms.php" class="text-decoration-none text-secondary">Terms of Service</a></li>
-                    <li class="mb-2"><a href="/privacy.php" class="text-decoration-none text-secondary">Privacy Policy</a></li>
-                    <li class="mb-2"><a href="/refund.php" class="text-decoration-none text-secondary">Refund Policy</a></li>
+                    <li class="mb-2"><a href="/terms" class="text-decoration-none text-secondary">Terms of Service</a></li>
+                    <li class="mb-2"><a href="/privacy" class="text-decoration-none text-secondary">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="/refund" class="text-decoration-none text-secondary">Refund Policy</a></li>
                 </ul>
             </div>
             <div class="col-md-3 col-6">
                 <h6 class="fw-bold mb-3">Support</h6>
                 <ul class="list-unstyled small">
-                    <li class="mb-2"><a href="/faq.php" class="text-decoration-none text-secondary">FAQ</a></li>
-                    <li class="mb-2"><a href="/contact.php" class="text-decoration-none text-secondary">Contact Us</a></li>
+                    <li class="mb-2"><a href="/faq" class="text-decoration-none text-secondary">FAQ</a></li>
+                    <li class="mb-2"><a href="/contact" class="text-decoration-none text-secondary">Contact Us</a></li>
                     <li class="mb-2"><a href="/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
                 </ul>
             </div>

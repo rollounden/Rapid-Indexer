@@ -6,7 +6,7 @@ require_once __DIR__ . '/config/config.php';
 session_start();
 
 if (!isset($_SESSION['uid']) || ($_SESSION['role'] ?? '') !== 'admin') {
-    header('Location: /login.php');
+    header('Location: /login');
     exit;
 }
 
@@ -58,7 +58,7 @@ include __DIR__ . '/includes/header_new.php';
             <p class="text-gray-400 mt-2">Manage discounts and affiliate codes.</p>
         </div>
         <div class="flex gap-2">
-            <a href="/admin.php" class="px-4 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 transition-all">
+            <a href="/admin" class="px-4 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 transition-all">
                 Back to Dashboard
             </a>
             <button @click="showModal = true" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-all flex items-center gap-2">

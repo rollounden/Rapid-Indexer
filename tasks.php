@@ -182,10 +182,10 @@ include __DIR__ . '/includes/header_new.php';
         <div class="flex gap-2">
             <!-- Tab Filters -->
             <div class="bg-white/5 p-1 rounded-lg flex">
-                <a href="/tasks.php" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo !isset($_GET['filter']) ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">All</a>
-                <a href="/tasks.php?filter=indexer" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'indexer') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Indexer</a>
-                <a href="/tasks.php?filter=checker" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'checker') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Checker</a>
-                <a href="/tasks.php?filter=traffic" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'traffic') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Traffic</a>
+                <a href="/tasks" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo !isset($_GET['filter']) ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">All</a>
+                <a href="/tasks?filter=indexer" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'indexer') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Indexer</a>
+                <a href="/tasks?filter=checker" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'checker') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Checker</a>
+                <a href="/tasks?filter=traffic" class="px-4 py-2 rounded-md text-sm font-bold transition-all <?php echo (isset($_GET['filter']) && $_GET['filter'] === 'traffic') ? 'bg-primary-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'; ?>">Traffic</a>
             </div>
             
             <a href="/dashboard" class="bg-white/10 hover:bg-white/20 text-white font-bold py-2 px-4 rounded-lg transition-all flex items-center gap-2">
@@ -378,7 +378,7 @@ include __DIR__ . '/includes/header_new.php';
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="/task_results.php?id=<?php echo $task['id']; ?>" 
+                                        <a href="/task_results?id=<?php echo $task['id']; ?>" 
                                            class="p-2 rounded-lg bg-white/5 text-gray-300 hover:bg-primary-600 hover:text-white transition-all" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </a>

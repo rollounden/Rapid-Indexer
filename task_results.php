@@ -219,7 +219,7 @@ include __DIR__ . '/includes/header_new.php';
 
         <div>
             <nav class="flex items-center text-sm text-gray-400 mb-2">
-                <a href="/tasks.php" class="hover:text-white transition-colors">Tasks</a>
+                <a href="/tasks" class="hover:text-white transition-colors">Tasks</a>
                 <span class="mx-2">/</span>
                 <span class="text-white">#<?php echo $task_id; ?></span>
             </nav>

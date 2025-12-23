@@ -101,8 +101,8 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                     <?php if ($is_logged_in): ?>
                         <a href="/dashboard" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</a>
                     <?php else: ?>
-                        <a href="/login.php" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Log in</a>
-                        <a href="/register.php" class="px-5 py-2.5 text-sm font-bold rounded-lg text-white bg-primary-700 hover:bg-primary-600 transition-all">Get Started</a>
+                        <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Log in</a>
+                        <a href="/register" class="px-5 py-2.5 text-sm font-bold rounded-lg text-white bg-primary-700 hover:bg-primary-600 transition-all">Get Started</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -132,11 +132,11 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                         <?php if ($is_logged_in): ?>
-                            <a href="/traffic.php" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
+                            <a href="/traffic" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
                                 <i class="fas fa-rocket"></i> Launch Viral Campaign
                             </a>
                         <?php else: ?>
-                            <a href="/register.php" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
+                            <a href="/register" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
                                 <i class="fas fa-rocket"></i> Start Viral Campaign Free
                             </a>
                         <?php endif; ?>
@@ -298,11 +298,11 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                 Join 5,000+ SEOs using Rapid Indexer to dominate the SERPs.
             </p>
             <?php if ($is_logged_in): ?>
-                <a href="/traffic.php" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
+                <a href="/traffic" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
                     Launch Viral Campaign
                 </a>
             <?php else: ?>
-                <a href="/register.php" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
+                <a href="/register" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg">
                     Start Viral Campaign Free
                 </a>
             <?php endif; ?>
@@ -316,8 +316,8 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
             </div>
             <div class="flex gap-6 text-sm font-medium text-gray-400">
                 <a href="/" class="hover:text-white">Home</a>
-                <a href="/privacy.php" class="hover:text-white">Privacy</a>
-                <a href="/terms.php" class="hover:text-white">Terms</a>
+                <a href="/privacy" class="hover:text-white">Privacy</a>
+                <a href="/terms" class="hover:text-white">Terms</a>
             </div>
         </div>
     </footer>

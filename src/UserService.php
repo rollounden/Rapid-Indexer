@@ -67,5 +67,32 @@ class UserService
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function getByApiKey(string $apiKey): ?array
+    {
+        $pdo = Db::conn();
+        $stmt = $pdo->prepare('SELECT id, email, credits_balance, status, role, created_at FROM users WHERE api_key = ?');
+        $stmt->execute([$apiKey]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user ?: null;
+    }
+
+    public static function generateApiKey(int $userId): string
+    {
+        $pdo = Db::conn();
+        
+        // Generate a secure random key
+        try {
+            $key = bin2hex(random_bytes(32));
+        } catch (Exception $e) {
+            // Fallback if random_bytes fails (unlikely on modern PHP)
+            $key = bin2hex(openssl_random_pseudo_bytes(32));
+        }
+        
+        $stmt = $pdo->prepare('UPDATE users SET api_key = ? WHERE id = ?');
+        $stmt->execute([$key, $userId]);
+        
+        return $key;
+    }
 }
 

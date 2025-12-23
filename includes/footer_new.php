@@ -13,9 +13,9 @@
                 © <?php echo date('Y'); ?> Rapid Indexer. All rights reserved.
             </div>
             <div class="flex gap-6 text-sm font-medium text-gray-400">
-                <a href="/privacy.php" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/terms.php" class="hover:text-white transition-colors">Terms</a>
-                <a href="/contact.php" class="hover:text-white transition-colors">Contact</a>
+                <a href="/privacy" class="hover:text-white transition-colors">Privacy</a>
+                <a href="/terms" class="hover:text-white transition-colors">Terms</a>
+                <a href="/contact" class="hover:text-white transition-colors">Contact</a>
                 <a href="/dashboard" class="hover:text-white transition-colors">Dashboard</a>
             </div>
         </div>

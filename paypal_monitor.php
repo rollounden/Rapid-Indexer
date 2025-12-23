@@ -122,6 +122,6 @@ try {
 }
 
 echo "<hr>";
-echo "<p><a href='payments.php'>Go to Payments Page</a></p>";
+echo "<p><a href='/payments'>Go to Payments Page</a></p>";
 echo "<p><a href='test_webhook_events.php'>Check Webhook Events</a></p>";
 ?>

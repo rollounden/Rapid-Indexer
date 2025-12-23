@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?= htmlspecialchars($message) ?>
             </div>
             <div class="text-center">
-                <a href="/login.php" class="text-rose-500 hover:underline">Back to Login</a>
+                <a href="/login" class="text-rose-500 hover:underline">Back to Login</a>
             </div>
         <?php else: ?>
         
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </form>
             <div class="text-center mt-6">
-                <a href="/login.php" class="text-gray-500 hover:text-gray-300 text-sm">Back to Login</a>
+                <a href="/login" class="text-gray-500 hover:text-gray-300 text-sm">Back to Login</a>
             </div>
         <?php endif; ?>
     </div>

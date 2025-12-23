@@ -4,7 +4,7 @@ session_start();
 
 // Admin Check
 if (!isset($_SESSION['uid']) || ($_SESSION['role'] ?? '') !== 'admin') {
-    header('Location: /login.php');
+    header('Location: /login');
     exit;
 }
 
@@ -56,7 +56,7 @@ include __DIR__ . '/includes/header_new.php';
 <div class="max-w-4xl mx-auto px-6 py-12">
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-white">📢 Send Promo Email</h1>
-        <a href="/admin.php" class="text-gray-400 hover:text-white">Back to Dashboard</a>
+        <a href="/admin" class="text-gray-400 hover:text-white">Back to Dashboard</a>
     </div>
 
     <?php if ($message): ?>

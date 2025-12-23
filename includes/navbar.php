@@ -22,13 +22,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'tasks.php' ? 'active' : ''; ?>" 
-                       href="/tasks.php">
+                       href="/tasks">
                         Tasks
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'payments.php' ? 'active' : ''; ?>" 
-                       href="/payments.php">
+                       href="/payments">
                         Payments
                     </a>
                 </li>
@@ -37,14 +37,14 @@
                         Support
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="supportDropdown">
-                        <li><a class="dropdown-item" href="/faq.php">FAQ</a></li>
-                        <li><a class="dropdown-item" href="/contact.php">Contact Us</a></li>
+                        <li><a class="dropdown-item" href="/faq">FAQ</a></li>
+                        <li><a class="dropdown-item" href="/contact">Contact Us</a></li>
                     </ul>
                 </li>
                 <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
                 <li class="nav-item">
                     <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) === 'admin.php' ? 'active' : ''; ?>" 
-                       href="/admin.php">
+                       href="/admin">
                         Admin
                     </a>
                 </li>
@@ -82,7 +82,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><h6 class="dropdown-header d-md-none"><?php echo htmlspecialchars($_SESSION['email'] ?? 'User'); ?></h6></li>
-                        <li><a class="dropdown-item" href="/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </li>
             </ul>

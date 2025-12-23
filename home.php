@@ -170,7 +170,7 @@ if (isset($_SESSION['uid'])) {
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center gap-8">
-                    <a href="/viral-blast.php" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fas fa-fire"></i> Viral Blast</a>
+                    <a href="/viral-blast" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fas fa-fire"></i> Viral Blast</a>
                     <div class="relative group" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false" class="text-sm font-medium text-gray-300 hover:text-white transition-colors flex items-center gap-1">
                             How it Works <i class="fas fa-chevron-down text-xs ml-1 transition-transform" :class="{ 'rotate-180': open }"></i>
@@ -196,12 +196,12 @@ if (isset($_SESSION['uid'])) {
                     </div>
                     <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Features</a>
                     <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Pricing</a>
-                    <a href="/faq.php" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</a>
+                    <a href="/faq" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</a>
                 </nav>
 
                 <div class="flex items-center gap-4">
-                    <a href="/login.php" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Log in</a>
-                    <a href="/register.php" class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-lg text-white bg-primary-700 hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/20">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Log in</a>
+                    <a href="/register" class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-lg text-white bg-primary-700 hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/20">
                         Get Started
                     </a>
                 </div>
@@ -224,7 +224,7 @@ if (isset($_SESSION['uid'])) {
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                    <a href="/register.php" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
+                    <a href="/register" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
                         Start Boosting Free
                         <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
                     </a>
@@ -289,8 +289,8 @@ if (isset($_SESSION['uid'])) {
                                 <p class="text-gray-400">Sign up to submit your URLs. You'll get <span class="text-primary-400 font-bold"><?php echo $free_credits; ?> free credits</span> instantly.</p>
                             </div>
                             <div class="space-y-3">
-                                <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-colors">Sign Up Free</a>
-                                <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
+                                <a href="/register" class="block w-full py-3 text-center rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-colors">Sign Up Free</a>
+                                <a href="/login" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
                             </div>
                         </div>
                     </div>
@@ -361,8 +361,8 @@ if (isset($_SESSION['uid'])) {
                                 <p class="text-gray-400">Sign up to access our <span class="text-white font-bold">Viral Blast</span> technology. Drip-feed traffic from social sources.</p>
                             </div>
                             <div class="space-y-3">
-                                <a href="/register.php" class="block w-full py-3 text-center rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold transition-all shadow-lg shadow-primary-900/20">Create Account</a>
-                                <a href="/login.php" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
+                                <a href="/register" class="block w-full py-3 text-center rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold transition-all shadow-lg shadow-primary-900/20">Create Account</a>
+                                <a href="/login" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
                             </div>
                         </div>
                     </div>
@@ -684,7 +684,7 @@ if (isset($_SESSION['uid'])) {
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">Viral Blast</h3>
                     <p class="text-gray-400 mb-4">Simulate viral social traffic with our tested drip-feed formula. Boost "User Behavior" signals.</p>
-                    <a href="/viral-blast.php" class="text-primary-400 font-bold text-sm hover:text-white transition-colors">Learn the Formula <i class="fas fa-arrow-right ml-1"></i></a>
+                    <a href="/viral-blast" class="text-primary-400 font-bold text-sm hover:text-white transition-colors">Learn the Formula <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
 
                 <!-- Card 1 -->
@@ -710,8 +710,8 @@ if (isset($_SESSION['uid'])) {
                     <div class="w-12 h-12 bg-primary-900/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-900/30 transition-colors border border-primary-900/30">
                         <i class="fa-solid fa-layer-group text-primary-500 text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Bulk Processing</h3>
-                    <p class="text-gray-400">Submit up to 10,000 URLs in a single batch. Perfect for large programmatic SEO sites.</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Bulk Processing & API</h3>
+                    <p class="text-gray-400">Submit up to 10,000 URLs in a single batch. Use our <strong class="text-white">Developer API</strong> to integrate indexing directly into your workflow.</p>
                 </div>
             </div>
         </div>
@@ -739,7 +739,7 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Export Reports</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-600 text-sm"></i> 1 Credit per Link</li>
                     </ul>
-                    <a href="/register.php" class="block w-full py-3 px-6 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold text-center transition-colors">Get Started</a>
+                    <a href="/register" class="block w-full py-3 px-6 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold text-center transition-colors">Get Started</a>
                 </div>
 
                 <!-- Premium -->
@@ -755,7 +755,7 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> 98% Success Rate</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-500 text-sm"></i> 2 Credits per Link</li>
                     </ul>
-                    <a href="/register.php" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
+                    <a href="/register" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
                 </div>
 
                 <!-- Traffic Blast -->
@@ -772,7 +772,7 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Drip-Feed Schedule</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-red-500 text-sm"></i> 60 Credits / 1k</li>
                     </ul>
-                    <a href="/viral-blast.php" class="block w-full py-3 px-6 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-center transition-colors shadow-lg shadow-red-900/20">Launch Blast</a>
+                    <a href="/viral-blast" class="block w-full py-3 px-6 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-center transition-colors shadow-lg shadow-red-900/20">Launch Blast</a>
                 </div>
             </div>
 
@@ -808,9 +808,9 @@ if (isset($_SESSION['uid'])) {
                 © <?php echo date('Y'); ?> Rapid Indexer. All rights reserved.
             </div>
             <div class="flex gap-6 text-sm font-medium text-gray-400">
-                <a href="/privacy.php" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/terms.php" class="hover:text-white transition-colors">Terms</a>
-                <a href="/contact.php" class="hover:text-white transition-colors">Contact</a>
+                <a href="/privacy" class="hover:text-white transition-colors">Privacy</a>
+                <a href="/terms" class="hover:text-white transition-colors">Terms</a>
+                <a href="/contact" class="hover:text-white transition-colors">Contact</a>
             </div>
         </div>
     </footer>

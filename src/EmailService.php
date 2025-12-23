@@ -53,7 +53,7 @@ class EmailService
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        $resetLink = $protocol . "://" . $host . "/reset_password.php?token=" . $token;
+        $resetLink = $protocol . "://" . $host . "/reset-password?token=" . $token;
         
         $body = "
             <h2>Reset Your Password</h2>

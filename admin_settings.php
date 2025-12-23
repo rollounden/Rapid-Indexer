@@ -7,7 +7,7 @@ session_start();
 
 // Check if user is logged in and is admin
 if (!isset($_SESSION['uid']) || ($_SESSION['role'] ?? '') !== 'admin') {
-    header('Location: /login.php');
+    header('Location: /login');
     exit;
 }
 
@@ -185,7 +185,7 @@ include __DIR__ . '/includes/header_new.php';
         <div>
             <h1 class="text-3xl font-bold text-white">System Settings</h1>
             <nav class="flex items-center text-sm text-gray-400 mt-1">
-                <a href="/admin.php" class="hover:text-white transition-colors">Dashboard</a>
+                <a href="/admin" class="hover:text-white transition-colors">Dashboard</a>
                 <span class="mx-2">/</span>
                 <span class="text-white">Settings</span>
             </nav>

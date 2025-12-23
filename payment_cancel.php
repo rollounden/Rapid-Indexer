@@ -94,15 +94,15 @@ if ($token) {
                         </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <a href="payments.php" class="btn btn-primary me-md-2">
+                            <a href="/payments" class="btn btn-primary me-md-2">
                                 <i class="fas fa-credit-card me-1"></i>
                                 Try Payment Again
                             </a>
-                            <a href="dashboard.php" class="btn btn-secondary me-md-2">
+                            <a href="/dashboard" class="btn btn-secondary me-md-2">
                                 <i class="fas fa-home me-1"></i>
                                 Go to Dashboard
                             </a>
-                            <a href="tasks.php" class="btn btn-success">
+                            <a href="/tasks" class="btn btn-success">
                                 <i class="fas fa-tasks me-1"></i>
                                 View Tasks
                             </a>
