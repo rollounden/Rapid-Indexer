@@ -115,9 +115,81 @@ curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
 }
 ```
 
-This section covers the Traffic API. For Indexing and Checking, see the previous section.
+### 3. Get Task Details
 
-### 1. Create Traffic Task
+Check the status of a specific task (indexing, checking, or traffic).
+
+- **URL**: `?action=get_task&task_id={id}`
+- **Method**: `GET`
+
+**cURL Example:**
+```bash
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "task": {
+    "id": 456,
+    "title": "My Blog Posts",
+    "type": "indexer",
+    "engine": "google",
+    "status": "processing",
+    "vip": true,
+    "progress": {
+      "updated": 10,
+      "pending": 5
+    },
+    "created_at": "2023-12-23 14:00:00",
+    "completed_at": null
+  }
+}
+```
+
+### 4. Get Task Links
+
+Get detailed status for each link in an indexing/checking task.
+
+- **URL**: `?action=get_task_links&task_id={id}`
+- **Method**: `GET`
+
+**cURL Example:**
+```bash
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task_links&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "links": [
+    {
+      "url": "https://example.com/page1",
+      "status": "indexed",
+      "error_code": null,
+      "checked_at": "2023-12-23 14:05:00"
+    },
+    {
+      "url": "https://example.com/page2",
+      "status": "pending",
+      "error_code": null,
+      "checked_at": null
+    }
+  ]
+}
+```
+
+---
+
+## Traffic API
+
+Simulate viral traffic to your URLs.
+
+### 5. Create Traffic Task
 
 Simulate viral traffic to your URLs.
 
@@ -265,73 +337,7 @@ curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
 }
 ```
 
-### 3. Get Task Details
-
-Check the status of a specific task.
-
-- **URL**: `?action=get_task&task_id={id}`
-- **Method**: `GET`
-
-**cURL Example:**
-```bash
-curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task&task_id=456" \
-     -H "X-API-Key: YOUR_API_KEY"
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "task": {
-    "id": 456,
-    "title": "My Blog Posts",
-    "type": "indexer",
-    "engine": "google",
-    "status": "processing",
-    "vip": true,
-    "progress": {
-      "updated": 10,
-      "pending": 5
-    },
-    "created_at": "2023-12-23 14:00:00",
-    "completed_at": null
-  }
-}
-```
-
-### 4. Get Task Links
-
-Get detailed status for each link in a task.
-
-- **URL**: `?action=get_task_links&task_id={id}`
-- **Method**: `GET`
-
-**cURL Example:**
-```bash
-curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task_links&task_id=456" \
-     -H "X-API-Key: YOUR_API_KEY"
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "links": [
-    {
-      "url": "https://example.com/page1",
-      "status": "indexed",
-      "error_code": null,
-      "checked_at": "2023-12-23 14:05:00"
-    },
-    {
-      "url": "https://example.com/page2",
-      "status": "pending",
-      "error_code": null,
-      "checked_at": null
-    }
-  ]
-}
-```
+---
 
 ## Error Handling
 

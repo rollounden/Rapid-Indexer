@@ -300,9 +300,82 @@ curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
                 </div>
             </div>
 
-            <!-- 2a. Create Traffic Task -->
+            <!-- 3. Get Task Details -->
             <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
-                <h4 class="text-lg font-bold text-white mb-2">2a. Create Traffic Task</h4>
+                <h4 class="text-lg font-bold text-white mb-2">3. Get Task Details</h4>
+                <p class="text-gray-400 mb-2 text-sm">Check the status of a specific task (indexing, checking, or traffic).</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=get_task&task_id={id}</code>
+                </div>
+                
+                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+</pre>
+                </div>
+
+                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": true,
+  "task": {
+    "id": 456,
+    "title": "My Blog Posts",
+    "status": "processing",
+    "progress": {
+      "updated": 10,
+      "pending": 5
+    }
+  }
+}
+</pre>
+                </div>
+            </div>
+
+            <!-- 4. Get Task Links -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">4. Get Task Links</h4>
+                <p class="text-gray-400 mb-2 text-sm">Get detailed status for each link in an indexing/checking task.</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=get_task_links&task_id={id}</code>
+                </div>
+                
+                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task_links&task_id=456" \
+     -H "X-API-Key: YOUR_API_KEY"
+</pre>
+                </div>
+
+                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": true,
+  "links": [
+    {
+      "url": "https://example.com/page1",
+      "status": "indexed",
+      "checked_at": "2023-12-23 14:05:00"
+    }
+  ]
+}
+</pre>
+                </div>
+            </div>
+
+            <!-- Traffic API -->
+            <h3 class="text-xl font-bold text-white mt-8 mb-4">Traffic API</h3>
+
+            <!-- 5. Create Traffic Task -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">5. Create Traffic Task</h4>
                 <p class="text-gray-400 mb-2 text-sm">Simulate viral traffic to your URLs.</p>
                 <div class="flex gap-2 mb-3">
                     <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30">POST</span>
@@ -550,76 +623,6 @@ curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
                             <div><code class="text-primary-300">ZA</code> South Africa</div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 3. Get Task Details -->
-            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
-                <h4 class="text-lg font-bold text-white mb-2">3. Get Task Details</h4>
-                <p class="text-gray-400 mb-2 text-sm">Check the status of a specific task.</p>
-                <div class="flex gap-2 mb-3">
-                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
-                    <code class="text-gray-300 text-sm font-mono">?action=get_task&task_id={id}</code>
-                </div>
-                
-                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
-                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
-<pre class="text-gray-300 font-mono text-xs">
-curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task&task_id=456" \
-     -H "X-API-Key: YOUR_API_KEY"
-</pre>
-                </div>
-
-                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
-                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
-<pre class="text-gray-300 font-mono text-xs">
-{
-  "success": true,
-  "task": {
-    "id": 456,
-    "title": "My Blog Posts",
-    "status": "processing",
-    "progress": {
-      "updated": 10,
-      "pending": 5
-    }
-  }
-}
-</pre>
-                </div>
-            </div>
-
-            <!-- 4. Get Task Links -->
-            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
-                <h4 class="text-lg font-bold text-white mb-2">4. Get Task Links</h4>
-                <p class="text-gray-400 mb-2 text-sm">Get detailed status for each link in a task.</p>
-                <div class="flex gap-2 mb-3">
-                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
-                    <code class="text-gray-300 text-sm font-mono">?action=get_task_links&task_id={id}</code>
-                </div>
-                
-                <p class="text-sm font-bold text-gray-400 mb-2">cURL Example:</p>
-                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
-<pre class="text-gray-300 font-mono text-xs">
-curl -X GET "https://rapid-indexer.com/api/v1/index.php?action=get_task_links&task_id=456" \
-     -H "X-API-Key: YOUR_API_KEY"
-</pre>
-                </div>
-
-                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
-                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
-<pre class="text-gray-300 font-mono text-xs">
-{
-  "success": true,
-  "links": [
-    {
-      "url": "https://example.com/page1",
-      "status": "indexed",
-      "checked_at": "2023-12-23 14:05:00"
-    }
-  ]
-}
-</pre>
                 </div>
             </div>
 
