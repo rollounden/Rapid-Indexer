@@ -27,7 +27,9 @@ X-API-Key: 5f4dcc3b5aa765d61d8327deb882cf99
 ?api_key=5f4dcc3b5aa765d61d8327deb882cf99
 ```
 
-## Endpoints
+## Indexing API
+
+The Rapid Indexer User API allows you to integrate indexing capabilities directly into your applications, scripts, or WordPress sites.
 
 ### 1. Get User Profile
 
@@ -113,7 +115,9 @@ curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
 }
 ```
 
-### 2a. Create Traffic Task
+This section covers the Traffic API. For Indexing and Checking, see the previous section.
+
+### 1. Create Traffic Task
 
 Simulate viral traffic to your URLs.
 
@@ -135,6 +139,92 @@ Simulate viral traffic to your URLs.
 | `type_of_traffic` | int | No | `2` | `1`=Google Keyword, `2`=Referrer, `3`=Direct |
 | `google_keyword` | string | No | - | Required if type_of_traffic=`1` |
 | `referring_url` | string | No | - | Required if type_of_traffic=`2` |
+
+#### Device Options
+
+| Value | Description |
+|-------|-------------|
+| `5` | Mixed (Mobile & Desktop) — **Default** |
+| `1` | Desktop |
+| `4` | Mixed (Mobile Only) |
+| `2` | Mobile (Android) |
+| `3` | Mobile (iOS) |
+
+#### Traffic Type Options
+
+| Value | Description | Extra Parameter |
+|-------|-------------|-----------------|
+| `2` | Social Media / Custom Referrer — **Recommended** | `referring_url` |
+| `1` | Google Keyword Search | `google_keyword` |
+| `3` | Direct / Blank Referrer | None |
+
+#### Available Countries
+
+Use 2-letter ISO country codes. Default is `WW` (Worldwide).
+
+**Regions:**
+| Code | Region |
+|------|--------|
+| `WW` | Worldwide |
+| `NAM` | North America (US, CA, MX) |
+| `EUR` | Europe (DE, UK, FR, IT) |
+| `ASI` | Asia (CN, IN, ID, JP) |
+| `AFR` | Africa (NG, EG, ZA) |
+| `SAM` | South America (BR, AR, VE) |
+| `MEA` | Middle East (TR, SA, AE) |
+
+**North America:**
+| Code | Country |
+|------|---------|
+| `US` | United States |
+| `CA` | Canada |
+
+**Europe:**
+| Code | Country |
+|------|---------|
+| `GB` | United Kingdom |
+| `DE` | Germany |
+| `FR` | France |
+| `ES` | Spain |
+| `IT` | Italy |
+| `NL` | Netherlands |
+| `SE` | Sweden |
+| `CH` | Switzerland |
+| `PL` | Poland |
+| `BE` | Belgium |
+| `AT` | Austria |
+| `CZ` | Czech Republic |
+| `DK` | Denmark |
+| `HU` | Hungary |
+| `LT` | Lithuania |
+| `RO` | Romania |
+| `RU` | Russia |
+| `RS` | Serbia |
+| `UA` | Ukraine |
+
+**Asia & Pacific:**
+| Code | Country |
+|------|---------|
+| `IN` | India |
+| `ID` | Indonesia |
+| `JP` | Japan |
+| `KR` | South Korea |
+| `HK` | Hong Kong |
+| `SG` | Singapore |
+| `TW` | Taiwan |
+| `TH` | Thailand |
+| `VN` | Vietnam |
+| `PK` | Pakistan |
+| `AE` | United Arab Emirates |
+| `AU` | Australia |
+
+**South America & Africa:**
+| Code | Country |
+|------|---------|
+| `BR` | Brazil |
+| `AR` | Argentina |
+| `CL` | Chile |
+| `ZA` | South Africa |
 
 **Request Body Example:**
 ```json

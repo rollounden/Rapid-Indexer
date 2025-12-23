@@ -49,6 +49,9 @@ class TrafficService
                 'quantity' => $quantity,
                 'country' => $params['country'] ?? null,
             ];
+            // Set default device if missing
+            $apiParams['device'] = $params['device'] ?? '5';
+            
             // ... (add other params like device, etc)
             self::enrichApiParams($apiParams, $params);
 
@@ -203,6 +206,11 @@ class TrafficService
         if (!empty($sourceParams['device'])) {
             $apiParams['device'] = $sourceParams['device'];
         }
+        // Ensure device is set if not already (redundant but safe)
+        if (!isset($apiParams['device'])) {
+            $apiParams['device'] = '5';
+        }
+
         if (!empty($sourceParams['type_of_traffic'])) {
             $apiParams['type_of_traffic'] = $sourceParams['type_of_traffic'];
             

@@ -85,8 +85,8 @@ try {
                     'mode' => $input['mode'] ?? 'single',
                     'days' => $input['days'] ?? 1,
                     'country' => $input['country'] ?? 'WW',
-                    'device' => $input['device'] ?? '',
-                    'type_of_traffic' => $input['type_of_traffic'] ?? '',
+                    'device' => $input['device'] ?? '5', // Default to 5 (Mixed) if not set
+                    'type_of_traffic' => $input['type_of_traffic'] ?? '2', // Default to 2 (Referrer)
                     'google_keyword' => $input['google_keyword'] ?? '',
                     'referring_url' => $input['referring_url'] ?? '',
                 ];
