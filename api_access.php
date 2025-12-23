@@ -108,31 +108,217 @@ include __DIR__ . '/includes/header_new.php';
     <div class="card rounded-xl overflow-hidden">
         <div class="px-6 py-4 border-b border-white/5 bg-white/5">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fas fa-book text-blue-500"></i> Documentation
+                <i class="fas fa-book text-blue-500"></i> API Documentation
             </h3>
         </div>
         <div class="p-6">
-            <p class="text-gray-300 mb-4">
-                Rapid Indexer provides a simple REST API to create tasks, check status, and manage your account programmatically.
+            <p class="text-gray-300 mb-8">
+                The Rapid Indexer User API allows you to integrate indexing capabilities directly into your applications, scripts, or WordPress sites.
             </p>
             
+            <!-- Base URL -->
+            <h3 class="text-xl font-bold text-white mb-4">Base URL</h3>
             <div class="bg-black/20 rounded-lg p-4 mb-4 border border-white/5">
-                <h4 class="text-white font-bold mb-2">Base URL</h4>
                 <code class="text-primary-400 text-sm font-mono block">https://rapid-indexer.com/api/v1/index.php</code>
             </div>
 
-            <h4 class="text-white font-bold mb-2">Example: Check Account Balance</h4>
-            <div class="bg-[#111] rounded-lg p-4 border border-[#333] mb-6 overflow-x-auto">
-<pre class="text-gray-300 font-mono text-xs">
-curl -H "X-API-Key: YOUR_API_KEY" \
-     https://rapid-indexer.com/api/v1/index.php?action=me
-</pre>
+            <!-- Authentication -->
+            <h3 class="text-xl font-bold text-white mt-8 mb-4">Authentication</h3>
+            <p class="text-gray-300 mb-4">
+                Authentication is handled via the <code class="bg-white/10 px-1.5 py-0.5 rounded text-sm font-mono text-primary-300">X-API-Key</code> header.
+            </p>
+            <ul class="list-disc list-inside text-gray-300 space-y-1 mb-4">
+                <li>Get your API Key from the section above.</li>
+                <li>Include it in every request.</li>
+            </ul>
+            
+            <div class="mb-4">
+                <p class="text-sm font-bold text-gray-400 mb-2">Header Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+                    <pre class="text-gray-300 font-mono text-xs">X-API-Key: YOUR_API_KEY</pre>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm font-bold text-gray-400 mb-2">Query Parameter Alternative:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+                    <pre class="text-gray-300 font-mono text-xs">?api_key=YOUR_API_KEY</pre>
+                </div>
             </div>
 
-            <a href="/docs/USER_API_REFERENCE.md" target="_blank" class="text-primary-400 hover:text-primary-300 font-bold flex items-center gap-1">
-                View Full Documentation <i class="fas fa-external-link-alt text-xs"></i>
-            </a>
-            <p class="text-xs text-gray-500 mt-1">(Link to markdown file, HTML docs coming soon)</p>
+            <!-- Endpoints -->
+            <h3 class="text-xl font-bold text-white mt-8 mb-4">Endpoints</h3>
+
+            <!-- 1. Get User Profile -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">1. Get User Profile</h4>
+                <p class="text-gray-400 mb-2 text-sm">Check your account status and credit balance.</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=me</code>
+                </div>
+                
+                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": true,
+  "user": {
+    "id": 123,
+    "email": "user@example.com",
+    "credits_balance": 500,
+    "created_at": "2023-10-27 10:00:00"
+  }
+}
+</pre>
+                </div>
+            </div>
+
+            <!-- 2. Create Task -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">2. Create Task</h4>
+                <p class="text-gray-400 mb-2 text-sm">Submit URLs for indexing or checking.</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30">POST</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=create_task</code>
+                </div>
+                
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="text-xs text-gray-300 uppercase bg-white/5">
+                            <tr>
+                                <th class="px-3 py-2">Parameter</th>
+                                <th class="px-3 py-2">Type</th>
+                                <th class="px-3 py-2">Required</th>
+                                <th class="px-3 py-2">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="bg-white/5">
+                                <td class="px-3 py-2 font-mono text-primary-300">urls</td>
+                                <td class="px-3 py-2">array/string</td>
+                                <td class="px-3 py-2 text-red-400">Yes</td>
+                                <td class="px-3 py-2">Array of URLs or newline-separated string</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2 font-mono text-primary-300">type</td>
+                                <td class="px-3 py-2">string</td>
+                                <td class="px-3 py-2">No</td>
+                                <td class="px-3 py-2">`indexer` (default) or `checker`</td>
+                            </tr>
+                            <tr class="bg-white/5">
+                                <td class="px-3 py-2 font-mono text-primary-300">engine</td>
+                                <td class="px-3 py-2">string</td>
+                                <td class="px-3 py-2">No</td>
+                                <td class="px-3 py-2">`google` (default) or `yandex`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2 font-mono text-primary-300">title</td>
+                                <td class="px-3 py-2">string</td>
+                                <td class="px-3 py-2">No</td>
+                                <td class="px-3 py-2">Optional reference title</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-sm font-bold text-gray-400 mb-2">Request Body Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto mb-4">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "urls": [
+    "https://example.com/page1",
+    "https://example.com/page2"
+  ],
+  "type": "indexer",
+  "engine": "google",
+  "title": "My Blog Posts"
+}
+</pre>
+                </div>
+
+                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": true,
+  "message": "Task created successfully",
+  "task_id": 456,
+  "provider": "speedyindex",
+  "is_drip_feed": false
+}
+</pre>
+                </div>
+            </div>
+
+            <!-- 3. Get Task Details -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">3. Get Task Details</h4>
+                <p class="text-gray-400 mb-2 text-sm">Check the status of a specific task.</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=get_task&task_id={id}</code>
+                </div>
+                
+                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": true,
+  "task": {
+    "id": 456,
+    "title": "My Blog Posts",
+    "status": "processing",
+    "progress": {
+      "updated": 10,
+      "pending": 5
+    }
+  }
+}
+</pre>
+                </div>
+            </div>
+
+            <!-- 4. Get Task Links -->
+            <div class="mb-8 border-l-2 border-primary-500/30 pl-4">
+                <h4 class="text-lg font-bold text-white mb-2">4. Get Task Links</h4>
+                <p class="text-gray-400 mb-2 text-sm">Get detailed status for each link in a task.</p>
+                <div class="flex gap-2 mb-3">
+                    <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">GET</span>
+                    <code class="text-gray-300 text-sm font-mono">?action=get_task_links&task_id={id}</code>
+                </div>
+                
+                <p class="text-sm font-bold text-gray-400 mb-2">Response Example:</p>
+                <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": true,
+  "links": [
+    {
+      "url": "https://example.com/page1",
+      "status": "indexed",
+      "checked_at": "2023-12-23 14:05:00"
+    }
+  ]
+}
+</pre>
+                </div>
+            </div>
+
+            <!-- Error Handling -->
+            <h3 class="text-xl font-bold text-white mt-8 mb-4">Error Handling</h3>
+            <p class="text-gray-300 mb-4">
+                If an error occurs, the API will return a 4xx or 5xx status code and a JSON body with an <code class="bg-white/10 px-1.5 py-0.5 rounded text-sm font-mono text-primary-300">error</code> field.
+            </p>
+            <div class="bg-[#111] rounded-lg p-4 border border-[#333] overflow-x-auto">
+<pre class="text-gray-300 font-mono text-xs">
+{
+  "success": false,
+  "error": "Insufficient credits"
+}
+</pre>
+            </div>
+            
         </div>
     </div>
 
