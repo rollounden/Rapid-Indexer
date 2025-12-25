@@ -95,7 +95,7 @@ switch ($path) {
         break;
 
     case '/chrome-extension':
-        require_once __DIR__ . '/chrome_extension.php';
+        require_once __DIR__ . '/chrome-extension.php';
         break;
 
     case '/refund':
