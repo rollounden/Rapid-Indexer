@@ -171,6 +171,7 @@ if (isset($_SESSION['uid'])) {
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center gap-8">
                     <a href="/viral-blast" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fas fa-fire"></i> Viral Blast</a>
+    <a href="/chrome-extension" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fab fa-chrome"></i> Extension</a>
                     <div class="relative group" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false" class="text-sm font-medium text-gray-300 hover:text-white transition-colors flex items-center gap-1">
                             How it Works <i class="fas fa-chevron-down text-xs ml-1 transition-transform" :class="{ 'rotate-180': open }"></i>

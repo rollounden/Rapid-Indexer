@@ -94,6 +94,10 @@ switch ($path) {
         require_once __DIR__ . '/viral-blast.php';
         break;
 
+    case '/chrome-extension':
+        require_once __DIR__ . '/chrome_extension.php';
+        break;
+
     case '/refund':
         require_once __DIR__ . '/refund.php';
         break;
