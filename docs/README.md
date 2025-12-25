@@ -8,6 +8,7 @@
 - **PayPal Integration**: `docs/PAYPAL_INTEGRATION.md`
 - **Security & Compliance**: `docs/SECURITY.md`
 - **Logging & Monitoring**: `docs/LOGGING_MONITORING.md`
+- **Chrome Extension**: [Install from Chrome Web Store](https://chromewebstore.google.com/detail/rapid-indexer-seo-indexin/mckjdgeeinnbnhlmfinkeklpgffnjnpg) | [Source Code](https://github.com/backlinkz-io/Fastest-Website-Indexer)
 
 Quick start (Windows PowerShell):
 ```powershell
@@ -33,5 +34,3 @@ php artisan serve
 ```
 
 See each document for details.
-
-1

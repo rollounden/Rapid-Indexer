@@ -155,14 +155,14 @@ $free_credits = SettingsService::get('free_credits_on_signup', '30');
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://github.com/backlinkz-io/Fastest-Website-Indexer" target="_blank" class="inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
-                            <i class="fab fa-github mr-3 text-xl"></i>
-                            Download from GitHub
-                        </a>
-                         <button disabled class="inline-flex justify-center items-center px-8 py-4 bg-gray-800 text-gray-500 font-bold rounded-lg border border-gray-700 cursor-not-allowed text-lg">
+                        <a href="https://chromewebstore.google.com/detail/rapid-indexer-seo-indexin/mckjdgeeinnbnhlmfinkeklpgffnjnpg" target="_blank" class="inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
                             <i class="fab fa-chrome mr-3 text-xl"></i>
-                            Store (Coming Soon)
-                        </button>
+                            Install from Chrome Store
+                        </a>
+                        <a href="https://github.com/backlinkz-io/Fastest-Website-Indexer" target="_blank" class="inline-flex justify-center items-center px-8 py-4 bg-gray-800 text-gray-400 font-bold rounded-lg border border-gray-700 hover:bg-gray-700 hover:text-white transition-all text-lg">
+                            <i class="fab fa-github mr-3 text-xl"></i>
+                            View on GitHub
+                        </a>
                     </div>
                 </div>
                 <div class="relative">
@@ -301,7 +301,7 @@ $free_credits = SettingsService::get('free_credits_on_signup', '30');
                         <span class="text-4xl font-bold text-primary-500">1</span>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Install Extension</h3>
-                    <p class="text-gray-400 text-sm">Download the extension from GitHub and load it unpacked into Chrome.</p>
+                    <p class="text-gray-400 text-sm">Install Rapid Indexer directly from the Chrome Web Store.</p>
                 </div>
 
                 <div class="relative">
@@ -322,11 +322,15 @@ $free_credits = SettingsService::get('free_credits_on_signup', '30');
             </div>
 
             <div class="mt-16 flex flex-col items-center gap-4">
-                <a href="https://github.com/backlinkz-io/Fastest-Website-Indexer" target="_blank" class="inline-flex justify-center items-center px-10 py-5 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-600 transition-all shadow-xl shadow-primary-900/30 text-xl transform hover:-translate-y-1">
-                    <i class="fab fa-github mr-3"></i>
-                    Download from GitHub
+                <a href="https://chromewebstore.google.com/detail/rapid-indexer-seo-indexin/mckjdgeeinnbnhlmfinkeklpgffnjnpg" target="_blank" class="inline-flex justify-center items-center px-10 py-5 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-600 transition-all shadow-xl shadow-primary-900/30 text-xl transform hover:-translate-y-1">
+                    <i class="fab fa-chrome mr-3"></i>
+                    Install from Chrome Web Store
                 </a>
-                <p class="text-gray-400 font-medium"><i class="fab fa-chrome mr-2"></i> Chrome Web Store version coming soon</p>
+                <p class="text-gray-400 font-medium">
+                    <a href="https://github.com/backlinkz-io/Fastest-Website-Indexer" target="_blank" class="hover:text-primary-400 transition-colors">
+                        <i class="fab fa-github mr-2"></i> Also available on GitHub
+                    </a>
+                </p>
                 <p class="mt-2 text-gray-500 text-sm">Requires a Rapid Indexer account. <a href="/register" class="text-primary-400 hover:text-white">Sign up free</a>.</p>
             </div>
         </div>
