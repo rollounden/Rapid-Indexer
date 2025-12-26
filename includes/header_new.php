@@ -27,6 +27,7 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:url" content="<?php echo htmlspecialchars($canonical_url); ?>">
     <meta property="og:title" content="<?php echo htmlspecialchars($page_title); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($meta_description); ?>">

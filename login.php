@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Open Graph -->
     <meta property="og:title" content="Login - Rapid Indexer">
+    <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:description" content="Sign in to Rapid Indexer to manage your tasks, view reports, and boost your SEO.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rapid-indexer.com/login.php">

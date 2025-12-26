@@ -8,6 +8,14 @@
                     R
                 </div>
                 <span class="text-white font-bold text-lg">Rapid Indexer</span>
+
+                <!-- Social Links -->
+                <div class="flex gap-4 ml-4 pl-4 border-l border-white/10">
+                    <a href="https://x.com/rapid_indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://facebook.com/rapidindexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.f6s.com/company/rapid-indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors font-bold text-xs flex items-center h-5">F6S</a>
+                </div>
             </div>
             <div class="text-gray-500 text-sm">
                 © <?php echo date('Y'); ?> Rapid Indexer. All rights reserved.

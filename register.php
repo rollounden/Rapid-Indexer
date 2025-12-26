@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     <!-- Open Graph -->
     <meta property="og:title" content="Create Account - Rapid Indexer">
+    <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:description" content="Join Rapid Indexer today. Get <?php echo $free_credits; ?> free credits to start indexing your backlinks immediately.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rapid-indexer.com/register.php">

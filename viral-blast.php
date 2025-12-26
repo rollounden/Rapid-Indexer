@@ -21,6 +21,7 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
     <meta name="robots" content="index, follow">
     
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:url" content="https://rapid-indexer.com/viral-blast.php">
     <meta property="og:title" content="Viral Blast - The Secret to Instant Ranking Boosts">
     <meta property="og:description" content="Don't just build links. Simulate the viral activity Google loves. Get 1000s of real visitors from social referrers today.">
@@ -34,6 +35,47 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://rapid-indexer.com/#org",
+          "name": "Rapid Indexer",
+          "url": "https://rapid-indexer.com/",
+          "logo": "https://rapid-indexer.com/assets/img/rocket-icon.png",
+          "sameAs": [
+            "https://x.com/rapid_indexer",
+            "https://www.linkedin.com/company/rapid-indexer/",
+            "https://facebook.com/rapidindexer",
+            "https://www.f6s.com/company/rapid-indexer"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://rapid-indexer.com/viral-blast/#app",
+          "name": "Viral Blast",
+          "url": "https://rapid-indexer.com/viral-blast",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "publisher": { "@id": "https://rapid-indexer.com/#org" },
+          "isPartOf": { "@id": "https://rapid-indexer.com/#website" },
+          "description": "Traffic campaign tooling with scheduling controls, referrer/source selection, and reporting for engagement signals.",
+          "isRelatedTo": { "@id": "https://rapid-indexer.com/#app" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://rapid-indexer.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Viral Blast", "item": "https://rapid-indexer.com/viral-blast" }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -311,10 +353,21 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
 
     <footer class="border-t border-white/5 bg-black/20 py-12 mt-auto">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-gray-500 text-sm">
-                © <?php echo date('Y'); ?> Rapid Indexer.
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="text-gray-500 text-sm order-2 md:order-1">
+                    © <?php echo date('Y'); ?> Rapid Indexer.
+                </div>
+                
+                <!-- Social Links -->
+                <div class="flex gap-4 order-1 md:order-2">
+                    <a href="https://x.com/rapid_indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://facebook.com/rapidindexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.f6s.com/company/rapid-indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors font-bold text-xs flex items-center h-5">F6S</a>
+                </div>
             </div>
-            <div class="flex gap-6 text-sm font-medium text-gray-400">
+            
+            <div class="flex gap-6 text-sm font-medium text-gray-400 order-3">
                 <a href="/" class="hover:text-white">Home</a>
                 <a href="/privacy" class="hover:text-white">Privacy</a>
                 <a href="/terms" class="hover:text-white">Terms</a>

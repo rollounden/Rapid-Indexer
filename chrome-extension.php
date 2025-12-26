@@ -22,6 +22,7 @@ $free_credits = SettingsService::get('free_credits_on_signup', '30');
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:url" content="https://rapid-indexer.com/chrome-extension">
     <meta property="og:title" content="Rapid Indexer Chrome Extension">
     <meta property="og:description" content="Integrate Rapid Indexer seamlessly into your browsing experience. Instant indexing, traffic generation, and more.">
@@ -42,6 +43,49 @@ $free_credits = SettingsService::get('free_credits_on_signup', '30');
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://rapid-indexer.com/#org",
+          "name": "Rapid Indexer",
+          "url": "https://rapid-indexer.com/",
+          "logo": "https://rapid-indexer.com/assets/img/rocket-icon.png",
+          "sameAs": [
+            "https://x.com/rapid_indexer",
+            "https://www.linkedin.com/company/rapid-indexer/",
+            "https://facebook.com/rapidindexer",
+            "https://www.f6s.com/company/rapid-indexer"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://rapid-indexer.com/chrome-extension/#app",
+          "name": "Rapid Indexer Chrome Extension",
+          "applicationCategory": "BrowserApplication",
+          "operatingSystem": "Chrome",
+          "url": "https://rapid-indexer.com/chrome-extension",
+          "publisher": { "@id": "https://rapid-indexer.com/#org" },
+          "sameAs": [
+            "https://chromewebstore.google.com/detail/rapid-indexer-seo-indexin/mckjdgeeinnbnhlmfinkeklpgffnjnpg",
+            "https://github.com/backlinkz-io/Fastest-Website-Indexer"
+          ],
+          "description": "Browser extension to submit URLs, manage campaigns, and view credit balance."
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://rapid-indexer.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Chrome Extension", "item": "https://rapid-indexer.com/chrome-extension" }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -344,6 +388,14 @@ $free_credits = SettingsService::get('free_credits_on_signup', '30');
                     <i class="fas fa-rocket text-xl"></i>
                 </div>
                 <span class="text-white font-bold text-lg">Rapid Indexer</span>
+                
+                <!-- Social Links -->
+                <div class="flex gap-4 ml-4 pl-4 border-l border-white/10">
+                    <a href="https://x.com/rapid_indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://facebook.com/rapidindexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.f6s.com/company/rapid-indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors font-bold text-xs flex items-center h-5">F6S</a>
+                </div>
             </div>
             <div class="text-gray-500 text-sm">
                 © <?php echo date('Y'); ?> Rapid Indexer. All rights reserved.

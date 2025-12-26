@@ -28,6 +28,7 @@ if (isset($_SESSION['uid'])) {
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:url" content="https://rapid-indexer.com/">
     <meta property="og:title" content="Rapid Indexer - Premium SEO Link Indexing & Checking Service">
     <meta property="og:description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
@@ -48,6 +49,136 @@ if (isset($_SESSION['uid'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://rapid-indexer.com/#org",
+          "name": "Rapid Indexer",
+          "url": "https://rapid-indexer.com/",
+          "logo": "https://rapid-indexer.com/assets/img/rocket-icon.png",
+          "sameAs": [
+            "https://x.com/rapid_indexer",
+            "https://www.linkedin.com/company/rapid-indexer/",
+            "https://facebook.com/rapidindexer",
+            "https://www.f6s.com/company/rapid-indexer"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://rapid-indexer.com/#website",
+          "url": "https://rapid-indexer.com/",
+          "name": "Rapid Indexer",
+          "publisher": { "@id": "https://rapid-indexer.com/#org" },
+          "inLanguage": "en"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://rapid-indexer.com/#home",
+          "url": "https://rapid-indexer.com/",
+          "name": "Rapid Indexer – Get Indexed. Go Viral. Rank Higher.",
+          "isPartOf": { "@id": "https://rapid-indexer.com/#website" },
+          "about": { "@id": "https://rapid-indexer.com/#service" },
+          "publisher": { "@id": "https://rapid-indexer.com/#org" }
+        },
+        {
+          "@type": "Service",
+          "@id": "https://rapid-indexer.com/#service",
+          "name": "Rapid Indexer SEO Signals Platform",
+          "provider": { "@id": "https://rapid-indexer.com/#org" },
+          "serviceType": "SEO indexing and traffic simulation platform",
+          "areaServed": "Worldwide",
+          "offers": {
+            "@type": "Offer",
+            "url": "https://rapid-indexer.com/#pricing",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://rapid-indexer.com/#app",
+          "name": "Rapid Indexer",
+          "url": "https://rapid-indexer.com/",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "publisher": { "@id": "https://rapid-indexer.com/#org" },
+          "isPartOf": { "@id": "https://rapid-indexer.com/#website" },
+          "description": "Bulk URL submission, indexing status verification, and campaign-based workflow for SEO operations.",
+          "featureList": [
+            "Bulk submissions up to 10,000 URLs",
+            "VIP queue option",
+            "Drip feed scheduling",
+            "Index status verification and export"
+          ]
+        },
+        {
+          "@type": "HowTo",
+          "@id": "https://rapid-indexer.com/#howto",
+          "name": "How Rapid Indexer Works",
+          "description": "Submit URLs, verify indexing status, run campaigns, and manage credits.",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "name": "Submit Your Links",
+              "text": "Paste URLs into the dashboard and submit in bulk."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Verify Indexing Status",
+              "text": "Check whether URLs are indexed and export results."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Drive Traffic Campaigns",
+              "text": "Configure visitor volume and scheduling options."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Top Up Credits",
+              "text": "Add credits and continue submitting or running campaigns."
+            }
+          ]
+        },
+        {
+          "@type": "OfferCatalog",
+          "@id": "https://rapid-indexer.com/#pricing-catalog",
+          "name": "Rapid Indexer Pricing",
+          "url": "https://rapid-indexer.com/#pricing",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "name": "Link Checking",
+              "price": "0.01",
+              "priceCurrency": "USD",
+              "url": "https://rapid-indexer.com/#pricing",
+              "description": "Check index status with export reporting."
+            },
+            {
+              "@type": "Offer",
+              "name": "Premium Indexing",
+              "price": "0.02",
+              "priceCurrency": "USD",
+              "url": "https://rapid-indexer.com/#pricing",
+              "description": "URL submission with queue options and reporting."
+            },
+            {
+              "@type": "Offer",
+              "name": "Traffic Blast",
+              "price": "0.60",
+              "priceCurrency": "USD",
+              "url": "https://rapid-indexer.com/#pricing",
+              "description": "Campaign-based traffic with scheduling controls."
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -804,6 +935,14 @@ if (isset($_SESSION['uid'])) {
                     <i class="fas fa-rocket text-xl"></i>
                 </div>
                 <span class="text-white font-bold text-lg">Rapid Indexer</span>
+                
+                <!-- Social Links -->
+                <div class="flex gap-4 ml-4 pl-4 border-l border-white/10">
+                    <a href="https://x.com/rapid_indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://facebook.com/rapidindexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.f6s.com/company/rapid-indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors font-bold text-xs flex items-center h-5">F6S</a>
+                </div>
             </div>
             <div class="text-gray-500 text-sm">
                 © <?php echo date('Y'); ?> Rapid Indexer. All rights reserved.
