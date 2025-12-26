@@ -120,6 +120,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // Calculate stats
+$showCountdown = false;
+$countdownText = '';
+
 if ($task['type'] === 'traffic_campaign') {
     $total = array_sum(array_column($schedule, 'quantity'));
     $completedQty = 0;
@@ -146,8 +149,6 @@ if ($task['type'] === 'traffic_campaign') {
     
 } else {
     // Countdown Logic for Standard Indexer Tasks
-    $showCountdown = false;
-    $countdownText = '';
     
     if ($task['type'] === 'indexer' && empty($task['vip'])) {
         $createdTime = strtotime($task['created_at']);
