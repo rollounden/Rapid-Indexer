@@ -24,6 +24,7 @@
                 <a href="/privacy" class="hover:text-white transition-colors">Privacy</a>
                 <a href="/terms" class="hover:text-white transition-colors">Terms</a>
                 <a href="/contact" class="hover:text-white transition-colors">Contact</a>
+                <a href="/api-docs" class="hover:text-white transition-colors">API</a>
                 <a href="/chrome-extension" class="hover:text-white transition-colors">Extension</a>
                 <a href="/dashboard" class="hover:text-white transition-colors">Dashboard</a>
             </div>

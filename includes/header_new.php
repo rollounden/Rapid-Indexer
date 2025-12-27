@@ -184,7 +184,7 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
                                 <p class="text-xs text-gray-500 uppercase">Signed in as</p>
                                 <p class="text-sm font-bold text-white truncate"><?php echo htmlspecialchars($_SESSION['email'] ?? 'User'); ?></p>
                             </div>
-                            <a href="/api-docs" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">API Access</a>
+                            <a href="/api_access" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">API Access</a>
                             <a href="/logout" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300">Log out</a>
                         </div>
                     </div>
@@ -209,7 +209,7 @@ $og_image = $og_image ?? 'https://rapid-indexer.com/assets/img/dashboard-preview
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                 <a href="/admin" class="block px-3 py-2 rounded-md text-base font-medium <?php echo strpos($current_page, 'admin') === 0 ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">Admin</a>
                 <?php endif; ?>
-                <a href="/api-docs" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'api-docs.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">API Access</a>
+                <a href="/api_access" class="block px-3 py-2 rounded-md text-base font-medium <?php echo $current_page === 'api_access.php' ? 'bg-primary-900/20 text-primary-500' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">API Access</a>
                 <div class="border-t border-white/10 my-2"></div>
                 <a href="/logout" class="block px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-red-500/10">Log out</a>
             </div>
