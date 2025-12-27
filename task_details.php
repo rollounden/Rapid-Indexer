@@ -210,8 +210,14 @@ include __DIR__ . '/includes/header_new.php';
                                 <?php echo $link['checked_at'] ? date('M j, H:i', strtotime($link['checked_at'])) : '-'; ?>
                             </td>
                             <td class="px-6 py-4">
-                                <?php if ($link['result_data']): ?>
-                                    <button @click="showDetails = true; detailsContent = JSON.stringify(<?php echo htmlspecialchars($link['result_data']); ?>, null, 2)" 
+                                <?php if ($link['result_data']): 
+                                    $safeData = json_decode($link['result_data'], true);
+                                    if (is_array($safeData)) {
+                                        unset($safeData['provider'], $safeData['provider_task_id'], $safeData['tracking_id']);
+                                    }
+                                    $safeJson = json_encode($safeData);
+                                ?>
+                                    <button @click="showDetails = true; detailsContent = JSON.stringify(<?php echo htmlspecialchars($safeJson); ?>, null, 2)" 
                                             class="text-xs px-2 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors">
                                         Details
                                     </button>
