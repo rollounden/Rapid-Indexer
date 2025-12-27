@@ -432,8 +432,13 @@ include __DIR__ . '/includes/header_new.php';
             <?php if ($total_pages > 1): ?>
                 <div class="px-6 py-4 border-t border-white/5 bg-white/5 flex justify-center">
                     <nav class="flex items-center gap-2">
-                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                            <a href="?page=<?php echo $i; ?>" 
+                        <?php 
+                        // Build filter string
+                        $filterParam = isset($_GET['filter']) ? '&filter=' . htmlspecialchars($_GET['filter']) : '';
+                        
+                        for ($i = 1; $i <= $total_pages; $i++): 
+                        ?>
+                            <a href="?page=<?php echo $i; ?><?php echo $filterParam; ?>" 
                                class="w-10 h-10 flex items-center justify-center rounded-lg text-sm font-bold transition-colors <?php echo $i === $page ? 'bg-primary-600 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'; ?>">
                                 <?php echo $i; ?>
                             </a>
