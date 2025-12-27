@@ -110,7 +110,6 @@ curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
   "success": true,
   "message": "Task created successfully",
   "task_id": 456,
-  "provider": "speedyindex",
   "is_drip_feed": false
 }
 ```

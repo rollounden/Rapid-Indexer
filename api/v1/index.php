@@ -136,7 +136,6 @@ try {
                     'success' => true,
                     'message' => 'Task created successfully',
                     'task_id' => $result['task_id'],
-                    'provider' => $result['provider'] ?? 'unknown',
                     'is_drip_feed' => $result['is_drip_feed'] ?? false
                 ]);
             }
