@@ -425,7 +425,9 @@ include __DIR__ . '/includes/header_new.php';
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-xs text-gray-500">
-                                    <?php echo $run['provider_order_id'] ? 'Order #' . $run['provider_order_id'] : '-'; ?>
+                                    <?php 
+                                    echo '-';
+                                    ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

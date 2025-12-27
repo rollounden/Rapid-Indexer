@@ -262,8 +262,29 @@ include __DIR__ . '/includes/header_new.php';
                              </div>
                         </div>
 
-                        <div id="dripSection" style="display: none;">
-                            <!-- Drip feed removed temporarily -->
+                        <div id="dripSection" style="display: none;" class="mb-6">
+                            <div class="p-4 bg-purple-900/10 border border-purple-900/20 rounded-lg">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="drip_feed" id="dripFeed" value="1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer peer"/>
+                                        <label for="dripFeed" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer peer-checked:bg-purple-500 peer-checked:border-purple-500"></label>
+                                    </div>
+                                    <label for="dripFeed" class="font-bold text-white cursor-pointer flex items-center gap-2">
+                                        Enable Drip Feed <i class="fas fa-tint text-purple-400"></i>
+                                    </label>
+                                </div>
+                                
+                                <div id="dripOptions" style="display: none;" class="mt-4 pl-14">
+                                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Duration (Days)</label>
+                                    <div class="flex items-center gap-4">
+                                        <input type="range" name="drip_duration" id="dripDuration" min="1" max="30" value="3" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
+                                        <span class="text-white font-bold min-w-[3rem] text-center"><span id="dripDaysDisplay">3</span> days</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-2">
+                                        Links will be submitted gradually over the selected period to mimic natural growth.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="bg-black/20 rounded-lg p-4 mb-6 border border-white/5 flex justify-between items-center">
@@ -386,6 +407,15 @@ include __DIR__ . '/includes/header_new.php';
                     dripOptions.style.display = 'none';
                 }
             }
+        }
+        
+        const dripDuration = document.getElementById('dripDuration');
+        const dripDaysDisplay = document.getElementById('dripDaysDisplay');
+        
+        if (dripDuration && dripDaysDisplay) {
+            dripDuration.addEventListener('input', function() {
+                dripDaysDisplay.textContent = this.value;
+            });
         }
         
         if (dripCheckbox) {
