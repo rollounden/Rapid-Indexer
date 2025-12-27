@@ -20,9 +20,9 @@ if (isset($_SESSION['uid'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Rapid Indexer - Premium SEO Link Indexing & Checking Service</title>
-    <meta name="description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
-    <meta name="keywords" content="seo link indexing, google indexer, backlink checker, rapid indexer, seo tools, fast indexing, url submission">
+    <title>Rapid Indexer - The Fastest Google Indexer & Link Checker</title>
+    <meta name="description" content="Stop losing revenue to invisible pages. Rapid Indexer gets your links indexed in minutes (VIP Queue) and verifies their status. Fix 'Crawled - Currently Not Indexed' errors today.">
+    <meta name="keywords" content="google indexer, backlink indexer, link indexing service, google index checker, crawled not indexed, website authority, rapid indexer">
     <link rel="canonical" href="https://rapid-indexer.com/">
     <meta name="robots" content="index, follow">
     
@@ -30,14 +30,14 @@ if (isset($_SESSION['uid'])) {
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Rapid Indexer">
     <meta property="og:url" content="https://rapid-indexer.com/">
-    <meta property="og:title" content="Rapid Indexer - Premium SEO Link Indexing & Checking Service">
-    <meta property="og:description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
+    <meta property="og:title" content="Rapid Indexer - Get Your Pages Found on Google Fast">
+    <meta property="og:description" content="The fastest way to get indexed. Fix visibility issues and verify your links with our advanced infrastructure.">
     <meta property="og:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://rapid-indexer.com/">
-    <meta property="twitter:title" content="Rapid Indexer - Premium SEO Link Indexing & Checking Service">
-    <meta property="twitter:description" content="Boost your SEO with Rapid Indexer. We use tiered links and browser traffic to guarantee Google indexation. Monitor your backlinks with our advanced checker.">
+    <meta property="twitter:title" content="Rapid Indexer - Get Your Pages Found on Google Fast">
+    <meta property="twitter:description" content="The fastest way to get indexed. Fix visibility issues and verify your links with our advanced infrastructure.">
     <meta property="twitter:image" content="https://rapid-indexer.com/assets/img/dashboard-preview.png">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -69,37 +69,6 @@ if (isset($_SESSION['uid'])) {
           ]
         },
         {
-          "@type": "WebSite",
-          "@id": "https://rapid-indexer.com/#website",
-          "url": "https://rapid-indexer.com/",
-          "name": "Rapid Indexer",
-          "publisher": { "@id": "https://rapid-indexer.com/#org" },
-          "inLanguage": "en"
-        },
-        {
-          "@type": "WebPage",
-          "@id": "https://rapid-indexer.com/#home",
-          "url": "https://rapid-indexer.com/",
-          "name": "Rapid Indexer – Get Indexed. Go Viral. Rank Higher.",
-          "isPartOf": { "@id": "https://rapid-indexer.com/#website" },
-          "about": { "@id": "https://rapid-indexer.com/#service" },
-          "publisher": { "@id": "https://rapid-indexer.com/#org" }
-        },
-        {
-          "@type": "Service",
-          "@id": "https://rapid-indexer.com/#service",
-          "name": "Rapid Indexer SEO Signals Platform",
-          "provider": { "@id": "https://rapid-indexer.com/#org" },
-          "serviceType": "SEO indexing and traffic simulation platform",
-          "areaServed": "Worldwide",
-          "offers": {
-            "@type": "Offer",
-            "url": "https://rapid-indexer.com/#pricing",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock"
-          }
-        },
-        {
           "@type": "SoftwareApplication",
           "@id": "https://rapid-indexer.com/#app",
           "name": "Rapid Indexer",
@@ -107,72 +76,32 @@ if (isset($_SESSION['uid'])) {
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web",
           "publisher": { "@id": "https://rapid-indexer.com/#org" },
-          "isPartOf": { "@id": "https://rapid-indexer.com/#website" },
-          "description": "Bulk URL submission, indexing status verification, and campaign-based workflow for SEO operations.",
+          "description": "Visibility infrastructure for SEOs and businesses. Bulk URL submission, indexing status verification, and automated discovery.",
           "featureList": [
             "Bulk submissions up to 10,000 URLs",
-            "VIP queue option",
-            "Drip feed scheduling",
-            "Index status verification and export"
+            "VIP queue option (Under 2 min)",
+            "Google Index Checker",
+            "API Access"
           ]
         },
         {
-          "@type": "HowTo",
-          "@id": "https://rapid-indexer.com/#howto",
-          "name": "How Rapid Indexer Works",
-          "description": "Submit URLs, verify indexing status, run campaigns, and manage credits.",
-          "step": [
+          "@type": "FAQPage",
+          "mainEntity": [
             {
-              "@type": "HowToStep",
-              "name": "Submit Your Links",
-              "text": "Paste URLs into the dashboard and submit in bulk."
+              "@type": "Question",
+              "name": "What does 'Crawled - Currently Not Indexed' mean?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It means Google has visited your page but decided not to add it to the search index. This is often due to low perceived value, lack of backlinks, or crawl budget issues. Rapid Indexer helps fix this by signaling authority and forcing a re-crawl."
+              }
             },
             {
-              "@type": "HowToStep",
-              "name": "Verify Indexing Status",
-              "text": "Check whether URLs are indexed and export results."
-            },
-            {
-              "@type": "HowToStep",
-              "name": "Drive Traffic Campaigns",
-              "text": "Configure visitor volume and scheduling options."
-            },
-            {
-              "@type": "HowToStep",
-              "name": "Top Up Credits",
-              "text": "Add credits and continue submitting or running campaigns."
-            }
-          ]
-        },
-        {
-          "@type": "OfferCatalog",
-          "@id": "https://rapid-indexer.com/#pricing-catalog",
-          "name": "Rapid Indexer Pricing",
-          "url": "https://rapid-indexer.com/#pricing",
-          "itemListElement": [
-            {
-              "@type": "Offer",
-              "name": "Link Checking",
-              "price": "0.01",
-              "priceCurrency": "USD",
-              "url": "https://rapid-indexer.com/#pricing",
-              "description": "Check index status with export reporting."
-            },
-            {
-              "@type": "Offer",
-              "name": "Premium Indexing",
-              "price": "0.02",
-              "priceCurrency": "USD",
-              "url": "https://rapid-indexer.com/#pricing",
-              "description": "URL submission with queue options and reporting."
-            },
-            {
-              "@type": "Offer",
-              "name": "Traffic Blast",
-              "price": "0.60",
-              "priceCurrency": "USD",
-              "url": "https://rapid-indexer.com/#pricing",
-              "description": "Campaign-based traffic with scheduling controls."
+              "@type": "Question",
+              "name": "How fast is the VIP Indexing Queue?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our VIP Queue is designed for speed. Internal tests show Googlebot visits in as little as 35 seconds to 2 minutes after submission."
+              }
             }
           ]
         }
@@ -191,7 +120,6 @@ if (isset($_SESSION['uid'])) {
                         sans: ['"Rubik"', 'sans-serif'],
                     },
                     colors: {
-                        // Custom "less intense" red/rose palette
                         primary: {
                             50: '#fff1f2',
                             100: '#ffe4e6',
@@ -200,12 +128,11 @@ if (isset($_SESSION['uid'])) {
                             400: '#fb7185',
                             500: '#f43f5e',
                             600: '#e11d48', 
-                            700: '#be123c', // Base primary - deep rose
+                            700: '#be123c',
                             800: '#9f1239',
                             900: '#881337', 
                             950: '#4c0519',
                         },
-                        // Lighter black / dark grey palette for background
                         dark: {
                             50: '#f6f6f6',
                             100: '#e7e7e7',
@@ -216,9 +143,9 @@ if (isset($_SESSION['uid'])) {
                             600: '#5d5d5d',
                             700: '#4f4f4f',
                             800: '#454545',
-                            850: '#262626', // Lighter than pure black
-                            900: '#1a1a1a', // Main background
-                            950: '#111111', // Deepest background
+                            850: '#262626',
+                            900: '#1a1a1a',
+                            950: '#111111',
                         }
                     }
                 }
@@ -230,47 +157,15 @@ if (isset($_SESSION['uid'])) {
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        [x-cloak] {
-            display: none !important;
-        }
-
-        * {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            background-color: #141414; /* Matches the reference "lighter black" */
-            color: #efefef;
-        }
-
-        /* Custom inputs */
-        .dark input, .dark textarea, .dark select {
-            background-color: #111111;
-            border-color: #333333;
-            color: #e2e8f0;
-        }
-        
-        .dark input:focus, .dark textarea:focus, .dark select:focus {
-            border-color: #be123c;
-            outline: none;
-            box-shadow: 0 0 0 1px #be123c;
-        }
-
-        .card {
-            background: #1c1c1c;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-        
-        .nav-blur {
-            background: rgba(20, 20, 20, 0.9);
-            backdrop-filter: blur(12px);
-        }
-        
-        .feature-icon-box {
-            background: linear-gradient(135deg, #be123c 0%, #881337 100%);
-            box-shadow: 0 4px 20px -2px rgba(190, 18, 60, 0.4);
-        }
+        [x-cloak] { display: none !important; }
+        * { scroll-behavior: smooth; }
+        body { background-color: #141414; color: #efefef; }
+        .nav-blur { background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(12px); }
+        .card { background: #1c1c1c; border: 1px solid #2a2a2a; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .prose p { margin-bottom: 1.5rem; line-height: 1.8; color: #d1d5db; }
+        .prose h3 { color: white; font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; color: #d1d5db; margin-bottom: 1.5rem; }
+        .prose li { margin-bottom: 0.5rem; }
     </style>
 </head>
 
@@ -280,8 +175,8 @@ if (isset($_SESSION['uid'])) {
         <div class="bg-primary-900 text-white border-b border-primary-800">
             <div class="flex w-full items-center justify-center gap-5 px-4 py-2 sm:px-6 lg:px-8">
                 <p class="text-sm font-medium tracking-wide">
-                    <span class="bg-white/10 px-2 py-0.5 rounded text-xs mr-2 font-bold">NEW</span>
-                    VIP Queue Available: Get Indexed in Under 2 Minutes!
+                    <span class="bg-white/10 px-2 py-0.5 rounded text-xs mr-2 font-bold">VIP QUEUE</span>
+                    Internal tests show discovery in as little as 35 seconds!
                 </p>
             </div>
         </div>
@@ -290,429 +185,353 @@ if (isset($_SESSION['uid'])) {
     <nav class="w-full border-b border-white/5 nav-blur sticky top-0 z-40 lg:top-[37px]">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-
-                <!-- Styled logo -->
-                <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-3">
                     <div class="flex flex-col items-center text-primary-500">
                         <i class="fas fa-rocket text-3xl"></i>
                     </div>
                     <span class="font-bold text-2xl tracking-tight text-white">Rapid Indexer</span>
-                </div>
+                </a>
 
-                <!-- Navigation Links -->
                 <nav class="hidden md:flex items-center gap-8">
-                    <a href="/viral-blast" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fas fa-fire"></i> Viral Blast</a>
-    <a href="/chrome-extension" class="text-sm font-medium text-primary-400 hover:text-white transition-colors flex items-center gap-1"><i class="fab fa-chrome"></i> Extension</a>
-                    <div class="relative group" x-data="{ open: false }">
+                    <a href="#problem" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">The Problem</a>
+                    <a href="#how-it-works" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">How it Works</a>
+                    <a href="#use-cases" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Use Cases</a>
+                    <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Pricing</a>
+                    <!-- Tools Dropdown -->
+                     <div class="relative group" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false" class="text-sm font-medium text-gray-300 hover:text-white transition-colors flex items-center gap-1">
-                            How it Works <i class="fas fa-chevron-down text-xs ml-1 transition-transform" :class="{ 'rotate-180': open }"></i>
+                            Tools <i class="fas fa-chevron-down text-xs ml-1 transition-transform" :class="{ 'rotate-180': open }"></i>
                         </button>
-                        <div x-show="open" x-transition.opacity.duration.200ms class="absolute top-full left-0 mt-2 w-64 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-xl py-2 z-50" style="display: none;">
-                            <a href="#submit-links" class="block px-4 py-3 hover:bg-white/5 transition-colors">
-                                <div class="text-white font-bold text-sm">Submitting Links</div>
-                                <div class="text-xs text-gray-500">How to start an indexing campaign</div>
+                        <div x-show="open" x-transition.opacity.duration.200ms class="absolute top-full right-0 mt-2 w-56 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-xl py-2 z-50" style="display: none;">
+                            <a href="/chrome-extension" class="block px-4 py-3 hover:bg-white/5 transition-colors">
+                                <div class="text-white font-bold text-sm"><i class="fab fa-chrome mr-2 text-primary-400"></i>Chrome Extension</div>
                             </a>
-                            <a href="#check-links" class="block px-4 py-3 hover:bg-white/5 transition-colors">
-                                <div class="text-white font-bold text-sm">Checking Links</div>
-                                <div class="text-xs text-gray-500">Verify indexing status</div>
-                            </a>
-                            <a href="#viral-traffic" class="block px-4 py-3 hover:bg-white/5 transition-colors">
-                                <div class="text-white font-bold text-sm">Viral Traffic</div>
-                                <div class="text-xs text-gray-500">Simulate social engagement</div>
-                            </a>
-                            <a href="#buy-credits" class="block px-4 py-3 hover:bg-white/5 transition-colors">
-                                <div class="text-white font-bold text-sm">Buying Credits</div>
-                                <div class="text-xs text-gray-500">Purchase via Cryptomus</div>
+                             <a href="/viral-blast" class="block px-4 py-3 hover:bg-white/5 transition-colors">
+                                <div class="text-white font-bold text-sm"><i class="fas fa-fire mr-2 text-red-500"></i>Traffic Simulator</div>
+                                <div class="text-xs text-gray-500 mt-1">For Advanced SEOs</div>
                             </a>
                         </div>
                     </div>
-                    <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Features</a>
-                    <a href="#pricing" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Pricing</a>
-                    <a href="/faq" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">FAQ</a>
                 </nav>
 
                 <div class="flex items-center gap-4">
                     <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Log in</a>
                     <a href="/register" class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-lg text-white bg-primary-700 hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/20">
-                        Get Started
+                        Start Indexing Free
                     </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- 1. Hero Section (The "Money" Hook) -->
     <section class="relative pt-20 lg:pt-28 pb-20">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-4xl mx-auto">
-                <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">SEO Signals Platform</h1>
+                <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">The Visibility Infrastructure</h1>
                 <h2 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
-                    Get Indexed. <span class="text-primary-500">Go Viral.</span><br>
-                    Rank Higher.
+                    Stop Losing Revenue to <span class="text-primary-500">Invisible Pages</span>.<br>
+                    Get Indexed in Minutes.
                 </h2>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Don't just build links. Power them up. Rapid Indexer forces Google to crawl your backlinks (<span class="text-primary-400 font-bold">Under 2 mins with VIP!</span>) and simulates viral social traffic to boost your rankings.
+                    The fastest <strong class="text-white">Google Indexing Service</strong> & <strong class="text-white">Index Checker</strong>. 
+                    Fix "Crawled - Currently Not Indexed" errors and boost your visibility instantly.
+                    <br><span class="text-primary-400 text-sm font-bold block mt-2"><i class="fas fa-bolt"></i> VIP Queue Tests: Discovery in 35s - 2 minutes.</span>
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                     <a href="/register" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
-                        Start Boosting Free
+                        Start Indexing Free
                         <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
                     </a>
-                    <a href="#how-it-works" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 border border-white/10 text-white font-medium rounded-lg hover:bg-white/5 transition-colors text-lg">
-                        How it Works
+                    <a href="#check-links" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 border border-white/10 text-white font-medium rounded-lg hover:bg-white/5 transition-colors text-lg">
+                        Check Index Status
                     </a>
                 </div>
                 
-                <p class="text-sm text-gray-500">
-                    No credit card required • <?php echo $free_credits; ?> Free Credits on Signup
+                <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
+                    <i class="fas fa-check-circle text-green-500"></i> No credit card required • <?php echo $free_credits; ?> Free Credits on Signup
+                </p>
+                
+                <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500 opacity-60">
+                    <span>Used by:</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-building mr-1"></i> Agencies</span>
+                    <span class="font-bold text-gray-400"><i class="fab fa-amazon mr-1"></i> Amazon Sellers</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-map-marker-alt mr-1"></i> Local Businesses</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. The Visibility Problem (Deep Dive) -->
+    <section id="problem" class="py-24 bg-black/20 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-6">The "Invisible Internet" Epidemic</h2>
+                <p class="text-lg text-gray-400">
+                    Why 90% of new content and backlinks are failing to produce results in 2025.
                 </p>
             </div>
 
-            <div class="mt-20 grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Indexer Demo -->
-                <div class="card rounded-xl p-6 md:p-8 border-white/10 hover:border-primary-500/30 transition-colors" x-data="{ showModal: false, urlCount: 0, demoUrls: '' }" x-init="$watch('demoUrls', () => {
-                    if (!demoUrls) { urlCount = 0; } else { urlCount = demoUrls.split('\n').filter(line => line.trim().length > 0).length; }
-                });">
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-bolt text-primary-500"></i>
-                                Quick Indexer
-                            </h2>
-                            <p class="text-sm text-gray-400 mt-1">Submit URLs to index immediately</p>
-                        </div>
-                    </div>
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                <div class="prose max-w-none">
+                    <h3 class="text-white">Publishing Content ≠ Ranking Content</h3>
+                    <p>
+                        The modern web is oversaturated. Every day, millions of new pages, blog posts, and backlinks are created. Google's "Crawl Budget" (the resources it dedicates to discovering new content) simply cannot keep up with this exponential growth. This bottleneck has created a massive gap between content creation and content discovery.
+                    </p>
+                    <p>
+                        This has led to a silent crisis in SEO: <strong>Indexation Failure</strong>. You might have the best content, the perfect keywords, and high-authority backlinks, but if Google's bots don't crawl and index them, <strong>they do not exist</strong> in the eyes of the search engine. Your investment in content and links is effectively wasted until this bridge is crossed.
+                    </p>
+                    
+                    <h3 class="text-white">The "Crawled - Currently Not Indexed" Nightmare</h3>
+                    <p>
+                        This is the most frustrating error message in Google Search Console. It means Google knows your page exists, visited it, but <em>decided it wasn't worth adding to the index</em>. This often happens due to:
+                    </p>
+                    <ul>
+                        <li><strong>Lack of Authority Signals:</strong> The page has no incoming internal or external link signals to validate its importance.</li>
+                        <li><strong>Duplicate Content Flags:</strong> Google thinks it's too similar to other pages already in the index.</li>
+                        <li><strong>Crawl Budget Exhaustion:</strong> The bot left your site before finishing the job because your site is too large or slow.</li>
+                    </ul>
+                    <p>
+                        Without intervention, these pages can sit in limbo for months. During that time, they generate $0 revenue and zero SEO value. Our tools are built specifically to resolve these status codes.
+                    </p>
 
-                    <form class="space-y-4">
-                        <div class="relative">
-                            <textarea class="block w-full border rounded-lg p-4 bg-black/20 text-gray-300 border-white/10 focus:ring-primary-600 focus:border-primary-600 resize-y min-h-[160px] font-mono text-sm" 
-                                rows="6" 
-                                x-model="demoUrls" 
-                                placeholder="https://example.com/page-1&#10;https://example.com/page-2&#10;https://example.com/page-3" 
-                                readonly 
-                                x-on:click="showModal = true"></textarea>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center pt-2">
-                            <div class="flex items-center gap-2 text-sm">
-                                <span class="text-gray-400">Estimated Cost:</span>
-                                <span class="px-3 py-1 rounded-md bg-primary-900/20 border border-primary-900/30 text-primary-400 font-mono font-bold" x-text="urlCount + ' Credits'">0 Credits</span>
-                            </div>
-                            <button type="button" class="w-full sm:w-auto px-6 py-3 text-sm font-bold rounded-lg bg-white text-black hover:bg-gray-200 transition-all" x-on:click.prevent="showModal = true">
-                                Submit to Indexer
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Modal -->
-                    <div x-show="showModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-0">
-                        <div x-show="showModal" x-transition.opacity @click="showModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-                        <div x-show="showModal" x-transition.scale.origin.center class="relative card rounded-xl p-8 max-w-md w-full shadow-2xl border border-white/10">
-                            <button @click="showModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
-                                <i class="fa-solid fa-times text-xl"></i>
-                            </button>
-                            <div class="text-center mb-8">
-                                <div class="w-14 h-14 bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-500 border border-primary-900/50">
-                                    <i class="fa-solid fa-user-plus text-xl"></i>
-                                </div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Create Free Account</h3>
-                                <p class="text-gray-400">Sign up to submit your URLs. You'll get <span class="text-primary-400 font-bold"><?php echo $free_credits; ?> free credits</span> instantly.</p>
-                            </div>
-                            <div class="space-y-3">
-                                <a href="/register" class="block w-full py-3 text-center rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-colors">Sign Up Free</a>
-                                <a href="/login" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="text-white">The "Discovered - Currently Not Indexed" Trap</h3>
+                    <p>
+                        Even worse is when Google knows a URL exists (likely found via a sitemap) but hasn't even bothered to crawl it yet. This is a massive missed opportunity, especially for time-sensitive content like news, seasonal products, or viral posts where speed to market is everything.
+                    </p>
                 </div>
 
-                <!-- Traffic Demo (New) -->
-                <div class="card rounded-xl p-6 md:p-8 border-primary-600/30 bg-primary-900/5 hover:border-primary-500/50 transition-all relative overflow-hidden" x-data="{ showTrafficModal: false, trafficQty: 4000 }">
-                    <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">New Feature</div>
-                    
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-fire-flame-curved text-primary-500"></i>
-                                Viral Traffic Blast
-                            </h2>
-                            <p class="text-sm text-gray-400 mt-1">Simulate viral social traffic spikes</p>
+                <div class="space-y-8">
+                    <div class="bg-[#1a1a1a] border border-white/10 rounded-xl p-8 shadow-2xl">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center text-red-500">
+                                <i class="fas fa-unlink text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">The Backlink Black Hole</h4>
+                                <p class="text-sm text-gray-500">Why your link building isn't working</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-4">
+                            You pay for a guest post or build a tiered link structure. The link goes live. You wait. And wait.
+                        </p>
+                        <p class="text-gray-400">
+                            <strong>If that backlink page isn't indexed, no PageRank flows to your site.</strong>
+                        </p>
+                        <div class="bg-red-900/10 border-l-4 border-red-500 p-4 mt-4">
+                            <p class="text-red-300 text-sm font-medium">
+                                "I built 50 links this month but my rankings didn't move." <br>
+                                <span class="text-white">Reality check: Only 5 of them were actually indexed.</span>
+                            </p>
                         </div>
                     </div>
 
-                    <form class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Target URL</label>
-                            <div class="relative">
-                                <input type="text" class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10" 
-                                    placeholder="https://example.com/viral-post" readonly x-on:click="showTrafficModal = true">
-                                <div class="absolute right-3 top-3 text-gray-500"><i class="fas fa-link"></i></div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Visitors</label>
-                                <select class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10 appearance-none" x-model="trafficQty" x-on:click.prevent="showTrafficModal = true">
-                                    <option value="1000">1,000</option>
-                                    <option value="4000" selected>4,000</option>
-                                    <option value="10000">10,000</option>
-                                </select>
+                    <div class="bg-[#1a1a1a] border border-white/10 rounded-xl p-8 shadow-2xl">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-500">
+                                <i class="fas fa-search-dollar text-xl"></i>
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Duration</label>
-                                <div class="block w-full border rounded-lg p-3 bg-black/20 text-gray-300 border-white/10">3 Days</div>
+                                <h4 class="text-xl font-bold text-white">GSC Is Not Enough</h4>
+                                <p class="text-sm text-gray-500">Why you need an external checker</p>
                             </div>
                         </div>
-
-                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center pt-2">
-                            <div class="flex items-center gap-2 text-sm">
-                                <span class="text-gray-400">Estimated Cost:</span>
-                                <span class="px-3 py-1 rounded-md bg-primary-900/20 border border-primary-900/30 text-primary-400 font-mono font-bold" x-text="Math.ceil((trafficQty / 1000) * 60) + ' Credits'">240 Credits</span>
-                            </div>
-                            <button type="button" class="w-full sm:w-auto px-6 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/20" x-on:click.prevent="showTrafficModal = true">
-                                Launch Blast <i class="fas fa-rocket ml-1"></i>
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Traffic Modal -->
-                    <div x-show="showTrafficModal" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-0">
-                        <div x-show="showTrafficModal" x-transition.opacity @click="showTrafficModal = false" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-                        <div x-show="showTrafficModal" x-transition.scale.origin.center class="relative card rounded-xl p-8 max-w-md w-full shadow-2xl border border-white/10">
-                            <button @click="showTrafficModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
-                                <i class="fa-solid fa-times text-xl"></i>
-                            </button>
-                            <div class="text-center mb-8">
-                                <div class="w-14 h-14 bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-500 border border-primary-900/50">
-                                    <i class="fa-solid fa-fire text-xl"></i>
-                                </div>
-                                <h3 class="text-2xl font-bold text-white mb-2">Launch Viral Campaign</h3>
-                                <p class="text-gray-400">Sign up to access our <span class="text-white font-bold">Viral Blast</span> technology. Drip-feed traffic from social sources.</p>
-                            </div>
-                            <div class="space-y-3">
-                                <a href="/register" class="block w-full py-3 text-center rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold transition-all shadow-lg shadow-primary-900/20">Create Account</a>
-                                <a href="/login" class="block w-full py-3 text-center rounded-lg bg-white/5 hover:bg-white/10 text-white font-medium transition-colors border border-white/10">Log In</a>
-                            </div>
-                        </div>
+                        <p class="text-gray-400">
+                            Google Search Console data is often delayed by 3-5 days and uses sampling. It might say a URL is indexed when it has actually dropped out, or vice versa. Relying solely on GSC leaves you blind to the real-time status of your pages.
+                        </p>
+                        <p class="text-gray-400 mt-2">
+                            <strong>Rapid Indexer's Checker</strong> queries the live SERPs (Search Engine Results Pages) in real-time. We give you the binary truth: <span class="text-green-400">Yes</span> or <span class="text-red-400">No</span>.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-24 bg-[#111111] border-t border-white/5 scroll-mt-20">
+    <!-- 3. Our Solution (Technical) -->
+    <section id="how-it-works" class="py-24 relative overflow-hidden">
+        <!-- Background Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-900/10 rounded-full blur-[100px] -z-10"></div>
+
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How It Works</h2>
-                <p class="text-lg text-gray-400">Simple steps to boost your SEO performance.</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">The Solution: Rapid Indexing Infrastructure</h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                    We don't just "ping" Google. We use a multi-layered infrastructure to force discovery and validate visibility.
+                </p>
             </div>
 
-            <div class="space-y-24">
-                <!-- 1. Submit Links -->
-                <div id="submit-links" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
-                    <div class="order-2 md:order-1">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-900/30 text-primary-500 font-bold text-xl border border-primary-900/50 mb-6">1</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Submit Your Links</h3>
-                        <p class="text-gray-400 text-lg mb-6">
-                            Paste your URLs into our dashboard. We accept bulk submissions up to 10,000 links at once.
-                        </p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-primary-500"></i>
-                                <span>Standard indexing starts in ~2 hours (48h cycle)</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-bolt mt-1 text-yellow-500"></i>
-                                <span class="text-white font-bold">VIP Queue: Under 2 minute indexing</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-primary-500"></i>
-                                <span>Select <strong>Drip Feed</strong> to spread submissions over days</span>
-                            </li>
-                        </ul>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Service A: Indexer -->
+                <div class="card p-8 rounded-xl border-primary-600/30 bg-primary-900/5 relative overflow-hidden group hover:border-primary-500/50 transition-colors">
+                    <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">Core Engine</div>
+                    <div class="w-14 h-14 bg-primary-600/20 rounded-lg flex items-center justify-center mb-6 border border-primary-600/30 text-primary-500 text-2xl">
+                        <i class="fas fa-bolt"></i>
                     </div>
-                    <div class="order-1 md:order-2 relative group">
-                        <div class="absolute -inset-2 bg-primary-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl">
-                            <!-- Mock UI -->
-                            <div class="flex gap-4 mb-4">
-                                <div class="w-1/2 h-10 bg-white/5 rounded-lg border border-white/5"></div>
-                                <div class="w-1/2 h-10 bg-white/5 rounded-lg border border-white/5"></div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Rapid URL Indexer</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Our proprietary indexing engine uses a combination of direct cloud API signaling and high-authority feed injection to force Googlebot to crawl your URLs immediately. This isn't just a ping; it's a priority request.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 text-xs"><i class="fas fa-check"></i></div>
+                            <div>
+                                <strong class="text-white block">Standard Indexing</strong>
+                                <span class="text-sm text-gray-500">Best for bulk backlinks, citations, and Tier 2/3 links. Typically processes within 24-48 hours using our safe, drip-fed authority network. This mimics natural discovery patterns for large batches of links.</span>
                             </div>
-                            <div class="space-y-2 mb-4">
-                                <div class="h-4 bg-white/5 rounded w-3/4"></div>
-                                <div class="h-32 bg-white/5 rounded-lg border border-white/5 p-3 font-mono text-xs text-gray-500">
-                                    https://example.com/page-1<br>
-                                    https://example.com/page-2<br>
-                                    https://example.com/page-3
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="h-4 w-20 bg-white/5 rounded"></div>
-                                <div class="h-10 w-32 bg-primary-600 rounded-lg"></div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 text-xs"><i class="fas fa-bolt"></i></div>
+                            <div>
+                                <strong class="text-white block">VIP Priority Queue</strong>
+                                <span class="text-sm text-gray-500">For "Money Pages", new blog posts, and time-sensitive press releases. Internal tests show discovery in <strong class="text-white">35 seconds to 2 minutes</strong>. This is the fastest indexing available on the market, bypassing the standard crawl queue.</span>
                             </div>
                         </div>
                     </div>
+                    <a href="/register" class="inline-flex items-center justify-center w-full py-3 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold transition-all">Start Indexing Now</a>
                 </div>
 
-                <!-- 2. Check Links -->
-                <div id="check-links" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
-                    <div class="relative group">
-                        <div class="absolute -inset-2 bg-blue-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl">
-                            <div class="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
-                                <div class="h-6 w-32 bg-white/5 rounded"></div>
-                                <div class="h-6 w-20 bg-green-500/20 rounded-full"></div>
+                <!-- Service B: Checker -->
+                <div id="check-links" class="card p-8 rounded-xl border-white/10 relative overflow-hidden group hover:border-white/20 transition-colors">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">Verification</div>
+                    <div class="w-14 h-14 bg-blue-600/20 rounded-lg flex items-center justify-center mb-6 border border-blue-600/30 text-blue-500 text-2xl">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Index Status Checker</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Stop relying on outdated caches. Our checker tool performs live queries to see if your URL is actually returning in search results for your target market. Accuracy is paramount for reporting.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 text-xs"><i class="fas fa-globe"></i></div>
+                            <div>
+                                <strong class="text-white block">Real-Time SERP Verification</strong>
+                                <span class="text-sm text-gray-500">We don't check a cache; we check the live Google results page to ensure 100% accuracy. If we say it's indexed, it's visible to the world.</span>
                             </div>
-                            <div class="grid grid-cols-3 gap-4 mb-6">
-                                <div class="bg-white/5 rounded-lg p-3 text-center">
-                                    <div class="h-6 w-8 mx-auto bg-primary-500/20 rounded mb-2"></div>
-                                    <div class="h-3 w-12 mx-auto bg-white/10 rounded"></div>
-                                </div>
-                                <div class="bg-white/5 rounded-lg p-3 text-center border border-green-500/30">
-                                    <div class="h-6 w-8 mx-auto bg-green-500 rounded mb-2"></div>
-                                    <div class="h-3 w-12 mx-auto bg-white/10 rounded"></div>
-                                </div>
-                                <div class="bg-white/5 rounded-lg p-3 text-center">
-                                    <div class="h-6 w-8 mx-auto bg-yellow-500/20 rounded mb-2"></div>
-                                    <div class="h-3 w-12 mx-auto bg-white/10 rounded"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center p-2 bg-white/5 rounded border border-green-500/20">
-                                    <div class="h-3 w-48 bg-white/10 rounded"></div>
-                                    <div class="h-4 w-16 bg-green-500/20 rounded"></div>
-                                </div>
-                                <div class="flex justify-between items-center p-2 bg-white/5 rounded">
-                                    <div class="h-3 w-40 bg-white/10 rounded"></div>
-                                    <div class="h-4 w-16 bg-yellow-500/20 rounded"></div>
-                                </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="mt-1 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 text-xs"><i class="fas fa-file-csv"></i></div>
+                            <div>
+                                <strong class="text-white block">Bulk Reporting</strong>
+                                <span class="text-sm text-gray-500">Paste up to 10,000 URLs. Get a clean CSV report showing "Indexed", "Not Indexed", or "Error". Perfect for client audits and monthly reporting.</span>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/30 text-blue-500 font-bold text-xl border border-blue-900/50 mb-6">2</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Verify Indexing Status</h3>
-                        <p class="text-gray-400 text-lg mb-6">
-                            Don't guess. Know. Our checker tool verifies if your URLs are actually indexed in Google's database.
-                        </p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-blue-500"></i>
-                                <span>Real-time verification against live SERPs</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-blue-500"></i>
-                                <span>Detailed reports: Indexed, Unindexed, or Error</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-blue-500"></i>
-                                <span>Export results to CSV for client reporting</span>
-                            </li>
-                        </ul>
-                    </div>
+                    <a href="/register" class="inline-flex items-center justify-center w-full py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold transition-all">Verify Your Links</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Use Cases (Deep Dive) -->
+    <section id="use-cases" class="py-24 bg-[#111111] border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">What Can You Index? (Almost Anything)</h2>
+                <p class="text-gray-400">If it has a URL and is publicly accessible, we can help Google find it.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Backlinks -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
+                    <i class="fas fa-link text-3xl text-primary-500 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">Backlinks & Guest Posts</h4>
+                    <p class="text-gray-400 text-sm">
+                        You spent money on a guest post or PBN link. If it's on a page deep in the site structure, Google might not crawl it for weeks. Use Rapid Indexer to force a crawl immediately, ensuring the "link juice" starts flowing to your money site instantly. Don't let your link building budget go to waste on unindexed pages.
+                    </p>
                 </div>
 
-                <!-- 3. Viral Blast Traffic -->
-                <div id="viral-traffic" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
-                    <div class="order-2 md:order-1">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-900/30 text-red-500 font-bold text-xl border border-red-900/50 mb-6">3</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Drive Viral Traffic</h3>
-                        <p class="text-gray-400 text-lg mb-6">
-                            Supercharge your rankings by simulating viral social engagement. Google loves trending content.
-                        </p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-red-500"></i>
-                                <span>Simulate visitors from Twitter, Reddit, Facebook</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-red-500"></i>
-                                <span>Drip-feed traffic over 1-30 days for natural growth</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-red-500"></i>
-                                <span>High-quality residential IPs avoid detection</span>
-                            </li>
-                        </ul>
+                <!-- Parasite SEO -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
+                    <i class="fab fa-linkedin text-3xl text-blue-400 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">Parasite SEO</h4>
+                    <p class="text-gray-400 text-sm">
+                        Posting on high-authority sites like LinkedIn, Medium, Reddit, or Quora is a powerful strategy. However, these platforms generate millions of URLs daily. Use our VIP Queue to index your specific post instantly and rank for long-tail keywords before the competition even knows the page exists.
+                    </p>
+                </div>
+
+                <!-- Press Releases -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
+                    <i class="fas fa-newspaper text-3xl text-gray-300 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">Press Releases</h4>
+                    <p class="text-gray-400 text-sm">
+                        News is only valuable if it's fresh. Press releases often get syndicated to hundreds of news sites. Bulk submit these URLs to ensure maximum coverage and authority signals across the web. Capture the "Top Stories" carousel by being the first to be indexed.
+                    </p>
+                </div>
+
+                <!-- Local SEO -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
+                    <i class="fas fa-map-marked-alt text-3xl text-green-500 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">Local Citations</h4>
+                    <p class="text-gray-400 text-sm">
+                        Directory listings (Yelp, YellowPages, local chambers of commerce) are critical for Local SEO map rankings. Many of these directories have poor internal linking. Indexing them ensures Google validates your Name, Address, and Phone (NAP) consistency, boosting your Google Maps visibility.
+                    </p>
+                </div>
+
+                <!-- eCommerce -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
+                    <i class="fas fa-shopping-cart text-3xl text-purple-500 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">eCommerce Products</h4>
+                    <p class="text-gray-400 text-sm">
+                        Launching a new collection? Seasonal products? You can't wait 4 weeks for Google to find your new product pages. Index them in minutes to start capturing search traffic while demand is high. Essential for Black Friday and holiday sales.
+                    </p>
+                </div>
+
+                <!-- Social Profiles -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
+                    <i class="fas fa-user-circle text-3xl text-pink-500 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">Social Profiles</h4>
+                    <p class="text-gray-400 text-sm">
+                        Creating brand profiles on various platforms? Ensure they appear in brand name searches by forcing an index. This helps control the first page of Google for your brand reputation management, pushing negative results down.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Advanced Section: Traffic (The "Turbo") -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div class="card bg-[#1a1a1a] border border-white/10 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-2/3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-500/10 text-red-500 text-xs font-bold uppercase mb-4 border border-red-500/20">
+                        <i class="fas fa-exclamation-triangle"></i> Advanced Strategy
                     </div>
-                    <div class="order-1 md:order-2 relative group">
-                        <div class="absolute -inset-2 bg-red-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl">
-                            <!-- Traffic Chart Simulation -->
-                            <div class="flex justify-between items-end h-32 gap-2 mb-4">
-                                <div class="w-full bg-red-900/20 rounded-t h-[20%]"></div>
-                                <div class="w-full bg-red-900/40 rounded-t h-[45%]"></div>
-                                <div class="w-full bg-red-600 rounded-t h-[80%] shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
-                                <div class="w-full bg-red-900/50 rounded-t h-[60%]"></div>
-                                <div class="w-full bg-red-900/30 rounded-t h-[30%]"></div>
-                            </div>
-                            <div class="flex justify-between text-xs text-gray-500 font-mono border-t border-white/5 pt-2">
-                                <span>Day 1</span>
-                                <span>Day 2</span>
-                                <span>Day 3</span>
-                            </div>
-                            <div class="mt-4 bg-white/5 rounded p-3 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">
-                                    <i class="fas fa-arrow-up"></i>
+                    <h2 class="text-3xl font-bold text-white mb-4">Indexing is Step 1. Ranking Requires Signals.</h2>
+                    <p class="text-gray-400 mb-6 text-lg">
+                        Google's algorithm has evolved. It now looks for <strong class="text-white">User Signals</strong> (Click-Through Rate, Dwell Time, Traffic Sources) to validate if a newly indexed page is actually relevant.
+                    </p>
+                    <p class="text-gray-400 mb-6 text-lg">
+                        Our <strong>Viral Traffic Blast</strong> technology simulates real interest by sending high-quality, residential traffic from social referrers to your pages. This validates the indexation and helps sticky rankings.
+                    </p>
+                    <p class="text-sm text-gray-500 italic mb-6">
+                        ⚠️ Not recommended for standard business websites. Designed for experienced SEOs, parasite campaigns, and experimental projects.
+                    </p>
+                    <a href="/viral-blast" class="inline-flex items-center text-white font-bold border-b border-red-500 pb-0.5 hover:text-red-400 transition-colors">
+                        Explore Viral Traffic Blast <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                    </a>
+                </div>
+                <div class="md:w-1/3 w-full flex justify-center">
+                    <div class="relative w-full max-w-xs">
+                        <div class="absolute -inset-4 bg-red-600/20 rounded-full blur-2xl"></div>
+                        <div class="relative bg-black/40 p-6 rounded-xl border border-white/10 backdrop-blur-sm">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-500">
+                                    <i class="fas fa-fire"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-gray-400">Ranking Boost</div>
-                                    <div class="text-white font-bold text-sm">+12 Positions</div>
+                                    <div class="text-white font-bold">Social Signal</div>
+                                    <div class="text-xs text-gray-500">Twitter • Reddit • FB</div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Buy Credits -->
-                <div id="buy-credits" class="grid md:grid-cols-2 gap-12 items-center scroll-mt-32">
-                    <div class="order-2 md:order-1 relative group">
-                        <div class="absolute -inset-2 bg-purple-600/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="relative bg-[#1c1c1c] border border-white/10 rounded-xl p-6 shadow-2xl text-center">
-                            <h4 class="text-gray-400 uppercase text-xs font-bold mb-4">Payment Gateway</h4>
-                            <div class="bg-black/40 rounded-lg p-6 border border-white/5 mb-6">
-                                <div class="text-3xl font-bold text-white mb-1">$50.00</div>
-                                <div class="text-sm text-gray-500">5,000 Credits</div>
+                            <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 w-3/4"></div>
                             </div>
-                            <button class="w-full py-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20">
-                                <i class="fas fa-lock"></i> Pay with Cryptomus
-                            </button>
-                            <div class="mt-4 text-xs text-gray-500 flex justify-center gap-4">
-                                <span class="flex items-center gap-1"><i class="fab fa-bitcoin"></i> BTC</span>
-                                <span class="flex items-center gap-1"><i class="fab fa-ethereum"></i> ETH</span>
-                                <span class="flex items-center gap-1"><i class="fas fa-dollar-sign"></i> USDT</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-1 md:order-2">
-                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-900/30 text-purple-500 font-bold text-xl border border-purple-900/50 mb-6">4</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Secure Crypto Payments</h3>
-                        <p class="text-gray-400 text-lg mb-6">
-                            Top up your account instantly using Cryptomus. We support major cryptocurrencies for privacy and speed.
-                        </p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-purple-500"></i>
-                                <span>Pay with Bitcoin, Ethereum, USDT, LTC, and more</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-purple-500"></i>
-                                <span>Credits added automatically after 1 confirmation</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check mt-1 text-purple-500"></i>
-                                <span>No recurring subscriptions - pay as you go</span>
-                            </li>
-                        </ul>
-                        <div class="mt-8 flex gap-4 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-                            <img src="/assets/img/bitcoin-btc-logo.png" class="h-8 object-contain">
-                            <img src="/assets/img/ethereum-eth-logo.png" class="h-8 object-contain">
-                            <img src="/assets/img/Zcash-Yellow.png" class="h-8 object-contain">
+                            <div class="mt-2 text-right text-xs text-red-400 font-mono">+1,420 Visitors</div>
                         </div>
                     </div>
                 </div>
@@ -720,144 +539,70 @@ if (isset($_SESSION['uid'])) {
         </div>
     </section>
 
-    <!-- Why Rapid Indexer Section (SEO Content) -->
-    <section id="why-us" class="py-24 bg-black/20 border-y border-white/5">
+    <!-- 6. Audience Specifics & Integrations -->
+    <section class="py-24 bg-black/20">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">The Ranking Formula Has Changed</h2>
-                    <div class="space-y-6 text-lg text-gray-400">
-                        <p>
-                            <strong class="text-primary-400">Indexing is step one. Virality is step two.</strong> 
-                            Google's modern algorithm prioritizes "User Signals" (CTR, Dwell Time, Traffic Sources) alongside backlinks.
-                        </p>
-                        <p>
-                            If you build 100 backlinks to a page but it gets 0 visitors, it looks suspicious (unnatural).
-                        </p>
-                        <p>
-                            Rapid Indexer solves this by combining <span class="text-white font-semibold">Premium Indexing</span> with <span class="text-white font-semibold">Viral Traffic Simulation</span>. We prove to Google that your content is not only real but trending.
-                        </p>
-                    </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Agencies -->
+                <div class="p-8 border border-white/5 rounded-xl hover:bg-white/5 transition-colors">
+                    <h3 class="text-xl font-bold text-white mb-3 flex items-center"><i class="fas fa-briefcase text-primary-500 mr-3"></i> For Agencies</h3>
+                    <p class="text-gray-400 text-sm mb-6">
+                        You handle hundreds of links for clients. Manually checking them is impossible. Use our infrastructure to automate the delivery of your link building campaigns.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check mr-2 text-primary-500"></i> Bulk Processing (10k+ links)</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-2 text-primary-500"></i> Developer API Access</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-2 text-primary-500"></i> White-label CSV Reports</li>
+                    </ul>
                 </div>
-                <div class="relative">
-                    <div class="absolute -inset-4 bg-primary-900/20 rounded-full blur-3xl opacity-50"></div>
-                    <div class="card p-8 rounded-xl relative border-primary-900/50">
-                        <h3 class="text-xl font-bold text-white mb-4">Our Multi-Pronged Approach</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
-                                    <i class="fa-solid fa-check text-xs"></i>
-                                </div>
-                                <span class="text-gray-300">Direct submission signals to search engines</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
-                                    <i class="fa-solid fa-check text-xs"></i>
-                                </div>
-                                <span class="text-gray-300">Tiered linking structure for authority</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
-                                    <i class="fa-solid fa-check text-xs"></i>
-                                </div>
-                                <span class="text-gray-300">Real browser traffic simulation</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <div class="w-6 h-6 rounded-full bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-1 text-primary-500">
-                                    <i class="fa-solid fa-check text-xs"></i>
-                                </div>
-                                <span class="text-gray-300">Detailed index status verification</span>
-                            </li>
-                        </ul>
+                
+                <!-- Businesses -->
+                <div class="p-8 border border-white/5 rounded-xl hover:bg-white/5 transition-colors">
+                    <h3 class="text-xl font-bold text-white mb-3 flex items-center"><i class="fas fa-store text-primary-500 mr-3"></i> For Business Owners</h3>
+                    <p class="text-gray-400 text-sm mb-6">
+                        You don't need to be an SEO expert. You just want your site to appear on Google. Our simple dashboard makes it easy to submit your new pages and forget about it.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check mr-2 text-primary-500"></i> Simple Dashboard</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-2 text-primary-500"></i> No Monthly Subscription</li>
+                        <li class="flex items-center"><i class="fas fa-check mr-2 text-primary-500"></i> Auto-Refunds for failures</li>
+                    </ul>
+                </div>
+
+                <!-- Automation -->
+                <div class="p-8 border border-white/5 rounded-xl hover:bg-white/5 transition-colors">
+                    <h3 class="text-xl font-bold text-white mb-3 flex items-center"><i class="fas fa-robot text-primary-500 mr-3"></i> For Automation</h3>
+                    <p class="text-gray-400 text-sm mb-6">
+                        Integrate indexing into your existing workflow. Connect your tools and let us handle the signaling in the background.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-2 bg-black/20 rounded border border-white/10">
+                            <span class="text-sm text-gray-300 font-bold"><i class="fab fa-chrome mr-2"></i> Chrome Extension</span>
+                            <span class="text-xs text-green-400">Available</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-black/20 rounded border border-white/10">
+                            <span class="text-sm text-gray-300 font-bold"><i class="fas fa-bolt mr-2"></i> Zapier / Make / n8n</span>
+                            <span class="text-xs text-green-400">Via API</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-black/20 rounded border border-white/10">
+                            <span class="text-sm text-gray-300 font-bold"><i class="fab fa-wordpress mr-2"></i> WordPress Plugin</span>
+                            <span class="text-xs text-green-400">Easy Setup</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Strip -->
-    <div class="border-b border-white/5 bg-black/20 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div>
-                    <div class="text-3xl md:text-4xl font-bold text-white mb-1">1.2M+</div>
-                    <div class="text-sm text-gray-500 uppercase tracking-wider font-bold">Pages Indexed</div>
-                </div>
-                <div>
-                    <div class="text-3xl md:text-4xl font-bold text-white mb-1">98%</div>
-                    <div class="text-sm text-gray-500 uppercase tracking-wider font-bold">Success Rate</div>
-                </div>
-                <div>
-                    <div class="text-3xl md:text-4xl font-bold text-white mb-1">9m</div>
-                    <div class="text-sm text-gray-500 uppercase tracking-wider font-bold">Crawler Time</div>
-                </div>
-                <div>
-                    <div class="text-3xl md:text-4xl font-bold text-white mb-1">24/7</div>
-                    <div class="text-sm text-gray-500 uppercase tracking-wider font-bold">System Uptime</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Features Grid -->
-    <section id="features" class="py-24 relative">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Built for SEO Performance</h2>
-                <p class="text-lg text-gray-400 max-w-2xl mx-auto">Everything you need to get your content ranked faster.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Viral Blast Card (New) -->
-                <div class="p-8 rounded-xl card border border-primary-600/50 bg-primary-900/10 hover:bg-primary-900/20 transition-colors group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">New</div>
-                    <div class="w-12 h-12 bg-primary-600/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-600/30 transition-colors border border-primary-600/30">
-                        <i class="fa-solid fa-fire-flame-curved text-primary-500 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Viral Blast</h3>
-                    <p class="text-gray-400 mb-4">Simulate viral social traffic with our tested drip-feed formula. Boost "User Behavior" signals.</p>
-                    <a href="/viral-blast" class="text-primary-400 font-bold text-sm hover:text-white transition-colors">Learn the Formula <i class="fas fa-arrow-right ml-1"></i></a>
-                </div>
-
-                <!-- Card 1 -->
-                <div class="p-8 rounded-xl card hover:border-primary-700/50 transition-colors group">
-                    <div class="w-12 h-12 bg-primary-900/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-900/30 transition-colors border border-primary-900/30">
-                        <i class="fa-solid fa-rocket text-primary-500 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Fast & VIP Indexing</h3>
-                    <p class="text-gray-400">Standard links submit in ~2 hours. Upgrade to <strong class="text-white">VIP</strong> for under 2-minute processing for your money sites.</p>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="p-8 rounded-xl card hover:border-primary-700/50 transition-colors group">
-                    <div class="w-12 h-12 bg-primary-900/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-900/30 transition-colors border border-primary-900/30">
-                        <i class="fa-solid fa-check-double text-primary-500 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Verification</h3>
-                    <p class="text-gray-400">We don't just submit; we check if Google actually indexed your page and report the status.</p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="p-8 rounded-xl card hover:border-primary-700/50 transition-colors group">
-                    <div class="w-12 h-12 bg-primary-900/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary-900/30 transition-colors border border-primary-900/30">
-                        <i class="fa-solid fa-layer-group text-primary-500 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Bulk Processing & API</h3>
-                    <p class="text-gray-400">Submit up to 10,000 URLs in a single batch. Use our <strong class="text-white">Developer API</strong> to integrate indexing directly into your workflow.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing -->
-    <section id="pricing" class="py-24 bg-black/20">
+    <!-- 7. Pricing -->
+    <section id="pricing" class="py-24 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Simple Pay-As-You-Go</h2>
-                <p class="text-lg text-gray-400">Get started with our premium indexing service today, for as little as $0.02 per indexed page!</p>
+                <p class="text-lg text-gray-400">Credits never expire. Pay only for what you use.</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- Standard -->
                 <div class="rounded-xl p-8 card flex flex-col">
                     <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Link Checking</h3>
@@ -869,65 +614,120 @@ if (isset($_SESSION['uid'])) {
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Check Index Status</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Real-time Verification</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> Export Reports</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-600 text-sm"></i> 1 Credit per Link</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-600 text-sm"></i> 100% Accuracy Guarantee</li>
                     </ul>
                     <a href="/register" class="block w-full py-3 px-6 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold text-center transition-colors">Get Started</a>
                 </div>
 
                 <!-- Premium -->
                 <div class="rounded-xl p-8 card border-primary-700 relative overflow-hidden flex flex-col">
-                    <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Premium Indexing</h3>
+                    <div class="absolute top-0 right-0 bg-primary-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase">Recommended</div>
+                    <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Rapid Indexing</h3>
                     <div class="flex items-baseline gap-1 mb-6">
                         <span class="text-4xl font-extrabold text-primary-500">$0.02</span>
                         <span class="text-gray-500">/ URL</span>
                     </div>
                     <ul class="space-y-4 mb-8 text-gray-300 flex-1">
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Force Google Crawl</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Tiered Links & Traffic</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> 98% Success Rate</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-primary-500 text-sm"></i> 2 Credits per Link</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> <strong>VIP Queue</strong> Included (Under 2 min)</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Drip-Feed Included</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> API Access Included</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-primary-500 text-sm"></i> Auto-Refund if not indexed</li>
                     </ul>
                     <a href="/register" class="block w-full py-3 px-6 rounded-lg bg-primary-700 hover:bg-primary-600 text-white font-bold text-center transition-colors shadow-lg shadow-primary-900/20">Start Indexing</a>
                 </div>
-
-                <!-- Traffic Blast -->
-                <div class="rounded-xl p-8 card flex flex-col border border-red-500/30 relative overflow-hidden">
-                    <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Traffic Blast</h3>
-                    <div class="flex items-baseline gap-1 mb-6">
-                        <span class="text-4xl font-extrabold text-red-500">$0.60</span>
-                        <span class="text-gray-500 text-sm font-bold ml-1">/ 1k Visitors</span>
-                    </div>
-                    <ul class="space-y-4 mb-8 text-gray-300 flex-1">
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Real Residential IPs</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Geo-Targeted Traffic</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Social Referrers</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500 text-sm"></i> Drip-Feed Schedule</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-coins text-red-500 text-sm"></i> 60 Credits / 1k</li>
-                    </ul>
-                    <a href="/viral-blast" class="block w-full py-3 px-6 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-center transition-colors shadow-lg shadow-red-900/20">Launch Blast</a>
-                </div>
             </div>
-
-            <!-- Payment Methods -->
-            <div class="mt-16 text-center">
+             <!-- Payment Methods -->
+             <div class="mt-16 text-center">
                 <p class="text-sm text-gray-500 mb-6 uppercase tracking-wider font-semibold">Secure Crypto Payments</p>
-                <div class="flex flex-wrap justify-center items-center gap-6">
-                    <!-- Crypto Images -->
-                    <div class="flex items-center gap-6 opacity-80 hover:opacity-100 transition-opacity">
-                        <img src="/assets/img/bitcoin-btc-logo.png" alt="Bitcoin" class="h-8 w-auto object-contain">
-                        <img src="/assets/img/ethereum-eth-logo.png" alt="Ethereum" class="h-8 w-auto object-contain">
-                        <img src="/assets/img/Zcash-Yellow.png" alt="Zcash" class="h-8 w-auto object-contain">
-                        
-                        <span class="text-white font-bold flex items-center gap-2 border border-white/10 px-4 py-2 rounded-full text-sm bg-white/5">
-                            <i class="fa-solid fa-coins text-primary-500"></i>
-                            Crypto Only
-                        </span>
-                    </div>
+                <div class="flex flex-wrap justify-center items-center gap-6 opacity-60">
+                    <img src="/assets/img/bitcoin-btc-logo.png" alt="Bitcoin" class="h-6 w-auto object-contain">
+                    <img src="/assets/img/ethereum-eth-logo.png" alt="Ethereum" class="h-6 w-auto object-contain">
+                    <img src="/assets/img/Zcash-Yellow.png" alt="Zcash" class="h-6 w-auto object-contain">
+                    <span class="text-xs text-gray-500 border border-white/10 px-2 py-1 rounded">Crypto Only</span>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- 8. Frequently Asked Questions (New Section) -->
+    <section class="py-24 bg-[#111111] border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-400">Everything you need to know about indexing and verification.</p>
+            </div>
+
+            <div class="space-y-6" x-data="{ active: null }">
+                <!-- FAQ 1 -->
+                <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
+                    <button @click="active = (active === 1 ? null : 1)" class="flex justify-between items-center w-full p-6 text-left hover:bg-white/5 transition-colors">
+                        <span class="text-white font-bold">How fast is the VIP Indexing Queue?</span>
+                        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300" :class="{ 'rotate-180': active === 1 }"></i>
+                    </button>
+                    <div x-show="active === 1" x-collapse class="px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                        Our VIP Priority Queue is engineered for speed. Internal tests consistently show Googlebot crawling submitted URLs in as little as 35 seconds to 2 minutes. While we force the crawl almost instantly, the actual time for Google to update its public index can vary slightly, but discovery is typically immediate.
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
+                    <button @click="active = (active === 2 ? null : 2)" class="flex justify-between items-center w-full p-6 text-left hover:bg-white/5 transition-colors">
+                        <span class="text-white font-bold">Does this work for "Crawled - Currently Not Indexed"?</span>
+                        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300" :class="{ 'rotate-180': active === 2 }"></i>
+                    </button>
+                    <div x-show="active === 2" x-collapse class="px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                        Yes. This error usually happens when Google visits a page but deems it not authoritative enough to index. By using Rapid Indexer, you are sending a strong signal of importance and authority, which often forces Google to reconsider and index the page. For stubborn pages, we recommend combining indexing with a small amount of social traffic (via Viral Blast) to validate user interest.
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
+                    <button @click="active = (active === 3 ? null : 3)" class="flex justify-between items-center w-full p-6 text-left hover:bg-white/5 transition-colors">
+                        <span class="text-white font-bold">Is this safe for my money site?</span>
+                        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300" :class="{ 'rotate-180': active === 3 }"></i>
+                    </button>
+                    <div x-show="active === 3" x-collapse class="px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                        Absolutely. We use 100% white-hat signaling methods for our Standard and VIP indexing services. We do not build spammy links to your site; we simply notify Google's infrastructure that your content exists and is ready for crawling. It is as safe as using Google Search Console, but automated and faster.
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
+                    <button @click="active = (active === 4 ? null : 4)" class="flex justify-between items-center w-full p-6 text-left hover:bg-white/5 transition-colors">
+                        <span class="text-white font-bold">What is the success rate?</span>
+                        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300" :class="{ 'rotate-180': active === 4 }"></i>
+                    </button>
+                    <div x-show="active === 4" x-collapse class="px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                        We see an average success rate of 98% for valid, crawlable pages. However, no tool can force Google to index "noindex" pages, broken links (404s), or content that violates Google's core policies. If a page fails to index, it is usually an issue with the content quality or site configuration, not the signaling.
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
+                    <button @click="active = (active === 5 ? null : 5)" class="flex justify-between items-center w-full p-6 text-left hover:bg-white/5 transition-colors">
+                        <span class="text-white font-bold">Do you offer refunds?</span>
+                        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300" :class="{ 'rotate-180': active === 5 }"></i>
+                    </button>
+                    <div x-show="active === 5" x-collapse class="px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                        Yes. We operate on a credit system. If you submit a URL for indexing and we cannot verify that Google crawled it, the credits are automatically refunded to your account. You only pay for successful submissions.
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
+                    <button @click="active = (active === 6 ? null : 6)" class="flex justify-between items-center w-full p-6 text-left hover:bg-white/5 transition-colors">
+                        <span class="text-white font-bold">Can I integrate this with my software?</span>
+                        <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300" :class="{ 'rotate-180': active === 6 }"></i>
+                    </button>
+                    <div x-show="active === 6" x-collapse class="px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                        Yes! We have a full Developer API available for all users. You can integrate Rapid Indexer into your own SEO tools, dashboards, or internal scripts. We also support integration via Zapier and Make.com for no-code automation.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
     <footer class="border-t border-white/5 bg-black/20 py-12 mt-auto">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-3">
@@ -935,13 +735,9 @@ if (isset($_SESSION['uid'])) {
                     <i class="fas fa-rocket text-xl"></i>
                 </div>
                 <span class="text-white font-bold text-lg">Rapid Indexer</span>
-                
-                <!-- Social Links -->
                 <div class="flex gap-4 ml-4 pl-4 border-l border-white/10">
-                    <a href="https://x.com/rapid_indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://facebook.com/rapidindexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a>
-                    <a href="https://www.f6s.com/company/rapid-indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors font-bold text-xs flex items-center h-5">F6S</a>
+                    <a href="https://x.com/rapid_indexer" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
             <div class="text-gray-500 text-sm">

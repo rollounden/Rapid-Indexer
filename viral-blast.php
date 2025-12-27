@@ -112,6 +112,8 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
         }
     </script>
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
         body { background-color: #141414; color: #efefef; }
         .nav-blur { background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(12px); }
@@ -124,6 +126,9 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
         .viral-glow {
             box-shadow: 0 0 40px -10px rgba(190, 18, 60, 0.3);
         }
+        .prose p { margin-bottom: 1.5rem; line-height: 1.8; color: #d1d5db; }
+        .prose h3 { color: white; font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 
@@ -151,6 +156,14 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
         </div>
     </nav>
 
+    <!-- DISCLAIMER BANNER -->
+    <div class="bg-red-900/20 border-b border-red-500/20 text-center py-3 px-4">
+        <p class="text-red-400 text-sm font-bold flex items-center justify-center gap-2">
+            <i class="fas fa-exclamation-triangle"></i>
+            Advanced Feature: Recommended for experienced SEOs and grayhat campaigns only.
+        </p>
+    </div>
+
     <!-- Hero -->
     <section class="relative pt-20 pb-24 overflow-hidden">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-primary-900/20 rounded-full blur-[120px] -z-10"></div>
@@ -159,37 +172,34 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="text-center lg:text-left">
                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-900/20 border border-primary-500/30 text-primary-400 text-sm font-bold mb-8 viral-glow">
-                        <i class="fas fa-fire-flame-curved"></i> NEW: Viral Simulation Engine
+                        <i class="fas fa-fire-flame-curved"></i> Viral Simulation Engine
                     </div>
                     
                     <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-                        Simulate <span class="gradient-text">Virality</span>.<br>
-                        Dominante Search.
+                        Simulate <span class="gradient-text">Early Interest</span>.<br>
+                        Not Fake Rankings.
                     </h1>
                     
-                    <p class="text-xl text-gray-400 mb-10 leading-relaxed">
-                        Google's algorithm has evolved. It demands user engagement.
-                        <strong class="text-white">Viral Blast</strong> injects randomized, high-retention traffic from social referrers to prove your content is trending.
+                    <p class="text-xl text-gray-400 mb-6 leading-relaxed">
+                        Google's modern algorithm prioritizes <strong class="text-white">User Signals</strong> (Click-Through Rate, Dwell Time, Social Referrers) to determine which indexed pages actually deserve to rank.
+                    </p>
+                    <p class="text-lg text-gray-400 mb-10 leading-relaxed border-l-2 border-primary-500 pl-4">
+                        A page with 100 backlinks and 0 visitors looks unnatural.<br>
+                        <strong>Viral Blast</strong> injects randomized, high-retention traffic from social sources to validate your content's popularity.
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-                        <?php if ($is_logged_in): ?>
-                            <a href="/traffic" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
-                                <i class="fas fa-rocket"></i> Launch Viral Campaign
-                            </a>
-                        <?php else: ?>
-                            <a href="/register" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
-                                <i class="fas fa-rocket"></i> Start Viral Campaign Free
-                            </a>
-                        <?php endif; ?>
-                        <a href="#formula" class="w-full sm:w-auto px-8 py-4 border border-white/10 text-white font-medium rounded-xl hover:bg-white/5 transition-colors text-lg flex items-center justify-center">
-                            See The Formula
+                        <a href="<?php echo $cta_link; ?>" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all shadow-lg shadow-primary-900/40 text-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-rocket"></i> <?php echo $cta_text; ?>
+                        </a>
+                        <a href="#logic" class="w-full sm:w-auto px-8 py-4 border border-white/10 text-white font-medium rounded-xl hover:bg-white/5 transition-colors text-lg flex items-center justify-center">
+                            See The Logic
                         </a>
                     </div>
                     
                     <div class="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500">
                         <div class="flex items-center gap-2"><i class="fas fa-check text-primary-500"></i> Residential IPs</div>
-                        <div class="flex items-center gap-2"><i class="fas fa-check text-primary-500"></i> Social Signals</div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-primary-500"></i> Social Headers</div>
                         <div class="flex items-center gap-2"><i class="fas fa-check text-primary-500"></i> Drip-Feed</div>
                     </div>
                 </div>
@@ -251,45 +261,114 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
         </div>
     </section>
 
+    <!-- The Logic (Deep Dive) -->
+    <section id="logic" class="py-24 bg-black/20 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-6">Why Indexing Is No Longer Enough</h2>
+                <p class="text-lg text-gray-400">
+                    Understanding the "User Signal" gap in most SEO campaigns.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                <div class="prose max-w-none">
+                    <h3 class="text-white">The "Sandbox" Problem</h3>
+                    <p>
+                        When Google discovers a new page (especially on a new domain), it often places it in a "Sandbox" period. It indexes the URL, but ranks it on Page 10+. Why? <strong>Lack of trust.</strong>
+                    </p>
+                    <p>
+                        Google wants to see how real users interact with the page before promoting it. It measures:
+                    </p>
+                    <ul class="text-gray-400">
+                        <li><strong>Click-Through Rate (CTR):</strong> Are people clicking?</li>
+                        <li><strong>Dwell Time:</strong> Are they staying to read?</li>
+                        <li><strong>Traffic Sources:</strong> Is the traffic coming from reputable sources (Social Media) or just bot crawlers?</li>
+                    </ul>
+                    
+                    <h3 class="text-white">Validating Your Backlinks</h3>
+                    <p>
+                        If you build a Guest Post on a high-DA site, but that post gets zero reads, zero shares, and zero clicks... it sends a weak signal. 
+                    </p>
+                    <p>
+                        By sending a small drip-feed of social traffic to your Tier 1 backlinks, you "activate" them. You prove to Google that this backlink is on a living, breathing page that real humans engage with.
+                    </p>
+                </div>
+
+                <div class="bg-[#1a1a1a] border border-white/10 rounded-xl p-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-green-500/10 text-green-500 text-xs font-bold px-3 py-1 rounded-bl-lg">Live Signal Test</div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between pb-4 border-b border-white/5">
+                            <div>
+                                <div class="text-white font-bold">Standard Page</div>
+                                <div class="text-xs text-gray-500">Indexed, No Traffic</div>
+                            </div>
+                            <span class="text-red-400 font-mono">Rank #84</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pb-4 border-b border-white/5">
+                            <div>
+                                <div class="text-white font-bold">Viral Blast Page</div>
+                                <div class="text-xs text-gray-500">Indexed + 1,200 Social Visits</div>
+                            </div>
+                            <span class="text-green-400 font-mono">Rank #12</span>
+                        </div>
+
+                        <div class="bg-primary-900/10 p-4 rounded-lg border border-primary-500/20">
+                            <p class="text-sm text-gray-300 italic">
+                                "We used Viral Blast on 50 'stuck' parasite SEO posts. Within 7 days, 68% of them moved to Page 1. The social headers made the difference."
+                            </p>
+                            <div class="mt-2 text-xs text-primary-400 font-bold">— Agency Case Study</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- The Formula -->
-    <section id="formula" class="py-24 bg-black/30 border-y border-white/5">
+    <section class="py-24 relative">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div>
-                    <h2 class="text-3xl font-bold text-white mb-6">The "Tested Formula" for SEO Success</h2>
+                    <h2 class="text-3xl font-bold text-white mb-6">Our "Tested Formula"</h2>
                     <div class="space-y-6 text-lg text-gray-400">
                         <p>
-                            Backlinks alone are suspicious. Why would a page have 100 links but 0 visitors? That's a footprint.
+                            We spent 18 months refining our traffic algorithm to bypass bot filters and register as genuine human interest.
                         </p>
-                        <p>
-                            Our <strong>Viral Blast</strong> mimics the exact pattern of a viral content piece:
-                        </p>
-                        <ul class="space-y-4 mt-6">
+                        <ul class="space-y-6 mt-6">
                             <li class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500 flex-shrink-0 border border-green-500/20">
-                                    <i class="fas fa-random"></i>
+                                <div class="w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500 flex-shrink-0 border border-green-500/20">
+                                    <i class="fas fa-random text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-white font-bold">Randomized Drip-Feed</h4>
-                                    <p class="text-sm mt-1">Traffic doesn't come in flat lines. We use chaotic, randomized burst intervals (20m - 6h) to simulate real sharing.</p>
+                                    <h4 class="text-white font-bold text-lg">Chaotic Drip-Feed</h4>
+                                    <p class="text-sm mt-1">
+                                        Bot traffic usually arrives in a perfect, flat line. Real viral traffic comes in waves. We use randomized burst intervals (20m - 6h gaps) to mimic natural sharing patterns.
+                                    </p>
                                 </div>
                             </li>
                             <li class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0 border border-blue-500/20">
-                                    <i class="fab fa-twitter"></i>
+                                <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 flex-shrink-0 border border-blue-500/20">
+                                    <i class="fab fa-twitter text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-white font-bold">Social Referrers</h4>
-                                    <p class="text-sm mt-1">We spoof headers from trusted platforms like Twitter, Reddit, and Facebook. Google sees "Social Signal".</p>
+                                    <h4 class="text-white font-bold text-lg">Social Header Spoofing</h4>
+                                    <p class="text-sm mt-1">
+                                        Every visit carries a "Referrer" header. We cycle through Twitter (t.co), Reddit, Facebook, and Pinterest. To Google Analytics, it looks like your link just went viral on social media.
+                                    </p>
                                 </div>
                             </li>
                             <li class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 flex-shrink-0 border border-purple-500/20">
-                                    <i class="fas fa-globe"></i>
+                                <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 flex-shrink-0 border border-purple-500/20">
+                                    <i class="fas fa-globe text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-white font-bold">Residential IPs</h4>
-                                    <p class="text-sm mt-1">Real user behavior requires real IPs. No datacenter footprints that get flagged instantly.</p>
+                                    <h4 class="text-white font-bold text-lg">Residential IP Network</h4>
+                                    <p class="text-sm mt-1">
+                                        We do not use cheap datacenter proxies (AWS, DigitalOcean) which are easily flagged. We route traffic through a pool of residential IPs, ensuring every "hit" looks like a real person on a home ISP.
+                                    </p>
                                 </div>
                             </li>
                         </ul>
@@ -331,6 +410,53 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
         </div>
     </section>
 
+    <!-- Use Cases & Warning -->
+    <section class="py-24 bg-black/20 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-6">Best Use Cases</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-green-500 mt-1"></i>
+                            <div>
+                                <strong class="text-white">Parasite SEO</strong>
+                                <p class="text-gray-400 text-sm">LinkedIn, Medium, Reddit posts that need a "nudge" to rank.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-green-500 mt-1"></i>
+                            <div>
+                                <strong class="text-white">Tier 1 Backlinks</strong>
+                                <p class="text-gray-400 text-sm">Guest posts or PBN links that aren't passing authority.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-green-500 mt-1"></i>
+                            <div>
+                                <strong class="text-white">Reputation Management</strong>
+                                <p class="text-gray-400 text-sm">Pushing positive news stories higher in the SERPs.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-6">⚠️ Important Disclaimer</h3>
+                    <div class="bg-red-900/10 border border-red-500/30 p-6 rounded-xl">
+                        <p class="text-gray-300 mb-4 text-sm">
+                            This tool is designed for <strong>experienced SEOs</strong> who understand the risks and rewards of traffic manipulation. 
+                        </p>
+                        <p class="text-gray-300 text-sm">
+                            While our methods are designed to be safe (residential IPs, natural headers), traffic generation is an advanced strategy. 
+                            <strong>Do not use this on your primary "Money Site" homepage unless you know what you are doing.</strong> 
+                            We recommend using it on supporting pages (parasites, backlinks) to push authority to your main site.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA -->
     <section class="py-24">
             <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
@@ -362,8 +488,6 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
                 <div class="flex gap-4 order-1 md:order-2">
                     <a href="https://x.com/rapid_indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
                     <a href="https://www.linkedin.com/company/rapid-indexer/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://facebook.com/rapidindexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a>
-                    <a href="https://www.f6s.com/company/rapid-indexer" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors font-bold text-xs flex items-center h-5">F6S</a>
                 </div>
             </div>
             
@@ -377,4 +501,3 @@ $cta_text = $is_logged_in ? 'Launch Viral Campaign' : 'Start Viral Campaign Free
 
 </body>
 </html>
-
