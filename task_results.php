@@ -150,7 +150,7 @@ if ($task['type'] === 'traffic_campaign') {
 } else {
     // Countdown Logic for Standard Indexer Tasks
     
-    if ($task['type'] === 'indexer' && empty($task['vip'])) {
+    if ($task['type'] === 'indexer' && empty($task['vip']) && empty($task['is_drip_feed'])) {
         $createdTime = strtotime($task['created_at']);
         $startTime = $createdTime + (2 * 3600); // 2 hours later
         $now = time();
@@ -456,7 +456,9 @@ include __DIR__ . '/includes/header_new.php';
                         <tr class="bg-white/5 border-b border-white/5">
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">URL</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Checked At</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                <?php echo ($task['type'] === 'checker') ? 'Checked At' : 'Date'; ?>
+                            </th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Result</th>
                         </tr>
                     </thead>
@@ -495,7 +497,10 @@ include __DIR__ . '/includes/header_new.php';
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-400">
-                                    <?php echo $link['checked_at'] ? date('M j, H:i', strtotime($link['checked_at'])) : '-'; ?>
+                                    <?php 
+                                    $date = $link['checked_at'] ? date('M j, H:i', strtotime($link['checked_at'])) : ($task['created_at'] ? date('M j, H:i', strtotime($task['created_at'])) : '-');
+                                    echo $date;
+                                    ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php if ($link['result_data']): ?>
