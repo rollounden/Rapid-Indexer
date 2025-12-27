@@ -32,7 +32,7 @@ Make sure to replace `/path/to/your/project` with the actual path (e.g., `/var/w
    - `auto_drip_feed.php` runs periodically.
    - It picks up pending drip tasks.
    - It calculates a batch size based on the duration.
-   - It submits a batch of links to the indexing provider (SpeedyIndex).
+   - It submits a batch of links to the indexing provider.
    - It updates the task's `next_run_at` time (default: every 2 hours).
    - It marks submitted links as `indexed` (submitted).
 4. **Completion**: When all links are submitted, the task is marked as `completed`.

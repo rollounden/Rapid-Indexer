@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         throw new Exception('VIP queue is only available for tasks with ≤ 100 links');
                     }
                     
-                    // Add VIP queue request to SpeedyIndex
+                    // Add VIP queue request to Provider
                     require_once __DIR__ . '/src/SpeedyIndexClient.php';
                     $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $_SESSION['uid']);
                     $result = $client->request('POST', '/v2/task/google/indexer/vip', ['task_id' => $task['speedyindex_task_id']]);

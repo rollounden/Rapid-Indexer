@@ -1,10 +1,10 @@
-### SpeedyIndex SaaS Layer Documentation
+### Indexing SaaS Layer Documentation
 
 - **PRD**: `docs/PRD.md`
 - **Implementation Plan**: `docs/IMPLEMENTATION_PLAN.md`
 - **Windows Setup**: `docs/SETUP_WINDOWS.md`
 - **Database Schema (MySQL 8)**: `docs/DB_SCHEMA.sql`
-- **SpeedyIndex API Guide**: `docs/SPEEDYINDEX_API.md`
+- **Provider API Guide**: `docs/SPEEDYINDEX_API.md`
 - **PayPal Integration**: `docs/PAYPAL_INTEGRATION.md`
 - **Security & Compliance**: `docs/SECURITY.md`
 - **Logging & Monitoring**: `docs/LOGGING_MONITORING.md`

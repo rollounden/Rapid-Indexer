@@ -349,3 +349,11 @@ If an error occurs, the API will return a 4xx or 5xx status code and a JSON body
 }
 ```
 
+**Common Error Messages:**
+
+- `Indexing Error: Service unavailable`
+- `Indexing Error: Yandex is not supported for this operation`
+- `Service configuration error`
+- `Order Error: Invalid link format`
+- `Failed to create task`
+

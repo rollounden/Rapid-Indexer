@@ -4,7 +4,7 @@ Phase 0: Foundation
 - Initialize Laravel app, env config, auth scaffolding, roles (user/admin), middleware for status (active/suspended).
 - Create MySQL schema migrations: Users, Tasks, TaskLinks, Payments, ApiLogs, AdminActions, Announcements.
 
-Phase 1: SpeedyIndex Integration (MVP)
+Phase 1: Provider Integration (MVP)
 - Services for: account balance, task create, list, status, full report, single URL, invoice create, VIP queue.
 - Background jobs for task status polling; store reports; map provider codes.
 - API logging middleware to record all external calls in `ApiLogs`.
@@ -28,7 +28,7 @@ Phase 5: Security, Compliance, Observability
 - Error dashboards, daily/weekly error reports; abuse detection.
 
 Architecture
-- Laravel Controllers → Services (SpeedyIndexService, PaymentsService) → HTTP Client.
+- Laravel Controllers → Services (TaskService, PaymentsService) → HTTP Client.
 - Jobs/Queue: polling, report fetching, notifications.
 - Policies & Gates for admin/user access.
 - Config in `.env` for API keys and PayPal credentials.

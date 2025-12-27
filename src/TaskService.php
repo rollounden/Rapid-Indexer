@@ -18,7 +18,7 @@ class TaskService
         // Determine provider
         $provider = SettingsService::get('indexing_provider', 'speedyindex');
         
-        // Check for RocketIndexer VIP override
+        // Check for VIP override
         $useRocketVip = SettingsService::get('use_rocket_for_vip', '0') === '1';
         if ($vip && $useRocketVip && $type === 'indexer') {
             $provider = 'rocketindexer';
@@ -28,7 +28,7 @@ class TaskService
             $provider = 'speedyindex';
         }
 
-        // RalfyIndex doesn't support Yandex
+        // Secondary provider doesn't support Yandex
         if ($provider === 'ralfy' && $engine === 'yandex') {
             throw new Exception('Yandex is not supported for this operation. Please use Google.');
         }
@@ -94,9 +94,9 @@ class TaskService
                 }
                 $client = new RocketIndexerClient($apiKey, $userId);
 
-                // RocketIndexer processes URLs individually. 
+                // Process URLs
                 // We'll mark the task as "processing" and let a background worker handle status checks,
-                // OR since it's "fast", we just submit them all now.
+                // OR just submit them all now if fast.
                 
                 foreach ($urls as $url) {
                     $res = $client->submitUrl($url);
@@ -132,9 +132,9 @@ class TaskService
                 }
                 $client = new RalfyIndexClient($apiKey, $userId);
                 
-                // Ralfy doesn't support VIP queue explicitly in the same way (or maybe it does but no endpoint), 
-                // and 'engine' parameter is not used in Ralfy /project endpoint, only URLs.
-                // But we'll just send URLs.
+                // Some providers don't support VIP queue explicitly in the same way 
+                // and 'engine' parameter might not be used in project endpoint, only URLs.
+                // We'll just send URLs.
                 
                 $projectName = $title ? preg_replace('/[^a-zA-Z0-9 _.-]/', '', $title) : null;
                 $api = $client->createProject($urls, $projectName);
@@ -147,22 +147,22 @@ class TaskService
                     throw new Exception("Indexing Error: $msg");
                 }
 
-                // Success - Ralfy is fire and forget
+                // Success - fire and forget
                 // Mark task as completed immediately
                 $stmt = $pdo->prepare('UPDATE tasks SET status = ?, completed_at = NOW() WHERE id = ?');
                 $stmt->execute(['completed', $taskId]);
 
                 // Mark links as indexed (submitted)
                 $stmt = $pdo->prepare('UPDATE task_links SET status = ?, result_data = ?, checked_at = NOW() WHERE task_id = ?');
-                $stmt->execute(['indexed', json_encode(['status' => 'submitted_to_ralfy']), $taskId]);
+                $stmt->execute(['indexed', json_encode(['status' => 'submitted_to_provider']), $taskId]);
                 
-                // We don't have a remote task ID to store for Ralfy.
+                // We don't have a remote task ID to store for this provider.
                 
                 $pdo->commit();
                 return ['task_id' => $taskId, 'provider' => 'ralfy'];
 
             } else {
-                // Default: SpeedyIndex
+                // Default Provider
                 $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);
                 $api = $client->createTask($engine, $type, $urls, $title);
                 $body = json_decode($api['body'] ?? '', true) ?: [];
@@ -214,7 +214,7 @@ class TaskService
         $report = $client->fullReport($task['search_engine'], $task['type'], $task['speedyindex_task_id']);
         $payload = json_decode($report['body'] ?? '', true) ?: [];
 
-        // Parse SpeedyIndex API response structure
+        // Parse Provider API response structure
         $result = $payload['result'] ?? [];
         $indexed_links = $result['indexed_links'] ?? [];
         $unindexed_links = $result['unindexed_links'] ?? [];
@@ -329,7 +329,7 @@ class TaskService
                 throw new Exception("Indexing Error: " . ($body['message'] ?? 'Unknown'));
             }
         } else {
-            // SpeedyIndex
+            // Default Provider
             $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $task['user_id']);
             $api = $client->createTask($task['search_engine'], $task['type'], $batchUrls, $task['title'] . " (Batch)");
             $body = json_decode($api['body'] ?? '', true) ?: [];

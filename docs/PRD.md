@@ -1,15 +1,15 @@
-# SpeedyIndex SaaS Layer (Internal Credits) — Product Requirements Document (PRD)
+# Indexing SaaS Layer (Internal Credits) — Product Requirements Document (PRD)
 
 ## 1. Overview
-Build a PHP + MySQL SaaS that lets users submit URLs for indexing/checking via SpeedyIndex API while all credits/balances are managed internally in our database. SpeedyIndex is used strictly for task processing (create/check tasks, fetch results). Users top up credits via PayPal; credits are deducted per URL (and extra for VIP when enabled).
+Build a PHP + MySQL SaaS that lets users submit URLs for indexing/checking via Provider API while all credits/balances are managed internally in our database. Provider is used strictly for task processing (create/check tasks, fetch results). Users top up credits via PayPal; credits are deducted per URL (and extra for VIP when enabled).
 
 - Tech: PHP (MVC or small framework), MySQL 8.x, Bootstrap UI (Vue/React optional), optional Redis/queue for async polling.
 - Roles: User, Admin.
-- Constraints: Never expose SpeedyIndex API keys to the frontend. No dependency on SpeedyIndex balances. All billing/audit lives in our DB.
+- Constraints: Never expose Provider API keys to the frontend. No dependency on Provider balances. All billing/audit lives in our DB.
 
 ## 2. Scope
 - In-scope: Registration/Login, internal credits ledger, PayPal payments, task submission/tracking (indexer/checker), URL-level results, resubmission, admin management, API logs and error monitoring, alerts.
-- Out-of-scope: Using SpeedyIndex for balances or invoices; exposing SpeedyIndex keys.
+- Out-of-scope: Using Provider for balances or invoices; exposing Provider keys.
 
 ## 3. Roles & Permissions
 - User: Manage profile, view internal credits, submit tasks, view/download results, view payment history and API logs (self), resubmit failed links.
@@ -23,7 +23,7 @@ Build a PHP + MySQL SaaS that lets users submit URLs for indexing/checking via S
 
 ### 4.2 Credits & Billing
 - Internal credit model: default 1 credit = 1 URL processed. VIP multiplier configurable (e.g., +1 credit per URL).
-- On task submission: verify sufficient credits, reserve/deduct credits, then create SpeedyIndex task.
+- On task submission: verify sufficient credits, reserve/deduct credits, then create Provider task.
 - Resubmission deducts credits again per URL.
 - PayPal top-up: on successful webhook capture, create payment record and credit ledger entry, increment user balance.
 - Full audit via credit ledger: every change in balance is recorded with reason and reference.
@@ -31,7 +31,7 @@ Build a PHP + MySQL SaaS that lets users submit URLs for indexing/checking via S
 ### 4.3 Task Management (Indexer/Checker)
 - Submit single/bulk URLs (CSV/text), Google/Yandex, normal or VIP.
 - Store task metadata and each URL as `task_links` with statuses: pending, indexed, unindexed, error.
-- Poll SpeedyIndex for task status/results; persist to DB.
+- Poll Provider for task status/results; persist to DB.
 - Task details view: progress, per-URL status, error codes, report download (CSV/JSON).
 - Bulk actions: resubmit failed URLs (revalidates credits).
 
@@ -55,12 +55,12 @@ Build a PHP + MySQL SaaS that lets users submit URLs for indexing/checking via S
 - Announcements broadcast.
 
 ### 4.7 API Usage & Error Monitoring
-- Log every SpeedyIndex API call: endpoint, payload, response, status_code, duration_ms, error_message, timestamp, user_id (nullable for system calls).
+- Log every Provider API call: endpoint, payload, response, status_code, duration_ms, error_message, timestamp, user_id (nullable for system calls).
 - Charts: error rate over time, top endpoints, most common errors, affected users.
 - Alerts: threshold-based notifications for repeated failures or suspected abuse.
 
 ### 4.8 Security & Compliance
-- Never expose SpeedyIndex API keys on frontend; keep in server env/config.
+- Never expose Provider API keys on frontend; keep in server env/config.
 - Passwords hashed (bcrypt/Argon2). CSRF, XSS, SQLi protections. HTTPS enforced.
 - GDPR: account deletion and data export.
 - Activity logs (login IP, timestamps).
@@ -71,12 +71,12 @@ Build a PHP + MySQL SaaS that lets users submit URLs for indexing/checking via S
 - tasks (submission metadata)
 - task_links (per-URL status/result)
 - payments (PayPal transactions + credits awarded)
-- api_logs (all external API calls to SpeedyIndex)
+- api_logs (all external API calls to Provider)
 - webhook_events (raw PayPal webhook deliveries with idempotency)
 - admin_actions, announcements
 
 ## 6. External Integrations
-- SpeedyIndex API: create tasks (indexer/checker), fetch status/results.
+- Provider API: create tasks (indexer/checker), fetch status/results.
 - PayPal: Orders + Webhooks (capture/complete/refund). Idempotent processing.
 - SMTP/Email: verification, resets, alerts.
 
