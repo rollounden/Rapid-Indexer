@@ -31,11 +31,7 @@ if (!$validKey || $apiKey !== $validKey) {
     http_response_code(401);
     // Debugging info - remove in production if sensitive
     echo json_encode([
-        'error' => 'Unauthorized. Invalid or missing X-Admin-Key.',
-        'debug_received_key_length' => strlen($apiKey ?? ''),
-        'debug_configured_key_length' => strlen($validKey ?? ''),
-        // 'debug_received' => $apiKey, // Uncomment if you really can't see why they don't match
-        // 'debug_expected' => $validKey
+        'error' => 'Unauthorized. Invalid or missing X-Admin-Key.'
     ]);
     exit;
 }

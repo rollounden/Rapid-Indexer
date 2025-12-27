@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $page_title = 'API Documentation - Rapid Indexer';
 $meta_description = 'Rapid Indexer User API Reference. Integrate indexing capabilities directly into your applications.';
-$current_page = 'api'; // For potential nav highlighting if added
+$current_page = 'api-docs.php'; // For potential nav highlighting if added
 
 include 'includes/header_new.php';
 ?>
