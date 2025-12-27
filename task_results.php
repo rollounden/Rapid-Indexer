@@ -498,8 +498,15 @@ include __DIR__ . '/includes/header_new.php';
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-400">
                                     <?php 
-                                    $date = $link['checked_at'] ? date('M j, H:i', strtotime($link['checked_at'])) : ($task['created_at'] ? date('M j, H:i', strtotime($task['created_at'])) : '-');
-                                    echo $date;
+                                    // For pending links (especially drip feed), we don't want to show a date yet.
+                                    // Only show date if checked_at is set (meaning it was processed).
+                                    // Falls back to '-' if pending.
+                                    
+                                    if ($link['checked_at']) {
+                                        echo date('M j, H:i', strtotime($link['checked_at']));
+                                    } else {
+                                        echo '-';
+                                    }
                                     ?>
                                 </td>
                                 <td class="px-6 py-4">
