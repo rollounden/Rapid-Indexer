@@ -66,21 +66,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $page = max(1, intval($_GET['page'] ?? 1));
 $per_page = 20;
 $offset = ($page - 1) * $per_page;
+$search = trim($_GET['search'] ?? '');
+
+$whereClause = "1=1";
+$params = [];
+
+if ($search) {
+    // Search by ID or Email
+    if (is_numeric($search)) {
+        $whereClause .= " AND (id = ? OR email LIKE ?)";
+        $params[] = $search;
+        $params[] = "%$search%";
+    } else {
+        $whereClause .= " AND email LIKE ?";
+        $params[] = "%$search%";
+    }
+}
 
 // Get total users
-$stmt = $pdo->query("SELECT COUNT(*) FROM users");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE $whereClause");
+$stmt->execute($params);
 $total_users = $stmt->fetchColumn();
 $total_pages = ceil($total_users / $per_page);
 
 // Get users list
-$stmt = $pdo->prepare("
+$query = "
     SELECT * FROM users 
+    WHERE $whereClause
     ORDER BY created_at DESC 
-    LIMIT :limit OFFSET :offset
-");
-$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+    LIMIT " . (int)$per_page . " OFFSET " . (int)$offset;
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
 $users = $stmt->fetchAll();
 
 include __DIR__ . '/includes/header_new.php';
@@ -103,6 +120,23 @@ include __DIR__ . '/includes/header_new.php';
                 <span class="text-white">Users</span>
             </nav>
         </div>
+        
+        <!-- Search Form -->
+        <form method="GET" class="flex items-center gap-2 w-full md:w-auto">
+            <div class="relative w-full md:w-64">
+                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search ID or Email..." 
+                       class="w-full bg-[#111] border border-[#333] rounded-lg pl-10 pr-4 py-2 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            </div>
+            <?php if ($search): ?>
+                <a href="/admin_users" class="px-3 py-2 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-lg transition-colors" title="Clear Search">
+                    <i class="fas fa-times"></i>
+                </a>
+            <?php endif; ?>
+            <button type="submit" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg transition-colors">
+                Search
+            </button>
+        </form>
     </div>
     
     <?php if ($error): ?>
@@ -184,18 +218,21 @@ include __DIR__ . '/includes/header_new.php';
             </table>
         </div>
         
-        <?php if ($total_pages > 1): ?>
-            <div class="px-6 py-4 border-t border-white/5 bg-white/5 flex justify-center">
-                <nav class="flex items-center gap-2">
-                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <a href="?page=<?php echo $i; ?>" 
-                           class="w-10 h-10 flex items-center justify-center rounded-lg text-sm font-bold transition-colors <?php echo $i === $page ? 'bg-primary-600 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'; ?>">
-                            <?php echo $i; ?>
-                        </a>
-                    <?php endfor; ?>
-                </nav>
-            </div>
-        <?php endif; ?>
+            <?php if ($total_pages > 1): ?>
+                <div class="px-6 py-4 border-t border-white/5 bg-white/5 flex justify-center">
+                    <nav class="flex items-center gap-2">
+                        <?php 
+                        $searchParam = $search ? '&search=' . urlencode($search) : '';
+                        for ($i = 1; $i <= $total_pages; $i++): 
+                        ?>
+                            <a href="?page=<?php echo $i; ?><?php echo $searchParam; ?>" 
+                               class="w-10 h-10 flex items-center justify-center rounded-lg text-sm font-bold transition-colors <?php echo $i === $page ? 'bg-primary-600 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'; ?>">
+                                <?php echo $i; ?>
+                            </a>
+                        <?php endfor; ?>
+                    </nav>
+                </div>
+            <?php endif; ?>
     </div>
     
     <!-- Delete Confirmation Modal -->
