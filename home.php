@@ -175,8 +175,8 @@ if (isset($_SESSION['uid'])) {
         <div class="bg-primary-900 text-white border-b border-primary-800">
             <div class="flex w-full items-center justify-center gap-5 px-4 py-2 sm:px-6 lg:px-8">
                 <p class="text-sm font-medium tracking-wide">
-                    <span class="bg-white/10 px-2 py-0.5 rounded text-xs mr-2 font-bold">VIP QUEUE</span>
-                    Internal tests show discovery in as little as 35 seconds!
+                    <span class="bg-white/10 px-2 py-0.5 rounded text-xs mr-2 font-bold">NEW</span>
+                    Links indexed in under 2 mins!
                 </p>
             </div>
         </div>
@@ -228,7 +228,7 @@ if (isset($_SESSION['uid'])) {
     <section class="relative pt-20 lg:pt-28 pb-20">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-4xl mx-auto">
-                <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">The Visibility Infrastructure</h1>
+                
                 <h2 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
                     Boost Your Rankings <span class="text-primary-500">Today</span><br>
                     by Indexing Links You Already Have.
@@ -236,12 +236,11 @@ if (isset($_SESSION['uid'])) {
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
                     Don't let your hard work go to waste. <strong>Rapid Indexer</strong> forces Google to crawl your backlinks, blog posts, and product pages in minutes—not weeks.
-                    <br><span class="text-primary-400 text-sm font-bold block mt-2"><i class="fas fa-bolt"></i> VIP Queue: Discovery in 35s - 2 minutes.</span>
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                     <a href="/register" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
-                        Start Indexing Now
+                        I Want To Boost My SEO
                         <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
                     </a>
                     <a href="#check-links" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 border border-white/10 text-white font-medium rounded-lg hover:bg-white/5 transition-colors text-lg">
