@@ -500,10 +500,13 @@ include __DIR__ . '/includes/header_new.php';
                                     <?php 
                                     // For pending links (especially drip feed), we don't want to show a date yet.
                                     // Only show date if checked_at is set (meaning it was processed).
-                                    // Falls back to '-' if pending.
+                                    // If status is NOT pending/drip-waiting but checked_at is null (e.g. legacy or direct indexer),
+                                    // fallback to task creation time so completed tasks don't show '-'.
                                     
                                     if ($link['checked_at']) {
                                         echo date('M j, H:i', strtotime($link['checked_at']));
+                                    } elseif ($link['status'] !== 'pending') {
+                                         echo $task['created_at'] ? date('M j, H:i', strtotime($task['created_at'])) : '-';
                                     } else {
                                         echo '-';
                                     }
