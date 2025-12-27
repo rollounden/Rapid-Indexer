@@ -57,7 +57,7 @@ class TrafficService
 
             $response = $client->addOrder($apiParams);
             if (isset($response['error']) || isset($response['body']['error'])) {
-                throw new Exception("Provider Error: " . ($response['body']['error'] ?? $response['error']));
+                throw new Exception("Order Error: " . ($response['body']['error'] ?? $response['error']));
             }
             $orderId = $response['body']['order'] ?? null;
 

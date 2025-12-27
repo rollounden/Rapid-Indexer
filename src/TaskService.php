@@ -30,7 +30,7 @@ class TaskService
 
         // RalfyIndex doesn't support Yandex
         if ($provider === 'ralfy' && $engine === 'yandex') {
-            throw new Exception('RalfyIndex does not support Yandex. Please use Google.');
+            throw new Exception('Yandex is not supported for this operation. Please use Google.');
         }
 
         CreditsService::reserveForTask($userId, count($urls), $vip, $type);
@@ -90,7 +90,7 @@ class TaskService
             if ($provider === 'rocketindexer') {
                 $apiKey = SettingsService::getDecrypted('rocket_api_key');
                 if (!$apiKey) {
-                    throw new Exception('RocketIndexer API key not configured');
+                    throw new Exception('Service configuration error (API key missing)');
                 }
                 $client = new RocketIndexerClient($apiKey, $userId);
 
@@ -128,7 +128,7 @@ class TaskService
             } elseif ($provider === 'ralfy') {
                 $apiKey = SettingsService::getDecrypted('ralfy_api_key');
                 if (!$apiKey) {
-                    throw new Exception('RalfyIndex API key not configured');
+                    throw new Exception('Service configuration error (API key missing)');
                 }
                 $client = new RalfyIndexClient($apiKey, $userId);
                 
@@ -143,8 +143,8 @@ class TaskService
                 $body = json_decode($api['body'] ?? '', true) ?: [];
                 
                 if (($api['httpCode'] ?? 500) >= 400 || isset($body['errorCode'])) {
-                    $msg = $body['message'] ?? 'Unknown RalfyIndex error';
-                    throw new Exception("RalfyIndex Error: $msg");
+                    $msg = $body['message'] ?? 'Unknown error';
+                    throw new Exception("Indexing Error: $msg");
                 }
 
                 // Success - Ralfy is fire and forget
@@ -167,7 +167,7 @@ class TaskService
                 $api = $client->createTask($engine, $type, $urls, $title);
                 $body = json_decode($api['body'] ?? '', true) ?: [];
                 $siTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
-                if (!$siTaskId) { throw new Exception('Failed to create SpeedyIndex task'); }
+                if (!$siTaskId) { throw new Exception('Failed to create task'); }
 
                 $stmt = $pdo->prepare('UPDATE tasks SET speedyindex_task_id = ?, provider_task_id = ?, status = ? WHERE id = ?');
                 $stmt->execute([$siTaskId, $siTaskId, 'processing', $taskId]);
@@ -208,7 +208,7 @@ class TaskService
             return ['ok' => true, 'updated' => 0, 'pending' => $pendingCount, 'status' => $task['status'], 'msg' => 'Drip feed active'];
         }
 
-        if (!$task['speedyindex_task_id']) { throw new Exception('No provider task id'); }
+        if (!$task['speedyindex_task_id']) { throw new Exception('Remote task ID missing'); }
 
         $client = new SpeedyIndexClient(SPEEDYINDEX_BASE_URL, SPEEDYINDEX_API_KEY, $userId);
         $report = $client->fullReport($task['search_engine'], $task['type'], $task['speedyindex_task_id']);
@@ -317,7 +317,7 @@ class TaskService
         
         if ($provider === 'ralfy') {
             $apiKey = SettingsService::getDecrypted('ralfy_api_key');
-            if (!$apiKey) throw new Exception('RalfyIndex API key missing');
+            if (!$apiKey) throw new Exception('Service configuration error (API key missing)');
             
             $client = new RalfyIndexClient($apiKey, $task['user_id']);
             $projectName = $task['title'] ? preg_replace('/[^a-zA-Z0-9 _.-]/', '', $task['title']) . " (Batch)" : null;
@@ -326,7 +326,7 @@ class TaskService
             $body = json_decode($api['body'] ?? '', true) ?: [];
              
             if (($api['httpCode'] ?? 500) >= 400 || isset($body['errorCode'])) {
-                throw new Exception("RalfyIndex Error: " . ($body['message'] ?? 'Unknown'));
+                throw new Exception("Indexing Error: " . ($body['message'] ?? 'Unknown'));
             }
         } else {
             // SpeedyIndex
@@ -335,7 +335,7 @@ class TaskService
             $body = json_decode($api['body'] ?? '', true) ?: [];
             
             $providerTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
-            if (!$providerTaskId) throw new Exception('Failed to create SpeedyIndex task');
+            if (!$providerTaskId) throw new Exception('Failed to create task');
             
             $providerBatchId = $providerTaskId;
         }
