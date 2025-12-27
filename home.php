@@ -529,25 +529,9 @@ if (isset($_SESSION['uid'])) {
                 </div>
             </div>
 
-            <div class="text-center mt-16">
-                <a href="/register" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                    Start Indexing Your Links
-                    <i class="fas fa-arrow-right ml-3"></i>
-                </a>
-                <p class="text-sm text-gray-500 mt-4">
-                    Join 5,000+ SEOs boosting their visibility today.
-                </p>
             </div>
         </div>
     </section>
-            <div class="text-center mt-16">
-                <a href="/register" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                    Start Indexing Your Links
-                    <i class="fas fa-arrow-right ml-3"></i>
-                </a>
-                <p class="text-sm text-gray-500 mt-4">
-                    Join 5,000+ SEOs boosting their visibility today.
-                </p>
             </div>
         </div>
     </section>
