@@ -230,8 +230,8 @@ if (isset($_SESSION['uid'])) {
             <div class="text-center max-w-4xl mx-auto">
                 <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">The Visibility Infrastructure</h1>
                 <h2 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
-                    Boost Your Rankings By Indexing<br>
-                    <span class="text-primary-500">The Links You Already Have</span>.
+                    Boost Your Rankings <span class="text-primary-500">Today</span><br>
+                    by Indexing Links You Already Have.
                 </h2>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -259,7 +259,12 @@ if (isset($_SESSION['uid'])) {
                 <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500 opacity-60">
                     <span>Used by:</span>
                     <span class="font-bold text-gray-400"><i class="fas fa-building mr-1"></i> Agencies</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-link mr-1"></i> Link Builders</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-pen-fancy mr-1"></i> Content Creators</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-search mr-1"></i> SEOs</span>
                     <span class="font-bold text-gray-400"><i class="fab fa-amazon mr-1"></i> Amazon Sellers</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-shopping-bag mr-1"></i> Marketplace Sellers</span>
+                    <span class="font-bold text-gray-400"><i class="fas fa-robot mr-1"></i> Automation Specialists</span>
                     <span class="font-bold text-gray-400"><i class="fas fa-map-marker-alt mr-1"></i> Local Businesses</span>
                 </div>
             </div>
@@ -519,6 +524,27 @@ if (isset($_SESSION['uid'])) {
                     </p>
                     <span class="text-xs font-mono text-pink-400 bg-pink-900/20 px-2 py-1 rounded">Target: Long-tail Traffic</span>
                 </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="/register" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                    Start Indexing Your Links
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </a>
+                <p class="text-sm text-gray-500 mt-4">
+                    Join 5,000+ SEOs boosting their visibility today.
+                </p>
+            </div>
+        </div>
+    </section>
+            <div class="text-center mt-16">
+                <a href="/register" class="inline-flex items-center px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                    Start Indexing Your Links
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </a>
+                <p class="text-sm text-gray-500 mt-4">
+                    Join 5,000+ SEOs boosting their visibility today.
+                </p>
             </div>
         </div>
     </section>
