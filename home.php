@@ -230,19 +230,18 @@ if (isset($_SESSION['uid'])) {
             <div class="text-center max-w-4xl mx-auto">
                 <h1 class="text-sm md:text-base font-bold text-primary-500 uppercase tracking-widest mb-4">The Visibility Infrastructure</h1>
                 <h2 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-tight">
-                    Stop Losing Revenue to <span class="text-primary-500">Invisible Pages</span>.<br>
-                    Get Indexed in Minutes.
+                    Boost Your Rankings By Indexing<br>
+                    <span class="text-primary-500">The Links You Already Have</span>.
                 </h2>
 
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    The fastest <strong class="text-white">Google Indexing Service</strong> & <strong class="text-white">Index Checker</strong>. 
-                    Fix "Crawled - Currently Not Indexed" errors and boost your visibility instantly.
-                    <br><span class="text-primary-400 text-sm font-bold block mt-2"><i class="fas fa-bolt"></i> VIP Queue Tests: Discovery in 35s - 2 minutes.</span>
+                    Don't let your hard work go to waste. <strong>Rapid Indexer</strong> forces Google to crawl your backlinks, blog posts, and product pages in minutes—not weeks.
+                    <br><span class="text-primary-400 text-sm font-bold block mt-2"><i class="fas fa-bolt"></i> VIP Queue: Discovery in 35s - 2 minutes.</span>
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                     <a href="/register" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 bg-primary-700 text-white font-bold rounded-lg hover:bg-primary-600 transition-all shadow-lg shadow-primary-900/30 text-lg">
-                        Start Indexing Free
+                        Start Indexing Now
                         <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
                     </a>
                     <a href="#check-links" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 border border-white/10 text-white font-medium rounded-lg hover:bg-white/5 transition-colors text-lg">
@@ -251,7 +250,10 @@ if (isset($_SESSION['uid'])) {
                 </div>
                 
                 <p class="text-sm text-gray-500 flex items-center justify-center gap-2">
-                    <i class="fas fa-check-circle text-green-500"></i> No credit card required • <?php echo $free_credits; ?> Free Credits on Signup
+                    <i class="fas fa-check-circle text-green-500"></i> No credit card required 
+                    <?php if ($free_credits > 0): ?>
+                        • <?php echo $free_credits; ?> Free Credits on Signup
+                    <?php endif; ?>
                 </p>
                 
                 <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500 opacity-60">
@@ -293,8 +295,12 @@ if (isset($_SESSION['uid'])) {
                         <li><strong>Duplicate Content Flags:</strong> Google thinks it's too similar to other pages already in the index.</li>
                         <li><strong>Crawl Budget Exhaustion:</strong> The bot left your site before finishing the job because your site is too large or slow.</li>
                     </ul>
+
+                    <h3 class="text-red-400 text-2xl border-l-4 border-red-500 pl-4 mt-8 italic">
+                        "Unindexed pages generate $0 revenue and zero SEO value."
+                    </h3>
                     <p>
-                        Without intervention, these pages can sit in limbo for months. During that time, they generate $0 revenue and zero SEO value. Our tools are built specifically to resolve these status codes.
+                        Without intervention, these pages can sit in limbo for months. Our tools are built specifically to resolve these status codes and unlock the value of your work.
                     </p>
 
                     <h3 class="text-white">The "Discovered - Currently Not Indexed" Trap</h3>
@@ -437,57 +443,81 @@ if (isset($_SESSION['uid'])) {
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Backlinks -->
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
-                    <i class="fas fa-link text-3xl text-primary-500 mb-4"></i>
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all group">
+                    <div class="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center mb-4 text-primary-500 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-link"></i>
+                    </div>
                     <h4 class="text-xl font-bold text-white mb-2">Backlinks & Guest Posts</h4>
-                    <p class="text-gray-400 text-sm">
-                        You spent money on a guest post or PBN link. If it's on a page deep in the site structure, Google might not crawl it for weeks. Use Rapid Indexer to force a crawl immediately, ensuring the "link juice" starts flowing to your money site instantly. Don't let your link building budget go to waste on unindexed pages.
+                    <p class="text-gray-400 text-sm mb-4">
+                        You built the link, but Google hasn't counted it. <br>
+                        Index <strong>Guest Posts, PBNs, Niche Edits</strong>, and Web 2.0s to ensure "link juice" actually passes to your money site.
                     </p>
+                    <span class="text-xs font-mono text-primary-400 bg-primary-900/20 px-2 py-1 rounded">Target: Higher DA/PA</span>
                 </div>
 
                 <!-- Parasite SEO -->
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
-                    <i class="fab fa-linkedin text-3xl text-blue-400 mb-4"></i>
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-blue-500/30 transition-all group">
+                    <div class="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center mb-4 text-blue-500 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-rocket"></i>
+                    </div>
                     <h4 class="text-xl font-bold text-white mb-2">Parasite SEO</h4>
-                    <p class="text-gray-400 text-sm">
-                        Posting on high-authority sites like LinkedIn, Medium, Reddit, or Quora is a powerful strategy. However, these platforms generate millions of URLs daily. Use our VIP Queue to index your specific post instantly and rank for long-tail keywords before the competition even knows the page exists.
+                    <p class="text-gray-400 text-sm mb-4">
+                        Rank high-authority pages in hours. <br>
+                        <strong>LinkedIn Articles, Medium, Outlook, Quora, Reddit</strong>. Get these indexed instantly to rank for competitive keywords using their domain authority.
                     </p>
+                    <span class="text-xs font-mono text-blue-400 bg-blue-900/20 px-2 py-1 rounded">Target: Fast Rankings</span>
+                </div>
+
+                <!-- Marketplaces -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-yellow-500/30 transition-all group">
+                    <div class="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center mb-4 text-yellow-500 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Marketplace Listings</h4>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Get your products found on Google, not just the app.<br>
+                        <strong>Amazon Products, Etsy Listings, eBay Auctions, Shopify Pages</strong>. Capture organic search traffic for your specific product SKUs.
+                    </p>
+                    <span class="text-xs font-mono text-yellow-400 bg-yellow-900/20 px-2 py-1 rounded">Target: Product Sales</span>
                 </div>
 
                 <!-- Press Releases -->
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
-                    <i class="fas fa-newspaper text-3xl text-gray-300 mb-4"></i>
-                    <h4 class="text-xl font-bold text-white mb-2">Press Releases</h4>
-                    <p class="text-gray-400 text-sm">
-                        News is only valuable if it's fresh. Press releases often get syndicated to hundreds of news sites. Bulk submit these URLs to ensure maximum coverage and authority signals across the web. Capture the "Top Stories" carousel by being the first to be indexed.
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-gray-400/30 transition-all group">
+                    <div class="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center mb-4 text-gray-300 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Press & News</h4>
+                    <p class="text-gray-400 text-sm mb-4">
+                        News is worthless if it isn't fresh.<br>
+                        <strong>Press Releases, Syndicated News, Brand Announcements</strong>. Index them immediately to hit the "Top Stories" carousel and control your brand narrative.
                     </p>
+                    <span class="text-xs font-mono text-gray-400 bg-gray-700/20 px-2 py-1 rounded">Target: Brand Authority</span>
                 </div>
 
-                <!-- Local SEO -->
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
-                    <i class="fas fa-map-marked-alt text-3xl text-green-500 mb-4"></i>
+                <!-- Local Citations -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-green-500/30 transition-all group">
+                    <div class="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center mb-4 text-green-500 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
                     <h4 class="text-xl font-bold text-white mb-2">Local Citations</h4>
-                    <p class="text-gray-400 text-sm">
-                        Directory listings (Yelp, YellowPages, local chambers of commerce) are critical for Local SEO map rankings. Many of these directories have poor internal linking. Indexing them ensures Google validates your Name, Address, and Phone (NAP) consistency, boosting your Google Maps visibility.
+                    <p class="text-gray-400 text-sm mb-4">
+                        Dominate the "Map Pack".<br>
+                        <strong>Yelp, YellowPages, BBB, Chamber of Commerce</strong>. Indexing these directory links validates your Name, Address, and Phone (NAP) data for Google Maps.
                     </p>
+                    <span class="text-xs font-mono text-green-400 bg-green-900/20 px-2 py-1 rounded">Target: Local Maps</span>
                 </div>
 
-                <!-- eCommerce -->
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
-                    <i class="fas fa-shopping-cart text-3xl text-purple-500 mb-4"></i>
-                    <h4 class="text-xl font-bold text-white mb-2">eCommerce Products</h4>
-                    <p class="text-gray-400 text-sm">
-                        Launching a new collection? Seasonal products? You can't wait 4 weeks for Google to find your new product pages. Index them in minutes to start capturing search traffic while demand is high. Essential for Black Friday and holiday sales.
+                <!-- Social & UGC -->
+                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-pink-500/30 transition-all group">
+                    <div class="w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center mb-4 text-pink-500 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Social & UGC</h4>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Rank for specific questions.<br>
+                        <strong>Twitter Threads, Instagram Posts, TikTok Videos, Forum Comments</strong>. Get specific posts indexed to rank for long-tail questions your audience is asking.
                     </p>
-                </div>
-
-                <!-- Social Profiles -->
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:border-primary-500/30 transition-all">
-                    <i class="fas fa-user-circle text-3xl text-pink-500 mb-4"></i>
-                    <h4 class="text-xl font-bold text-white mb-2">Social Profiles</h4>
-                    <p class="text-gray-400 text-sm">
-                        Creating brand profiles on various platforms? Ensure they appear in brand name searches by forcing an index. This helps control the first page of Google for your brand reputation management, pushing negative results down.
-                    </p>
+                    <span class="text-xs font-mono text-pink-400 bg-pink-900/20 px-2 py-1 rounded">Target: Long-tail Traffic</span>
                 </div>
             </div>
         </div>
