@@ -267,6 +267,10 @@ if (isset($_SESSION['uid'])) {
                     <span class="font-bold text-gray-400"><i class="fas fa-robot mr-1"></i> Automation Specialists</span>
                     <span class="font-bold text-gray-400"><i class="fas fa-map-marker-alt mr-1"></i> Local Businesses</span>
                 </div>
+                
+                <p class="mt-4 text-xs text-gray-600 italic">
+                    ...and anyone who wants more traffic with search-based marketing.
+                </p>
             </div>
         </div>
     </section>
