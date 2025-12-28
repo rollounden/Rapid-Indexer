@@ -113,6 +113,31 @@ try {
                 if (empty($urls) || !is_array($urls)) {
                     throw new Exception('No URLs provided. Send "urls" as array or newline-separated string.');
                 }
+
+                // URL Validation and Sanitization (Ensure scheme)
+                $validatedUrls = [];
+                foreach ($urls as $u) {
+                    $u = trim($u);
+                    if (empty($u)) continue;
+                    
+                    // If no scheme, prepend https://
+                    if (!preg_match('~^https?://~i', $u)) {
+                        $u = 'https://' . $u;
+                    }
+                    
+                    // Basic validation
+                    if (!filter_var($u, FILTER_VALIDATE_URL)) {
+                        // Log invalid URL attempt for debugging
+                        if (defined('LOG_FILE')) {
+                            error_log(date('[Y-m-d H:i:s] ') . "Invalid URL rejected: " . $u . "\n", 3, LOG_FILE);
+                        }
+                        throw new Exception("Invalid URL format: " . htmlspecialchars($u) . ". URLs must be valid and start with http:// or https://");
+                    }
+                    
+                    $validatedUrls[] = $u;
+                }
+                $urls = $validatedUrls;
+                if (empty($urls)) throw new Exception('No valid URLs provided.');
                 
                 $engine = $input['engine'] ?? 'google';
                 // Type is already read above

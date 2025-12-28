@@ -179,6 +179,13 @@ class TaskService
                         $errorMsg = 'Service temporarily unavailable';
                     }
                     
+                    // Log the full error internally
+                    if (class_exists('ApiLogger')) {
+                        // Assuming ApiLogger has a static method for generic logging or we rely on the client log
+                        // But client log only logs requests. Let's log to error log.
+                        error_log("Task Creation Failed: " . json_encode($body));
+                    }
+                    
                     throw new Exception("Indexing Error: $errorMsg");
                 }
 

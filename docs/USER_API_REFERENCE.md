@@ -91,6 +91,8 @@ Submit URLs for indexing or checking.
 }
 ```
 
+> **Note:** All URLs must include the protocol (`http://` or `https://`). Invalid URLs will cause the task creation to fail.
+
 **cURL Example:**
 ```bash
 curl -X POST "https://rapid-indexer.com/api/v1/index.php?action=create_task" \
