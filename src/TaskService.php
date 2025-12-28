@@ -167,7 +167,20 @@ class TaskService
                 $api = $client->createTask($engine, $type, $urls, $title);
                 $body = json_decode($api['body'] ?? '', true) ?: [];
                 $siTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
-                if (!$siTaskId) { throw new Exception('Failed to create task'); }
+                
+                // Handle provider error if task_id is missing
+                if (!$siTaskId) { 
+                    $errorMsg = $body['message'] ?? 'Unknown error';
+                    // Check for common error patterns and genericize if needed
+                    // Usually "Invalid URL", "Not enough credits" (on provider side)
+                    // If provider side balance issue, we should not show that to user if possible, or show "Service temporarily unavailable".
+                    
+                    if (stripos($errorMsg, 'balance') !== false || stripos($errorMsg, 'funds') !== false) {
+                        $errorMsg = 'Service temporarily unavailable';
+                    }
+                    
+                    throw new Exception("Indexing Error: $errorMsg");
+                }
 
                 $stmt = $pdo->prepare('UPDATE tasks SET speedyindex_task_id = ?, provider_task_id = ?, status = ? WHERE id = ?');
                 $stmt->execute([$siTaskId, $siTaskId, 'processing', $taskId]);
@@ -335,7 +348,13 @@ class TaskService
             $body = json_decode($api['body'] ?? '', true) ?: [];
             
             $providerTaskId = $body['task_id'] ?? $body['taskId'] ?? null;
-            if (!$providerTaskId) throw new Exception('Failed to create task');
+            if (!$providerTaskId) {
+                $errorMsg = $body['message'] ?? 'Unknown error';
+                if (stripos($errorMsg, 'balance') !== false || stripos($errorMsg, 'funds') !== false) {
+                    $errorMsg = 'Service temporarily unavailable';
+                }
+                throw new Exception("Indexing Error: $errorMsg");
+            }
             
             $providerBatchId = $providerTaskId;
         }
